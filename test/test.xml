@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<rss version="2.0">
+<!--Just a thought-->
+<channel>com.drinschinz.rssfeedcreator<title>com.drinschinz.rssfeedcreator</title>
+<link>http://configure.your.link</link>
+<description>Configure your description, please.</description>
+<item>
+<title>test:aeäüöÜÖÄÜmore6786537465347539&amp;§$%&amp;/"§%&amp;/"(&amp;$(=§_/\#ä+#*'Ä*</title>
+<description>This is a description</description>
+<created>1261505393113</created>
+</item>
+<item>
+<title>Humidity:30%</title>
+<description>This is a description</description>
+<created>1261505393113</created>
+</item>
+<item>
+<title>Temperature:12</title>
+<description>This is a description</description>
+<created>1261505393112</created>
+</item>
+<item>
+<title>test:aeäüöÜÖÄÜmore6786537465347539&amp;§$%&amp;/"§%&amp;/"(&amp;$(=§_/\#ä+#*'Ä*</title>
+<description>This is a description</description>
+<created>1261505387064</created>
+</item>
+<item>
+<title>Humidity:30%</title>
+<description>This is a description</description>
+<created>1261505387064</created>
+</item>
+<item>
+<title>Temperature:12</title>
+<description>This is a description</description>
+<created>1261505387064</created>
+</item>
+<item>
+<title>test:aeäüöÜÖÄÜmore6786537465347539&amp;§$%&amp;/"§%&amp;/"(&amp;$(=§_/\#ä+#*'Ä*</title>
+<description>This is a description</description>
+<created>1261505380993</created>
+</item>
+<item>
+<title>Humidity:30%</title>
+<description>This is a description</description>
+<created>1261505380993</created>
+</item>
+</channel>
+</rss>

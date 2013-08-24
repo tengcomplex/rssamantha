@@ -1,0 +1,92 @@
+#!/bin/bash
+HOST=Localhost
+PORT=8081
+DESC="This is some text, it should be longer 200 chracters and in best case it should repeat some word. Not all, but some. We want so see how well the compression works and how much CPU it actually consumes. Well, this long enough, I hope. Or maybe not. We will make sure its very long."
+
+function wgtg
+{
+	wget -q "http://$HOST:$PORT/$1" -O /dev/null &
+}
+
+function wgtp
+{
+	wget -q --post-data="$1" http://$HOST:$PORT/ -O /dev/null &
+	#wget -qO- --post-data="$1" http://$HOST:$PORT/
+}
+
+function item
+{
+	CR=$(($(date +%s%N)/1000000))
+  	wget -q --post-data="title=testtitle$CR&description=$DESC&channel=test&created=$CR" http://localhost:$PORT/ -O /dev/null &
+  	wget -q --post-data="title=testtitle$CR&description=$DESC&ix=0&created=$CR" http://localhost:$PORT/ -O /dev/null &
+  	wget -q --post-data="title=testtitle$CR&description=$DESC&channel=errorintention&created=$CR" http://localhost:$PORT/ -O /dev/null &
+}
+
+function itemr
+(
+	CR=$(($(date +%s%N)/1000000))
+  	wget -q --post-data="title=testtitle$CR&channel=test&created=$CR" http://localhost:$PORT/ -O /dev/null &	
+  	wget -q --post-data="title=testtitle$CR&channel=test&remove=1&created=4242" http://localhost:$PORT/ -O /dev/null &
+  	wget -q --post-data="title=testtitle$CR&channel=test&remove=1&created=$CR" http://localhost:$PORT/ -O /dev/null &
+)
+
+function request
+{
+	declare -a channels=("tengdev" "general" "misc" "news_de" "blogs_de" "news_us" "blogs_us" "news_uk" "blogs_uk" "news_fr" "news_jp" "news_il" "dortmund" "trading" "software" "podcasts" "blah" "news_au" "test")
+	declare -a ni=("5" "10" "-1" "ALL" "30" "bla")
+	for i in "${channels[@]}"
+	do
+		#echo "request "$i
+		wget -q http://localhost:$PORT/channel=$i -O /dev/null &
+		wget -q "http://localhost:$PORT/channel=$i&type=html" -O /dev/null &
+		wget -q "http://localhost:$PORT/channel=$i&type=txt" -O /dev/null &
+		wget -q "http://localhost:$PORT/channel=$i&type=html&cutoff=TODAY" -O /dev/null &
+		for j in "${ni[@]}"
+		do
+			#echo "http://localhost:$PORT/channel=$i&numitems=$j"
+			wget -q "http://localhost:$PORT/channel=$i&numitems=$j" -O /dev/null &
+			wget -q "http://localhost:$PORT/channel=$i&numitems=$j&type=html" -O /dev/null &
+			wget -q "http://localhost:$PORT/channel=$i&numitems=$j&type=txt" -O /dev/null &
+			wget -q "http://localhost:$PORT/channel=errorintention&numitems=$j" -O /dev/null &
+			sleep $1
+		done
+	done
+}
+
+function loop
+{
+	echo "do $1 sleep $2"
+	LIMIT=$1
+	for ((a=1; a <= LIMIT ; a++))
+	do
+  		#echo "$a "
+  		item
+  		itemr
+  		sleep $2
+	done
+	request $2
+}
+
+#for ((aa=1; aa <= 10 ; aa++))
+#do
+#	echo "aa:"$aa
+#	loop 10 1.0
+#	loop 10 2.1
+#	loop 20 1.0
+#	loop 10 2.1
+#	loop 10 1.0
+#	loop 20 2.1
+#done
+
+#loop 100 0.5
+#loop 100 0.3
+#loop 1000 0.1
+#loop 500 0.2
+#loop 1000 0.05
+echo "done"
+
+#wgtp "title=testtitle&channel=test&remove=1&created=4242"
+#wgtg "channel=test&numitems=5&type=txt"
+
+
+#wget -q --post-data="title=testtitle$CR&description=testdescription&channelname=test&created=$CR" http://localhost:$PORT/ -O /dev/null

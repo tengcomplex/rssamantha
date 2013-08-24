@@ -1,0 +1,12 @@
+set JVM=java
+set RSSAMANTHAHOME="C:\software\rssamantha\rssamantha"
+set PKG=com.drinschinz.rssamantha
+%JVM% ^
+-D%PKG%.loglevel=ALL ^
+-D%PKG%.itemstoragefile=items.dat ^
+-D%PKG%.knowndownloadsfile=knowndownloads.dat ^
+-D%PKG%.futuredump=true ^
+-D%PKG%.logfolder=log\ ^
+-D%PKG%.httpreferrer=http://www.myreferrer.com ^
+-jar ^
+%RSSAMANTHAHOME%\rssamantha.jar %RSSAMANTHAHOME%\rssamantha_demo.opml

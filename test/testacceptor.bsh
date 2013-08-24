@@ -1,0 +1,95 @@
+#!/bin/bash
+HOST=Localhost
+PORT=8081
+DESC="This is some text, it should be longer 200 chracters and in best case it should repeat some word. Not all, but some. We want so see how well the compression works and how much CPU it actually consumes. Well, this long enough, I hope. Or maybe not. We will make sure its very long."
+
+function wgtg
+{
+	wget -q "http://$HOST:$PORT/$1" -O /dev/null &
+}
+
+function wgtp
+{
+	wget -q --post-data="$1" http://$HOST:$PORT/ -O /dev/null &
+	#wget -qO- --post-data="$1" http://$HOST:$PORT/
+}
+
+function item
+{
+	CR=$(($(date +%s%N)/1000000))
+  	wgtp "title=testtitle$CR&description=$DESC&channel=test&created=$CR"
+  	wgtp "title=testtitle$CR&description=$DESC&ix=0&created=$CR"
+  	wgtp "title=testtitle$CR&description=$DESC&channel=errorintention&created=$CR"
+}
+
+function itemr
+(
+	CR=$(($(date +%s%N)/1000000))
+  	wgtp "title=testtitle$CR&channel=test&created=$CR"
+  	wgtp "title=testtitle$CR&channel=test&remove=1&created=4242"
+  	wgtp "title=testtitle$CR&channel=test&remove=1&created=$CR"
+)
+
+function request
+{
+	wgtg "channel=general&channel=dortmund&channel=news_de&channel=blogs_de&numitems=100&cutoff=TODAY&refresh=&search_title=.*Online.*&type=html"
+	wgtg "channel=general&channel=sport_de&channel=software&channel=podcasts&numitems=100&cutoff=TODAY&refresh=&search_title=.*test.*&type=html"
+	wgtg "channel=general&channel=blogs_us&channel=technews&channel=news_at&numitems=100&cutoff=TODAY&refresh=&search_title=.*Online.*|.*test.*&type=html"
+	wgtg "channel=general&channel=news_jp&channel=news_il&channel=news_ch&numitems=100&cutoff=TODAY&refresh=&search_title=.*Schweiz.*&type=html"
+	wgtg "channel=general&channel=dortmund&channel=news_de&channel=blogs_de&numitems=100&cutoff=TODAY&refresh=&search_title=.*Online.*&type=html"
+	declare -a channels=("tengdev" "general" "misc" "news_de" "blogs_de" "news_us" "blogs_us" "news_uk" "blogs_uk" "news_fr" "news_jp" "news_il" "dortmund" "trading" "software" "podcasts" "blah" "news_au" "test")
+	declare -a ni=("5" "10" "-1" "ALL" "30" "bla")
+	for i in "${channels[@]}"
+	do
+		#echo "request "$i
+		wgtg "channel=$i"
+		wgtg "channel=$i&type=html"
+		wgtg "channel=$i&type=txt"
+		wgtg "channel=$i&type=xml"
+		wgtg "channel=$i&type=html&cutoff=TODAY"
+		sleep $1
+		for j in "${ni[@]}"
+		do
+			#echo "channel=$i&numitems=$j"
+			wgtg "channel=$i&numitems=$j"
+			wgtg "channel=$i&numitems=$j&type=html"
+			wgtg "channel=$i&numitems=$j&type=txt"
+			wgtg "channel=$i&numitems=$j&type=xml"
+			wgtg "channel=errorintention&numitems=$j"
+			sleep $1
+		done
+	done
+}
+
+function loop
+{
+	echo "do $1 sleep $2"
+	LIMIT=$1
+	for ((a=1; a <= LIMIT ; a++))
+	do
+  		#echo "$a "
+  		item
+  		itemr
+  		sleep $2
+	done
+	request $2
+}
+
+for ((aa=1; aa <= 10 ; aa++))
+do
+	echo "aa:"$aa
+	loop 3 0.9
+	loop 1 2.2
+	loop 2 1.0
+	loop 1 2.1
+	loop 3 1.0
+	loop 1 2.1
+done
+
+echo "done"
+
+#wgtp "title=testtitle&channel=test&remove=1&created=4242"
+#wgtg "channel=test&numitems=5&type=txt"
+
+
+#wget -q --post-data="title=testtitle$CR&description=testdescription&channelname=test&created=$CR" http://localhost:$PORT/ -O /dev/null

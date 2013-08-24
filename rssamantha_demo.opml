@@ -1,0 +1,43 @@
+<opml version="1.0">
+    <head>
+        <title>RSSamatha Demo Configuration</title>
+    </head>
+    <body>
+        <outline
+            config.name="myfirstfeed"
+            config.rsswritesleep="65000"
+            config.showlimit="100"
+            config.storelimit="2000"
+            config.rssfilename="feeds/myfirstfeed.rss"
+            config.downloadfolder="podcasts/"
+            config.adddownloaditems="5"
+            rsschannel.title="tengnews_international"
+            rsschannel.link="http://localhost:8080/"
+            rsschannel.description="Some international news."
+            rsschannel.comment="Don't expect useful information here."
+            rsschannel.ttl="5"
+        >
+            <source title="The Register" feedtype="atom" feedUrl="http://www.theregister.co.uk/headlines.atom" delay="48754747" titleprefix="false"/>
+            <source title="oe-r" feedtype="podcast" feedUrl="http://static.orf.at/podcast/oe1/oe1_digitalleben.xml"/>
+            <source title="Niels Ruf" feedtype="rsstwitter" feedUrl="http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=NielsRuf" delay="19999999"/>
+            <source title="wdr verkehr" feedtype="rss" feedUrl="http://www.wdr.de/verkehrslage/rss.xml" delay="60000" matchpattern_title="A43|A44|A45" dayofweek="2,3,4,5,6" hourofday="8,9" appenddescription="true"/>
+            <source title="el universal" feedtype="rss" feedUrl="http://www.eluniversal.com/rss/pol_avances.xml"/>
+            <source title="Internet Archive" feedtype="rss" feedUrl="http://www.archive.org/services/collection-rss.php" matchpattern_title="^(?!SFGTV)." matchpattern_category="^movies."/>
+        </outline>
+	<outline
+            config.name="mysecondfeed"
+            config.rsswritesleep="65000"
+            config.showlimit="100"
+            config.storelimit="2000"
+            config.rssfilename="feeds/mysecondfeed.rss"
+            rsschannel.title="tengnews_second"
+            rsschannel.link="http://localhost:8080/"
+            rsschannel.description="Another international news."
+            rsschannel.comment="Don't expect useful information here."
+            rsschannel.ttl="8"
+        >
+            <source title="ria novosti" feedtype="rss" feedUrl="http://en.rian.ru/export/rss2/index.xml" delay="980000"/>
+            <source title="Googlenews ISIN" feedtype="rss" feedUrl="http://news.google.de/news?pz=1&amp;cf=all&amp;ned=de&amp;hl=de&amp;q=${repl_isinscan_1}&amp;cf=all&amp;output=rss" delay="48000000"/>
+        </outline>
+    </body>
+</opml>
