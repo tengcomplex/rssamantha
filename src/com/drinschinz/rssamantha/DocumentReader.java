@@ -97,7 +97,7 @@ public class DocumentReader
     }
     
     /** 
-     * TODO: Docbuilder could be global?
+     * TODO: Docbuilder could be global singelton?
      * 
      * @param is
      * @return
