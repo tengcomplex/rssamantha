@@ -100,7 +100,7 @@ public class DocumentReader
      * TODO: Docbuilder could be global singelton?
      * 
      * @param is
-     * @return
+     * @return Document
      * @throws Exception 
      */
     private Document getDocument(final InputStream is) throws Exception
@@ -114,7 +114,13 @@ public class DocumentReader
         doc.getDocumentElement().normalize();
         return doc;
     }
-
+    
+    /**
+     * 
+     * @param s Either an URL or local filename.
+     * @return
+     * @throws Exception 
+     */
     protected Document getDocument(final String s) throws Exception
     {
         if(s.startsWith("http://") || s.startsWith("https://"))
