@@ -95,7 +95,14 @@ public class DocumentReader
         }
         return getDocument(new ByteArrayInputStream(buffer.toString().getBytes()));
     }
-
+    
+    /** 
+     * TODO: Docbuilder could be global?
+     * 
+     * @param is
+     * @return
+     * @throws Exception 
+     */
     private Document getDocument(final InputStream is) throws Exception
     {
         final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
