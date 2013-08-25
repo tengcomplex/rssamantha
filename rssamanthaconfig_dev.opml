@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<opml version="1.0">
+	<head>
+		<title>Configuration DEV</title>
+	</head>
+	<body>
+		<outline
+			title="generalA" text="generalA" description="generalA"
+			config.name="generalA"
+			config.showlimit="50"
+			config.storelimit="3000"
+			config.downloadfolder="/tmp/"
+			rsschannel.title="tengrss"
+			rsschannel.link="http://localhost:4073/wangcvxvxcvxrss.html"
+			rsschannel.description="Mostly\ useless\ A\ Information."
+			rsschannel.comment="Don't\ expect\ useful\ \A\ information\ here."
+			rsschannel.ttl="15"		
+		>
+			<source title="test" feedtype="rss" feedUrl="http://localhost:8082/channel=tengdev" delay="30000"/>
+			<!--<source title="spreeblick" feedtype="rss" feedUrl="http://feeds2.feedburner.com/spreeblick/feed" htmlUrl="http://www.spreeblick.de" delay="3000" dayofweek="" hourofday="" appenddescription="false"/>-->
+			<!--<source title="wdr verkehr" feedtype="rss" feedUrl="http://www.wdr.de/verkehrslage/rss.xml" htmlUrl="http://www.wdr.de/" delay="60000" matchpattern_description_trafficexclude1="${repl_trafficexclude1}" dayofweek="2,3,4,5,6" hourofday="8,9,19,20,21" appenddescription="true"/>-->
+		</outline>
+
+		<outline
+			title="tengdev" text="tengdev" description="tengdev"
+			config.name="tengdev"
+			config.showlimit="50"
+			config.storelimit="30000"
+			rsschannel.title="tengrss"
+			rsschannel.link="http://localhost:4073/wangcvxvxcvxrss.html"
+			rsschannel.description="Mostly useless C Information."
+			rsschannel.comment="This is the first channel with some decent sources."
+			rsschannel.ttl="45"
+		>
+			
+			<source title="Mako" feedtype="rss" feedUrl="http://rcs.mako.co.il/rss/MainSliderRss.xml" delay="8600000"/>		
+            
+		</outline>
+
+		<outline
+			title="teng podcasts" text="podcasts" description="podcasts"
+            config.name="podcasts"
+			config.rsswritesleep="85000"
+			config.showlimit="4"
+			config.storelimit="4"
+			config.adddownloaditems="2"
+			config.rssfilename="/tmp/feed_podcast_test.rss"
+			config.downloadfolder="/tmp/"
+			rsschannel.title="teng podcasts"
+			rsschannel.link="http://localhost:4073/wangcvxvxcvxrss.html"
+			rsschannel.description="We love pods."
+			rsschannel.comment="Don't expect useful information here."
+			rsschannel.ttl="8"
+		>
+			<source title="Alternativlos" feedtype="podcast" feedUrl="http://alternativlos.org/alternativlos.rss" delay="60000"/>
+			<!--<source title="SF Börse" feedtype="podcast" feedUrl="http://feeds.sf.tv/podcast/boerse" delay="120000"/>-->
+			<!-- <source title="Youtube Pingpong" feedtype="rss" feedUrl="http://gdata.youtube.com/feeds/base/videos?q=${repl_pingpongscan_1}&amp;client=ytapi-youtube-search&amp;alt=rss&amp;v=2" delay="8600000"/> -->
+			<!--<source title="Comdirect Börsenpodcast" feedtype="podcast" feedUrl="http://www.comdirect.de/inf/pod_mp3.rss" delay="96000000"/>-->
+
+		</outline>
+
+	</body>
+</opml>
+
+
+
