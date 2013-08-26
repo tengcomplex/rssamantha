@@ -43,6 +43,7 @@ public class Main
         }
         catch(Exception e)
         {
+            // Shouldn't happen
             e.printStackTrace(System.err);
         }
     }

@@ -25,7 +25,6 @@ package com.drinschinz.rssamantha;
  * Simple http acceptor.<br>
  * 
  * TODO: handlePOST seems as if we could optimize. We don't need an Item object to remove.
- * TODO: APPNAME seems used often, maybe make it global static acessable.
  * @author teng
  */
 import java.io.*;
