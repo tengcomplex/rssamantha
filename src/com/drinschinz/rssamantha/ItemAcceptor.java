@@ -86,7 +86,7 @@ public class ItemAcceptor implements Runnable
             }
             if(s.length() == 0)
             {
-                Control.L.log(Level.WARNING, "cssfile was not availble or empty");
+                Control.L.log(Level.WARNING, "cssfile was not available or empty");
             }
             else
             {
