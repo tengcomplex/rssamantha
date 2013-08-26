@@ -97,7 +97,7 @@ public class DocumentReader
     }
     
     /** 
-     * TODO: Docbuilder could be global singelton?
+     * TODO: Docbuilder could be global synchronized singelton?
      * 
      * @param is
      * @return Document
