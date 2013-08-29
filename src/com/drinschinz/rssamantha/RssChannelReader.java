@@ -39,7 +39,11 @@ public class RssChannelReader extends ChannelReader
     {
         super(url, itemcreatorname);
     }
-
+    
+    /**
+     * TODO: Do we add null Item if fieldNode.getNodeType() != Node.ELEMENT_NODE?
+     * @return 
+     */
     public boolean read()
     {
         try
