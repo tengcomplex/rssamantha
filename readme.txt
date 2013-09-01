@@ -243,7 +243,7 @@ Changes
 Version: 0.801
 Release: soon
 ------------------
-- Tiny performance improvements (Item.clone(), Log.isLoggable()) .
+- Tiny performance improvements (Item.clone(), Log.isLoggable()).
 - In HTML output, open item title hrefs in new tabs/windows.
 
 -------------------
