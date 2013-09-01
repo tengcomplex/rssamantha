@@ -134,6 +134,7 @@ public class Item implements Comparable<Item>, Serializable
      * @return
      */
     @Override
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     public boolean equals(final Object o)
     {
         final Item cmp = (Item)o;
