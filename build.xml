@@ -123,7 +123,7 @@
         <mkdir dir="deploy/src/nbproject/"/>
         <echo>copy essentiel src files</echo>
         <copy file="${dist.dir}/readme.txt" tofile="deploy/src/readme.txt"/>
-        <copy file="feeds.opml" tofile="deploy/src/feeds.opml"/>
+        <copy file="rssamantha_demo.opml" tofile="deploy/src/rssamantha_demo.opml"/>
         <copy file="build.xml" tofile="deploy/src/build.xml"/>
         <copy file="nbproject/build-impl.xml" tofile="deploy/src/nbproject/build-impl.xml"/>
         <copy file="nbproject/profiler-build-impl.xml" tofile="deploy/src/nbproject/profiler-build-impl.xml"/>
