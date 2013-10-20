@@ -81,7 +81,7 @@ public class DocumentReader
         final StringBuilder buffer = new StringBuilder();
         for(int ii=0; ii<tmp.size(); ii++)
         {
-            String str = tmp.get(ii);
+            String str = tmp.get(ii);       
             for(Iterator<String> iter = repl.keySet().iterator(); iter.hasNext();)
             {
                 final String next = iter.next();
