@@ -1006,6 +1006,7 @@ public class Control
         {
             if(!file.exists())
             {
+                L.log(Level.WARNING, "File {0} does not exist", file.toString());
                 return ret;
             }
             final BufferedReader in = new BufferedReader(new FileReader(file));
