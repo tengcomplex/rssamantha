@@ -243,11 +243,14 @@ Changes
 Version: 0.801
 Release: soon
 ------------------
-- Tiny performance improvements (Item.clone(), Log.isLoggable()).
+- Tiny performance improvements:
+   * Item.clone()
+   * Log.isLoggable()
+   * Control: Remove synchronized keyword in additional getSortedItems() 
+     methods, all are calling synchronized method with full signature anyway.
+   * Control.getChannelIndex()
 - In HTML output, open item title hrefs in new tabs/windows.
 - Log warning in readFile() if file not exists. 
-- Control: Remove synchronized in additional getSortedItems() methods, all are 
-  calling synchronized method with full signature anyway.
 
 -------------------
 Version: 0.800
