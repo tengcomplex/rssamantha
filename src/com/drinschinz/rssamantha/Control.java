@@ -680,17 +680,17 @@ public class Control
         return ret;
     }
     
-    public synchronized List<Item> getSortedItems(final int ix, final long cutoff, final int numitems, final Pattern pt_title)
+    public List<Item> getSortedItems(final int ix, final long cutoff, final int numitems, final Pattern pt_title)
     {
         return getSortedItems(new int[]{ix}, cutoff, numitems, pt_title);
     }
 
-    public synchronized List<Item> getSortedItems(final int ix)
+    public List<Item> getSortedItems(final int ix)
     {
         return getSortedItems(ix, channels[ix].itemdata.getShowLimit(), -1, null);
     }
     
-    public synchronized List<Item> getSortedItems(final int[] ixs)
+    public List<Item> getSortedItems(final int[] ixs)
     {
         return getSortedItems(ixs, -1, -1, null);
     }
