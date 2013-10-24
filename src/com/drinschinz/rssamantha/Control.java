@@ -422,15 +422,14 @@ public class Control
     /** Helper for @initItemStorage() and @Itemacceptor*/
     public int getChannelIndex(final String name)
     {
-        if(name == null || name.length() == 0)
+        if(name != null && name.length() > 0)
         {
-            return -1;
-        }
-        for(int ii=0; ii<channels.length; ii++)
-        {
-            if(channels[ii].name.equals(name))
+            for(int ii=0; ii<channels.length; ii++)
             {
-                return ii;
+                if(channels[ii].name.equals(name))
+                {
+                    return ii;
+                }
             }
         }
         return -1;

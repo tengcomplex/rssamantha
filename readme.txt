@@ -246,6 +246,8 @@ Release: soon
 - Tiny performance improvements (Item.clone(), Log.isLoggable()).
 - In HTML output, open item title hrefs in new tabs/windows.
 - Log warning in readFile() if file not exists. 
+- Control: Remove synchronized in additional getSortedItems() methods, all are 
+  calling synchronized method with full signature anyway.
 
 -------------------
 Version: 0.800
