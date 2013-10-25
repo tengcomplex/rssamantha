@@ -71,7 +71,8 @@ public class HtmlFileHandler extends TxtFileHandler
     protected String getAsString(final List<Item> items, final String refresh, final String css)
     {
         final Calendar now = Calendar.getInstance();
-        final StringBuilder table = new StringBuilder("<TABLE border=\"0\">");
+        final StringBuilder table = new StringBuilder(32);
+        table.append("<TABLE border=\"0\">");
         int numitems = 0;
         for(Item ii : items)
         {
@@ -92,7 +93,8 @@ public class HtmlFileHandler extends TxtFileHandler
             table.append("</TR>").append(ClientThread.EOL);
         }
         table.append("</TABLE>").append(ClientThread.EOL);
-        final StringBuilder str = new StringBuilder("<HTML>");
+        final StringBuilder str = new StringBuilder(512);
+        str.append("<HTML>");
         str.append(ClientThread.EOL).append("<HEAD>").append(ClientThread.EOL);
         str.append("<META HTTP-EQUIV=\"refresh\" CONTENT=\"").append(refresh).append("\">"+ClientThread.EOL);
         String time;
