@@ -380,11 +380,14 @@ class ClientThread implements Runnable
             }
         }
         /* Log request */
-        for(Iterator<StringBuilder> iter = request.iterator(); iter.hasNext();)
+        if(Control.L.isLoggable(Level.FINEST))
         {
-            sb = iter.next();
+            for(Iterator<StringBuilder> iter = request.iterator(); iter.hasNext();)
+            {
+                sb = iter.next();
 //System.out.println("< " + sb.toString());
-            Control.L.log(Level.FINEST, "< [{0}]{1}", new Object[]{id, sb.toString()});
+                Control.L.log(Level.FINEST, "< [{0}]{1}", new Object[]{id, sb.toString()});
+            }
         }
         /* Extract command, URL und HTTP-Version */
         String s = (request.get(0)).toString();
