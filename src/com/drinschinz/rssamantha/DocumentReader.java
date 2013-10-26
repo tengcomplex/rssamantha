@@ -96,6 +96,14 @@ public class DocumentReader
         return getDocument(new ByteArrayInputStream(buffer.toString().getBytes()));
     }
     
+    private static final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+    static
+    {
+        docBuilderFactory.setCoalescing(true);
+        docBuilderFactory.setIgnoringComments(true);
+        docBuilderFactory.setIgnoringElementContentWhitespace(true);
+    }
+    
     /** 
      * TODO: Docbuilder could be global synchronized singelton?
      * 
@@ -105,13 +113,14 @@ public class DocumentReader
      */
     private Document getDocument(final InputStream is) throws Exception
     {
-        final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-        docBuilderFactory.setCoalescing(true);
-        docBuilderFactory.setIgnoringComments(true);
-        docBuilderFactory.setIgnoringElementContentWhitespace(true);
-        final DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+        DocumentBuilder docBuilder; 
+        synchronized(docBuilderFactory)
+        {
+            docBuilder = docBuilderFactory.newDocumentBuilder();
+        }
         final Document doc = docBuilder.parse(is);
         doc.getDocumentElement().normalize();
+        docBuilder = null;
         return doc;
     }
     
