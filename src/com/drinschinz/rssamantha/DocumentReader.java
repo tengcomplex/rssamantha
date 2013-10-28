@@ -32,9 +32,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -102,6 +104,19 @@ public class DocumentReader
         docBuilderFactory.setCoalescing(true);
         docBuilderFactory.setIgnoringComments(true);
         docBuilderFactory.setIgnoringElementContentWhitespace(true);
+        docBuilderFactory.setNamespaceAware(false);
+        docBuilderFactory.setValidating(false);
+        try 
+        {
+            docBuilderFactory.setFeature("http://xml.org/sax/features/namespaces", false);
+            docBuilderFactory.setFeature("http://xml.org/sax/features/validation", false);
+            docBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+            docBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        } 
+        catch(ParserConfigurationException ex) 
+        {
+            Control.L.log(Level.SEVERE, null, ex);
+        }
     }
     
     /** 
