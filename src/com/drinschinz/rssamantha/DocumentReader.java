@@ -103,18 +103,21 @@ public class DocumentReader
         docBuilderFactory.setCoalescing(true);
         docBuilderFactory.setIgnoringComments(true);
         docBuilderFactory.setIgnoringElementContentWhitespace(true);
-        docBuilderFactory.setNamespaceAware(false);
-        docBuilderFactory.setValidating(false);
-        try 
+        if("false".equals(System.getProperties().getProperty(Control.PNAME+".validatexml", "true").toLowerCase()))
         {
-            docBuilderFactory.setFeature("http://xml.org/sax/features/namespaces", false);
-            docBuilderFactory.setFeature("http://xml.org/sax/features/validation", false);
-            docBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
-            docBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-        } 
-        catch(ParserConfigurationException ex) 
-        {
-            Control.L.log(Level.SEVERE, null, ex);
+            docBuilderFactory.setNamespaceAware(false);
+            docBuilderFactory.setValidating(false);
+            try 
+            {
+                docBuilderFactory.setFeature("http://xml.org/sax/features/namespaces", false);
+                docBuilderFactory.setFeature("http://xml.org/sax/features/validation", false);
+                docBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+                docBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } 
+            catch(ParserConfigurationException ex) 
+            {
+                Control.L.log(Level.SEVERE, null, ex);
+            }
         }
     }
     
