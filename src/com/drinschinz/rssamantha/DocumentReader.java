@@ -35,6 +35,7 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -96,6 +97,30 @@ public class DocumentReader
         return getDocument(new ByteArrayInputStream(buffer.toString().getBytes()));
     }
     
+    private static final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+    static
+    {
+        docBuilderFactory.setCoalescing(true);
+        docBuilderFactory.setIgnoringComments(true);
+        docBuilderFactory.setIgnoringElementContentWhitespace(true);
+        if("false".equals(System.getProperties().getProperty(Control.PNAME+".validatexml", "true").toLowerCase()))
+        {
+            docBuilderFactory.setNamespaceAware(false);
+            docBuilderFactory.setValidating(false);
+            try 
+            {
+                docBuilderFactory.setFeature("http://xml.org/sax/features/namespaces", false);
+                docBuilderFactory.setFeature("http://xml.org/sax/features/validation", false);
+                docBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+                docBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } 
+            catch(ParserConfigurationException ex) 
+            {
+                Control.L.log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     /** 
      * TODO: Docbuilder could be global synchronized singelton?
      * 
@@ -105,13 +130,14 @@ public class DocumentReader
      */
     private Document getDocument(final InputStream is) throws Exception
     {
-        final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-        docBuilderFactory.setCoalescing(true);
-        docBuilderFactory.setIgnoringComments(true);
-        docBuilderFactory.setIgnoringElementContentWhitespace(true);
-        final DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+        DocumentBuilder docBuilder; 
+        synchronized(docBuilderFactory)
+        {
+            docBuilder = docBuilderFactory.newDocumentBuilder();
+        }
         final Document doc = docBuilder.parse(is);
         doc.getDocumentElement().normalize();
+        docBuilder = null;
         return doc;
     }
     
