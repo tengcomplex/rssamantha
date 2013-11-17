@@ -241,7 +241,7 @@ Changes
 ================================================================================
 -------------------
 Version: 0.801
-Release: soon
+Release: 20131117
 ------------------
 - Tiny performance improvements:
    * Item.clone()
