@@ -34,7 +34,7 @@ import java.util.List;
 public class HtmlFileHandler extends TxtFileHandler
 {
     public static final String DEFAULTDATETIMEHTMLPATTERN = "dd MMM yyyy HH:mm:ss";
-    public final static DateFormat timeformat = new SimpleDateFormat("HH:mm:ss");
+    public static final DateFormat timeformat = new SimpleDateFormat("HH:mm:ss");
 
     public HtmlFileHandler(final Control c, final int [] channelindices, final String rssfilename, final long sleep, final String pattern)
     {
