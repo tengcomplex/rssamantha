@@ -264,7 +264,7 @@ public abstract class ItemCreator extends Thread
         for(Item i : items)
         {
             final boolean throwaway = isThrowAway(i);
-            //Control.L.log(Level.FINEST, "channel:[{0}] creatorname:{1} item:{2} {3} throwing away", new Object[]{control.getChannelDataToShortString(channelindex), creatorname, i.toShortString(), throwaway ? "" : "not"});
+//Control.L.log(Level.FINEST, "channel:[{0}] creatorname:{1} item:{2} {3} throwing away", new Object[]{control.getChannelDataToShortString(channelindex), creatorname, i.toShortString(), throwaway ? "" : "not"});
             if(throwaway)
             {
                 continue;
