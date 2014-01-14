@@ -44,6 +44,7 @@ public class RssChannelReader extends ChannelReader
      * TODO: Do we add null Item if fieldNode.getNodeType() != Node.ELEMENT_NODE?
      * @return 
      */
+    @Override
     public boolean read()
     {
         try
