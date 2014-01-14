@@ -39,7 +39,8 @@ import java.util.logging.Level;
 public class DownloadControl extends Thread implements Observer
 {
     /** Files we downloaded older 300 days are going to be removed from cache.<br> 
-     * @see knownDownloads  
+     * @see #knownDownloads
+     * @see #update(java.util.Observable, java.lang.Object) 
      */
     private final static long MAX_OLD_KNOWNDOWNLOADS = 1000l * 60l * 60l * 24l * 300l;
     
@@ -155,6 +156,8 @@ public class DownloadControl extends Thread implements Observer
         return false;
     }
     
+    @SuppressWarnings("SynchronizeOnNonFinalField")
+    @Override
     public void update(final Observable arg0, final Object arg1)
     {
         final Download dl = (Download) arg0;
