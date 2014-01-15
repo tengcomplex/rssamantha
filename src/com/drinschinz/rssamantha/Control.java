@@ -306,12 +306,6 @@ public class Control
                                 itemcreator.setType(ItemCreator.ItemCreatorType.ATOMFEED);
                                 initItemCreator(itemcreator, nnmfeeds);
                             }
-                            else if("rsstwitter".equals(feedtype))
-                            {
-                                itemcreator = new RssFeedItemCreator(this, feedurl, title);
-                                itemcreator.setType(ItemCreator.ItemCreatorType.RSSTWITTERFEED);
-                                initItemCreator(itemcreator, nnmfeeds);
-                            }
                             else if("rssidentica".equals(feedtype))
                             {
                                 itemcreator = new RssFeedItemCreator(this, feedurl, title);

@@ -133,7 +133,6 @@ public abstract class ItemCreator extends Thread
         SIMPLEFILE,
         RSSFEED,
         SIMPLERSSFEED,
-        RSSTWITTERFEED,
         RSSIDENTICAFEED,
         ATOMFEED,
         HTTPFEED,
