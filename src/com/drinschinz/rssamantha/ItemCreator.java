@@ -229,12 +229,6 @@ public abstract class ItemCreator extends Thread
             }
             newTitle = (titleprefix ? "["+i.getElements().getElementValue("source")+"] " : "")+oldTitle;
         }
-        else if(i.getType() == ItemCreatorType.RSSTWITTERFEED)
-        {
-            newTitle = (titleprefix ? "[twitter] " : "")+oldTitle;
-            /* They always come up with description==title */
-            i.putElement("description", "");
-        }
         else if(i.getType() == ItemCreatorType.RSSIDENTICAFEED)
         {
             newTitle = (titleprefix ? "[identica] " : "")+oldTitle;
