@@ -137,10 +137,6 @@ rss (Using DOM parser from sun libs)
 simplerss (Using a SAX like parser from qdmxl classes,
   thanks to Steven R. Brandt,
   see http://www.javaworld.com/javatips/jw-javatip128.html?page=1)
-rsstwitter (Twitter stopped public RSS support in summer 2013)
-    Alternatively it's possible to use twitter API and adding items from an 
-    external process.
-    See https://github.com/tengcomplex/twittertorssamantha
 rssidentica
 atom
 podcast (Note that -Dknowndownloadsfile=filename must be set up, otherwise the
@@ -244,6 +240,10 @@ Version: 0.802
 Release: soon
 ------------------
 - Clean titles, remove newline when reading items.
+- Remove type rsstwitter. (Twitter stopped public RSS support in summer 2013)
+    Alternatively it's possible to use twitter API and adding items from an 
+    external process.
+    See https://github.com/tengcomplex/twittertorssamantha
 
 -------------------
 Version: 0.801
@@ -580,7 +580,6 @@ TODO
 ===============================================================================
 - Make status avaible as rss feed itself.
 - Add type="rss" to channels.opml
-- RSSTWITTER type is obselete.
 - It may be possible to smart trim every description at read() time.
 - Jun 27, 2011 6:35:19 AM com.drinschinz.rssfeedcreator.ChannelReader getCreated SEVERE: Error reading http://feeds.feedburner.com/francetv-sports?format=xml Couldn't parse dim 26 juin 2011 22:13:51 +0100
     Seems wrong, french guys using weird days are not supported as it seems.
