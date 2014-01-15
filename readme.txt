@@ -240,6 +240,12 @@ RSSamantha.
 Changes
 ================================================================================
 -------------------
+Version: 0.802
+Release: soon
+------------------
+- Clean titles, remove newline when reading items.
+
+-------------------
 Version: 0.801
 Release: 20131117
 ------------------
@@ -574,7 +580,6 @@ TODO
 ===============================================================================
 - Make status avaible as rss feed itself.
 - Add type="rss" to channels.opml
-- Clean titles, remove newline when reading items. (Example http://feeds.feedburner.com/manmademag_tech?format=xml)
 - RSSTWITTER type is obselete.
 - It may be possible to smart trim every description at read() time.
 - Jun 27, 2011 6:35:19 AM com.drinschinz.rssfeedcreator.ChannelReader getCreated SEVERE: Error reading http://feeds.feedburner.com/francetv-sports?format=xml Couldn't parse dim 26 juin 2011 22:13:51 +0100
