@@ -246,10 +246,10 @@ public abstract class ItemCreator extends Thread
         }
         if(appenddescription)
         {
-            newTitle += " | "+ChannelReader.smartTrim(i.getElements().getElementValue("description").replaceAll("\n", " ").replaceAll("\r", " "));
+            newTitle += " | "+ChannelReader.smartTrim(i.getElements().getElementValue("description"));
         }
         /* Some clients not handling html in the title well, so we strip it out */
-        return Control.decodeHtml(newTitle);
+        return Control.decodeHtml(newTitle).replaceAll("\n", " ").replaceAll("\r", " ");
     }
 
     /**
