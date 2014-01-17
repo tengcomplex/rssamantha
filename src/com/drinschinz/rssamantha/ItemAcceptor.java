@@ -611,7 +611,7 @@ class ClientThread implements Runnable
         out.println("<body>"+EOL);
         for(String c : itemacceptor.getControl().getAllChannelNames())
         {
-            out.println("<outline text=\""+c+"\" xmlUrl=\"http://"+itemacceptor.getHost()+":"+itemacceptor.getPort()+"/channel="+c+"\" />"+EOL);
+            out.println("<outline type=\"rss\" text=\""+c+"\" xmlUrl=\"http://"+itemacceptor.getHost()+":"+itemacceptor.getPort()+"/channel="+c+"\" />"+EOL);
         }
         out.println("</body>"+EOL);
         out.println("</opml>"+EOL);
