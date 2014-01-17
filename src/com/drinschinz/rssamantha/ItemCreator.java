@@ -133,7 +133,6 @@ public abstract class ItemCreator extends Thread
         SIMPLEFILE,
         RSSFEED,
         SIMPLERSSFEED,
-        RSSTWITTERFEED,
         RSSIDENTICAFEED,
         ATOMFEED,
         HTTPFEED,
@@ -229,12 +228,6 @@ public abstract class ItemCreator extends Thread
                 i.putElement("description", "");
             }
             newTitle = (titleprefix ? "["+i.getElements().getElementValue("source")+"] " : "")+oldTitle;
-        }
-        else if(i.getType() == ItemCreatorType.RSSTWITTERFEED)
-        {
-            newTitle = (titleprefix ? "[twitter] " : "")+oldTitle;
-            /* They always come up with description==title */
-            i.putElement("description", "");
         }
         else if(i.getType() == ItemCreatorType.RSSIDENTICAFEED)
         {
