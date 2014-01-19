@@ -241,6 +241,7 @@ Release: soon
 ------------------
 - Clean titles, remove newline when reading items.
 - Add type="rss" to channels.opml output.
+- Improve entrypage generation, writing directly to the stream.
 - Remove type rsstwitter. (Twitter stopped public RSS support in summer 2013)
     Alternatively it's possible to use twitter API and adding items from an 
     external process.
