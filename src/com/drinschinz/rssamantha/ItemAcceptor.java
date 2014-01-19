@@ -603,18 +603,18 @@ class ClientThread implements Runnable
     {
         out.print("HTTP/1.0 "+HTTP_OK+" OK"+EOL);
         out.print("Content-type: text/xml"+EOL+EOL);
-        out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+EOL);
-        out.println("<opml>"+EOL);
-        out.println("<head>"+EOL);
-        out.println("<title>"+Main.APPNAME+"</title>"+EOL);
-        out.println("</head>"+EOL);
-        out.println("<body>"+EOL);
+        out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        out.println("<opml>");
+        out.println("<head>");
+        out.println("<title>"+Main.APPNAME+"</title>");
+        out.println("</head>");
+        out.println("<body>");
         for(String c : itemacceptor.getControl().getAllChannelNames())
         {
-            out.println("<outline type=\"rss\" text=\""+c+"\" xmlUrl=\"http://"+itemacceptor.getHost()+":"+itemacceptor.getPort()+"/channel="+c+"\" />"+EOL);
+            out.println("<outline type=\"rss\" text=\""+c+"\" xmlUrl=\"http://"+itemacceptor.getHost()+":"+itemacceptor.getPort()+"/channel="+c+"\" />");
         }
-        out.println("</body>"+EOL);
-        out.println("</opml>"+EOL);
+        out.println("</body>");
+        out.println("</opml>");
     }
     
     /**
