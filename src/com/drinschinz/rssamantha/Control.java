@@ -992,9 +992,9 @@ public class Control
         L.log(Level.FINE, "Written filename:{0} duration:{1}ms", new Object[]{filename, System.currentTimeMillis()-pre});
     }
     
-    public synchronized static ArrayList<String> readFile(final File file)
+    public synchronized static List<String> readFile(final File file)
     {
-        final ArrayList<String> ret = new ArrayList<String>();
+        final List<String> ret = new ArrayList<String>();
         try
         {
             if(!file.exists())
@@ -1017,7 +1017,7 @@ public class Control
         return ret;
     }
 
-    public synchronized static ArrayList<String> readFile(final String fileName)
+    public synchronized static List<String> readFile(final String fileName)
     {
         return readFile(getFile(fileName));
     }
