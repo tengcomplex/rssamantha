@@ -239,6 +239,7 @@ Changes
 Version: 0.802
 Release: soon
 ------------------
+- Add automatic feedtype detection.
 - Clean titles, remove newline when reading items.
 - Add type="rss" to channels.opml output.
 - Improve entrypage generation, writing directly to the stream.
@@ -586,7 +587,6 @@ TODO
     Seems wrong, french guys using weird days are not supported as it seems.
 - Jul 11, 2011 6:11:15 AM com.drinschinz.rssfeedcreator.ChannelReader getCreated SEVERE: Error reading http://rss.nrg.co.il/news/ Couldn't parse Sun,10 Jul 2011 18:36:05 +0200
 - Add source attributes to readme.
-- Add automatic feedtype detection.
 - Add $after datetime POST argument support.
 
 - Add xsd validation for config.opml file, see: http://en.wikipedia.org/wiki/Xsd

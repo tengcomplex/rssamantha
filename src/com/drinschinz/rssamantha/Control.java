@@ -30,12 +30,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -285,34 +287,42 @@ public class Control
                             feedtype = "";
                             feedurl = "";
                             title = nnmfeeds.getNamedItem("title").getNodeValue();
-                            feedtype = nnmfeeds.getNamedItem("feedtype").getNodeValue();
+                            feedtype = nnmfeeds.getNamedItem("feedtype") != null ? nnmfeeds.getNamedItem("feedtype").getNodeValue() : null;
                             feedurl = nnmfeeds.getNamedItem("feedUrl").getNodeValue();
                             ItemCreator itemcreator = null;
-                            if("rss".equals(feedtype))
+                            if(feedtype == null || feedtype.length() == 0)
+                            {
+                                feedtype = detectFeedType(feedurl).name;
+                            }
+                            else
+                            {
+                                feedtype = feedtype.toLowerCase();
+                            }
+                            if(ItemCreator.ItemCreatorType.RSSFEED.name.equals(feedtype) || ItemCreator.ItemCreatorType.UNKNOWN.name.equals(feedtype))
                             {
                                 itemcreator = new RssFeedItemCreator(this, feedurl, title);
                                 itemcreator.setType(ItemCreator.ItemCreatorType.RSSFEED);
                                 initItemCreator(itemcreator, nnmfeeds);
                             }
-                            else if("simplerss".equals(feedtype))
+                            else if(ItemCreator.ItemCreatorType.SIMPLERSSFEED.name.equals(feedtype))
                             {
                                 itemcreator = new SimpleRssFeedItemCreator(this, feedurl, title);
                                 itemcreator.setType(ItemCreator.ItemCreatorType.SIMPLERSSFEED);
                                 initItemCreator(itemcreator, nnmfeeds);
                             }
-                            else if("atom".equals(feedtype))
+                            else if(ItemCreator.ItemCreatorType.ATOMFEED.name.equals(feedtype))
                             {
                                 itemcreator = new AtomFeedItemCreator(this, feedurl, title);
                                 itemcreator.setType(ItemCreator.ItemCreatorType.ATOMFEED);
                                 initItemCreator(itemcreator, nnmfeeds);
                             }
-                            else if("rssidentica".equals(feedtype))
+                            else if(ItemCreator.ItemCreatorType.RSSIDENTICAFEED.name.equals(feedtype))
                             {
                                 itemcreator = new RssFeedItemCreator(this, feedurl, title);
                                 itemcreator.setType(ItemCreator.ItemCreatorType.RSSIDENTICAFEED);
                                 initItemCreator(itemcreator, nnmfeeds);
                             }
-                            else if("podcast".equals(feedtype))
+                            else if(ItemCreator.ItemCreatorType.PODCASTFEED.name.equals(feedtype))
                             {
                                 itemcreator = new PodcastFeedItemCreator(this, feedurl, title);
                                 itemcreator.setType(ItemCreator.ItemCreatorType.PODCASTFEED);
@@ -339,6 +349,49 @@ public class Control
             return false;
         }
         return true;
+    }
+    
+    /**
+     * 
+     * @param url
+     * @return Default #ItemCreator.ItemCreatorType.UNKNOWN
+     */
+    private ItemCreator.ItemCreatorType detectFeedType(final String url)
+    {
+        BufferedReader in;
+        int numlines = 0;
+        ItemCreator.ItemCreatorType ret = ItemCreator.ItemCreatorType.UNKNOWN;
+        try 
+        {   
+            in = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null)
+            {
+//System.out.println(inputLine);
+                if(inputLine.indexOf("</item>") != -1)
+                {
+                    ret = ItemCreator.ItemCreatorType.RSSFEED;
+                    break;
+                }
+                if(inputLine.indexOf("</entry>") != -1)
+                {
+                    ret = ItemCreator.ItemCreatorType.ATOMFEED;
+                    break;
+                }
+                if(numlines++ > 1024)
+                {
+                    /* Return if some source giving us gigabytes of text */
+                    break;
+                }
+            }
+            in.close();
+            L.log(Level.INFO, "Detected feed type:{0} from URL:{1}", new Object[]{ret, url});
+        } 
+        catch(Exception ex) 
+        {
+            //ignore
+        }
+        return ret;
     }
 
     /* TODO: maybe it has more string comparision but is more clear doing it all in the loop */
