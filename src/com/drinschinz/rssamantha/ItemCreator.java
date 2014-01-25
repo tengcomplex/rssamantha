@@ -136,7 +136,8 @@ public abstract class ItemCreator extends Thread
         RSSIDENTICAFEED,
         ATOMFEED,
         HTTPFEED,
-        PODCASTFEED;
+        PODCASTFEED,
+        UNKNOWN;
     }
     
     /**
