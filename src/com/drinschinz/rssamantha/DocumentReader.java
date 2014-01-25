@@ -28,9 +28,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import javax.xml.parsers.DocumentBuilder;
@@ -78,7 +78,7 @@ public class DocumentReader
      */
     protected Document getPreprocessedDocument(final String s, final HashMap<String, String> repl) throws Exception
     {
-        final ArrayList<String> tmp = Control.readFile(s);
+        final List<String> tmp = Control.readFile(s);
         final StringBuilder buffer = new StringBuilder();
         for(int ii=0; ii<tmp.size(); ii++)
         {
