@@ -132,7 +132,10 @@ public class Control
          * And: google won't send stuff at a pure java client, so we mess
          * with the User-Agent sent...
          */
-        System.setProperty("http.agent", Main.APPNAME+" "+Main.APPVERSION);
+        if(!System.getProperties().containsKey("http.agent"))
+        {
+            System.setProperty("http.agent", Main.APPNAME+" "+Main.APPVERSION);
+        }
         if(!initChannels(configfilename))
         {
             System.exit(1);
