@@ -240,6 +240,7 @@ Version: 0.802
 Release: soon
 ------------------
 - Add automatic feedtype detection.
+- Just set "http.agent" property if empty.
 - Clean titles, remove newline when reading items.
 - Add type="rss" to channels.opml output.
 - Improve entrypage generation, writing directly to the stream.
