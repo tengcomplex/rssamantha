@@ -130,14 +130,21 @@ public abstract class ItemCreator extends Thread
 
     public enum ItemCreatorType
     {
-        SIMPLEFILE,
-        RSSFEED,
-        SIMPLERSSFEED,
-        RSSIDENTICAFEED,
-        ATOMFEED,
-        HTTPFEED,
-        PODCASTFEED,
-        UNKNOWN;
+        SIMPLEFILE("simplefile"),
+        RSSFEED("rss"),
+        SIMPLERSSFEED("simplerss"),
+        RSSIDENTICAFEED("rssidentica"),
+        ATOMFEED("atom"),
+        HTTPFEED("http"),
+        PODCASTFEED("podcast"),
+        UNKNOWN("unknown");
+        
+        final String name;
+        
+        ItemCreatorType(final String s)
+        {
+            this.name = s;
+        }
     }
     
     /**
