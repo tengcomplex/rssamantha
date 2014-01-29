@@ -22,7 +22,7 @@
 package com.drinschinz.rssamantha;
 
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.SortedSet;
 
@@ -110,7 +110,7 @@ class ShutdownThread extends Thread
         System.out.println("Shutting down");
         if(System.getProperties().containsKey(Control.PNAME+".itemstoragefile"))
         {
-            final HashMap<String, SortedSet<Item>> hm = control.getAllItems();
+            final Map<String, SortedSet<Item>> hm = control.getAllItems();
             Control.writeObject(hm, System.getProperty(Control.PNAME+".itemstoragefile"));
             System.out.println("Wrote items to "+System.getProperty(Control.PNAME+".itemstoragefile"));
         }
