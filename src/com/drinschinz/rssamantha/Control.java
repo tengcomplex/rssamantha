@@ -50,6 +50,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.SortedSet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -57,6 +58,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
@@ -107,7 +109,8 @@ public class Control
     
     private DownloadControl downloadcontrol;
     /** We add ItemCreators when initializing, start them in ItemCreatorsStarter and get rid of this stack eventually. */
-    private LinkedList<ItemCreator> itemcreators = new LinkedList<ItemCreator>();
+    //private LinkedList<ItemCreator> itemcreators = new LinkedList<ItemCreator>();
+    private LinkedList<ItemCreatorData> itemcreators = new LinkedList<ItemCreatorData>();
     private final RSSamanthaStatistics stats = new RSSamanthaStatistics();
 
     public static Logger L;
@@ -150,7 +153,7 @@ public class Control
     {
         int ix;
         String name;
-        final HashMap<String, String> channelelements = new HashMap<String, String>(), configelements = new HashMap<String, String>();
+        final Map<String, String> channelelements = new HashMap<String, String>(), configelements = new HashMap<String, String>();
         RssFileHandler rsswriter;
         TxtFileHandler txtwriter;
         HtmlFileHandler htmlwriter;
@@ -203,9 +206,55 @@ public class Control
         rcr = null;
     }
     
-    private boolean initChannels(final String s)
+    private static final class ItemCreatorData
     {
         String title = "", feedtype = "", feedurl = "";
+        String[] days, hours;
+        boolean appenddescription, titleprefix;
+        long sleep;
+        int channelindex;
+        HashMap<String, Matcher> pattern;
+        
+        void initItemCreator(final NamedNodeMap nnmfeeds) throws Exception
+        {
+            sleep = nnmfeeds.getNamedItem("delay") != null && nnmfeeds.getNamedItem("delay").getNodeValue().length() > 0 ? Long.valueOf(nnmfeeds.getNamedItem("delay").getNodeValue()) : DEFAULTREADITEMSLEEP;
+            titleprefix = nnmfeeds.getNamedItem("titleprefix") != null && nnmfeeds.getNamedItem("titleprefix").getNodeValue().length() > 0 ? Boolean.valueOf(nnmfeeds.getNamedItem("titleprefix").getNodeValue()) : DEFAULTTITLEPREFIX;
+            days = nnmfeeds.getNamedItem("dayofweek") != null && nnmfeeds.getNamedItem("dayofweek").getNodeValue().length() > 0 ? nnmfeeds.getNamedItem("dayofweek").getNodeValue().split(",") : null;
+            hours = nnmfeeds.getNamedItem("hourofday") != null && nnmfeeds.getNamedItem("hourofday").getNodeValue().length() > 0 ? nnmfeeds.getNamedItem("hourofday").getNodeValue().split(",") : null;
+            appenddescription = nnmfeeds.getNamedItem("appenddescription") != null && "true".equals(nnmfeeds.getNamedItem("appenddescription").getNodeValue());
+            for(int ii=0; ii<nnmfeeds.getLength(); ii++)
+            {
+                final String s = nnmfeeds.item(ii).getNodeName();
+                if(s == null || s.length() == 0)
+                {
+                    continue;
+                }
+                final String value = nnmfeeds.item(ii).getNodeValue();
+                if(s.startsWith("matchpattern_"))
+                {
+                    initPattern(s.substring(s.indexOf("_")+1), value);
+                }
+            }
+        }
+        
+        void initPattern(final String key, final String s)
+        {
+            if(s == null || s.length() == 0)
+            {
+                return;
+            }
+            if(pattern == null)
+            {
+                this.pattern = new HashMap<String, Matcher>();
+            }
+            final Pattern p = Pattern.compile(s);
+            this.pattern.put(key, p.matcher(""));
+        }
+    }
+    
+    private boolean initChannels(final String s)
+    {   
+        ItemCreatorData icd = null;
         try
         {
             Document doc = null;
@@ -279,6 +328,7 @@ public class Control
                                                                     nnm.getNamedItem("config.htmldatetimeformat") != null ? nnm.getNamedItem("config.htmldatetimeformat").getNodeValue() : HtmlFileHandler.DEFAULTDATETIMEHTMLPATTERN);
                     }
                     final NodeList feeds = fieldNode.getChildNodes();
+                    /* obtain ItemCreatorData */
                     for(int zz=0; zz<feeds.getLength(); zz++)
                     {
                         final Node n = feeds.item(zz);
@@ -286,57 +336,13 @@ public class Control
                         {
 //System.out.println("n:"+n.toString());
                             final NamedNodeMap nnmfeeds = n.getAttributes();
-                            title = "";
-                            feedtype = "";
-                            feedurl = "";
-                            title = nnmfeeds.getNamedItem("title").getNodeValue();
-                            feedtype = nnmfeeds.getNamedItem("feedtype") != null ? nnmfeeds.getNamedItem("feedtype").getNodeValue() : null;
-                            feedurl = nnmfeeds.getNamedItem("feedUrl").getNodeValue();
-                            ItemCreator itemcreator = null;
-                            if(feedtype == null || feedtype.length() == 0)
-                            {
-                                feedtype = detectFeedType(feedurl).name;
-                            }
-                            else
-                            {
-                                feedtype = feedtype.toLowerCase();
-                            }
-                            if(ItemCreator.ItemCreatorType.RSSFEED.name.equals(feedtype) || ItemCreator.ItemCreatorType.UNKNOWN.name.equals(feedtype))
-                            {
-                                itemcreator = new RssFeedItemCreator(this, feedurl, title);
-                                itemcreator.setType(ItemCreator.ItemCreatorType.RSSFEED);
-                                initItemCreator(itemcreator, nnmfeeds);
-                            }
-                            else if(ItemCreator.ItemCreatorType.SIMPLERSSFEED.name.equals(feedtype))
-                            {
-                                itemcreator = new SimpleRssFeedItemCreator(this, feedurl, title);
-                                itemcreator.setType(ItemCreator.ItemCreatorType.SIMPLERSSFEED);
-                                initItemCreator(itemcreator, nnmfeeds);
-                            }
-                            else if(ItemCreator.ItemCreatorType.ATOMFEED.name.equals(feedtype))
-                            {
-                                itemcreator = new AtomFeedItemCreator(this, feedurl, title);
-                                itemcreator.setType(ItemCreator.ItemCreatorType.ATOMFEED);
-                                initItemCreator(itemcreator, nnmfeeds);
-                            }
-                            else if(ItemCreator.ItemCreatorType.RSSIDENTICAFEED.name.equals(feedtype))
-                            {
-                                itemcreator = new RssFeedItemCreator(this, feedurl, title);
-                                itemcreator.setType(ItemCreator.ItemCreatorType.RSSIDENTICAFEED);
-                                initItemCreator(itemcreator, nnmfeeds);
-                            }
-                            else if(ItemCreator.ItemCreatorType.PODCASTFEED.name.equals(feedtype))
-                            {
-                                itemcreator = new PodcastFeedItemCreator(this, feedurl, title);
-                                itemcreator.setType(ItemCreator.ItemCreatorType.PODCASTFEED);
-                                initItemCreator(itemcreator, nnmfeeds);
-                                if(channels[ii].configelements.containsKey("adddownloaditems"))
-                                {
-                                    ((PodcastFeedItemCreator)itemcreator).setAddLimit(Integer.parseInt(channels[ii].configelements.get("adddownloaditems")));
-                                }
-                            }
-                            itemcreator.setChannelindex(ii);
-                            itemcreators.push(itemcreator);
+                            icd = new ItemCreatorData();
+                            icd.title = nnmfeeds.getNamedItem("title").getNodeValue();
+                            icd.feedurl = nnmfeeds.getNamedItem("feedUrl").getNodeValue();
+                            icd.feedtype = nnmfeeds.getNamedItem("feedtype") != null ? nnmfeeds.getNamedItem("feedtype").getNodeValue() : null;
+                            icd.initItemCreator(nnmfeeds);
+                            icd.channelindex = ii;
+                            itemcreators.push(icd);
                         }
                     }
 //System.out.println("channel:"+this.channels[ii].toString());
@@ -345,79 +351,17 @@ public class Control
         }
         catch(Exception ex)
         {
-            String err = "Error reading configfile:"+s+" title:"+title+" feedtype:"+feedtype+" feedurl:"+feedurl+" "+ex.getMessage();
+            final String err = "Error reading configfile:"+s
+                    +(icd != null && icd.title != null ? " title:"+icd.title : "")
+                    +(icd != null && icd.feedtype != null ? " feedtype:"+icd.feedtype : "")
+                    +(icd != null && icd.feedurl != null ? " feedurl:"+icd.feedurl : "")
+                    +" "+ex.getMessage();
             L.warning(err);
             System.err.println(err);
             ex.printStackTrace(System.err);
             return false;
         }
         return true;
-    }
-    
-    /**
-     * 
-     * @param url
-     * @return Default #ItemCreator.ItemCreatorType.UNKNOWN
-     */
-    private ItemCreator.ItemCreatorType detectFeedType(final String url)
-    {
-        BufferedReader in;
-        int numlines = 0;
-        ItemCreator.ItemCreatorType ret = ItemCreator.ItemCreatorType.UNKNOWN;
-        try 
-        {   
-            in = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null)
-            {
-//System.out.println(inputLine);
-                if(inputLine.indexOf("</item>") != -1)
-                {
-                    ret = ItemCreator.ItemCreatorType.RSSFEED;
-                    break;
-                }
-                if(inputLine.indexOf("</entry>") != -1)
-                {
-                    ret = ItemCreator.ItemCreatorType.ATOMFEED;
-                    break;
-                }
-                if(numlines++ > 1024)
-                {
-                    /* Return if some source giving us gigabytes of text */
-                    break;
-                }
-            }
-            in.close();
-            L.log(Level.INFO, "Detected feed type:{0} from URL:{1}", new Object[]{ret, url});
-        } 
-        catch(Exception ex) 
-        {
-            //ignore
-        }
-        return ret;
-    }
-
-    /* TODO: maybe it has more string comparision but is more clear doing it all in the loop */
-    private void initItemCreator(final ItemCreator itemcreator, final NamedNodeMap nnmfeeds) throws Exception
-    {
-        itemcreator.setSleep(nnmfeeds.getNamedItem("delay") != null && nnmfeeds.getNamedItem("delay").getNodeValue().length() > 0 ? Long.valueOf(nnmfeeds.getNamedItem("delay").getNodeValue()) : DEFAULTREADITEMSLEEP);
-        itemcreator.setTitlePrefix(nnmfeeds.getNamedItem("titleprefix") != null && nnmfeeds.getNamedItem("titleprefix").getNodeValue().length() > 0 ? Boolean.valueOf(nnmfeeds.getNamedItem("titleprefix").getNodeValue()) : DEFAULTTITLEPREFIX);
-        itemcreator.setDays(nnmfeeds.getNamedItem("dayofweek") != null && nnmfeeds.getNamedItem("dayofweek").getNodeValue().length() > 0 ? nnmfeeds.getNamedItem("dayofweek").getNodeValue().split(",") : null);
-        itemcreator.setHours(nnmfeeds.getNamedItem("hourofday") != null && nnmfeeds.getNamedItem("hourofday").getNodeValue().length() > 0 ? nnmfeeds.getNamedItem("hourofday").getNodeValue().split(",") : null);
-        itemcreator.setAppendDescription(nnmfeeds.getNamedItem("appenddescription") != null && "true".equals(nnmfeeds.getNamedItem("appenddescription").getNodeValue()));
-        for(int ii=0; ii<nnmfeeds.getLength(); ii++)
-        {
-            final String s = nnmfeeds.item(ii).getNodeName();
-            if(s == null || s.length() == 0)
-            {
-                continue;
-            }
-            final String value = nnmfeeds.item(ii).getNodeValue();
-            if(s.startsWith("matchpattern_"))
-            {
-                itemcreator.initPattern(s.substring(s.indexOf("_")+1), value);
-            }
-        }
     }
 
     public int getCompression()
@@ -550,7 +494,7 @@ public class Control
         return ret;
     }
 
-    protected synchronized HashMap<String, String> getChannelElements(final int ix)
+    protected synchronized Map<String, String> getChannelElements(final int ix)
     {
         return this.channels[ix].channelelements;
     }
@@ -562,20 +506,109 @@ public class Control
 
     private class ItemCreatorsStarter extends Thread
     {
+        /**
+         *
+         * @param url
+         * @return Default #ItemCreator.ItemCreatorType.UNKNOWN
+         */
+        private ItemCreator.ItemCreatorType detectFeedType(final String url)
+        {
+            BufferedReader in;
+            int numlines = 0;
+            ItemCreator.ItemCreatorType ret = ItemCreator.ItemCreatorType.UNKNOWN;
+            try
+            {
+                in = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
+                String inputLine;
+                while((inputLine = in.readLine()) != null)
+                {
+                    //System.out.println(inputLine);
+                    if(inputLine.indexOf("</item>") != -1)
+                    {
+                        ret = ItemCreator.ItemCreatorType.RSSFEED;
+                        break;
+                    }
+                    if(inputLine.indexOf("</entry>") != -1)
+                    {
+                        ret = ItemCreator.ItemCreatorType.ATOMFEED;
+                        break;
+                    }
+                    if(numlines++ > 1024)
+                    {
+                        /* Return if some source giving us gigabytes of text */
+                        break;
+                    }
+                }
+                in.close();
+                L.log(Level.INFO, "Detected feed type:{0} from URL:{1}", new Object[]{ret, url});
+            } 
+            catch(Exception ex)
+            {
+                //ignore
+            }
+            return ret;
+        }
+
         @Override
         @SuppressWarnings("SleepWhileHoldingLock")
         public void run()
         {
-            final int sleep = System.getProperties().containsKey(Control.this.getClass().getPackage().getName()+".starterdelay") ? Integer.parseInt(System.getProperty(Control.this.getClass().getPackage().getName()+".starterdelay")) : DEFAULTSTARTERDELAY;
+            final int sleep = System.getProperties().containsKey(Control.this.getClass().getPackage().getName() + ".starterdelay") ? Integer.parseInt(System.getProperty(Control.this.getClass().getPackage().getName() + ".starterdelay")) : DEFAULTSTARTERDELAY;
             L.log(Level.INFO, "Starting {0} itemcreators, delay:{1}ms", new Object[]{itemcreators.size(), String.valueOf(sleep)});
             try
             {
                 while(!itemcreators.isEmpty())
                 {
-                    addItemCreator(itemcreators.removeLast());
+                    ItemCreator itemcreator = null;
+                    ItemCreatorData icd = itemcreators.removeLast();
+                    if(icd.feedtype == null || icd.feedtype.length() == 0)
+                    {
+                        icd.feedtype = detectFeedType(icd.feedurl).name;
+                    } 
+                    else
+                    {
+                        icd.feedtype = icd.feedtype.toLowerCase();
+                    }
+                    if(ItemCreator.ItemCreatorType.RSSFEED.name.equals(icd.feedtype) || ItemCreator.ItemCreatorType.UNKNOWN.name.equals(icd.feedtype))
+                    {
+                        itemcreator = new RssFeedItemCreator(Control.this, icd.feedurl, icd.title);
+                        itemcreator.setType(ItemCreator.ItemCreatorType.RSSFEED);
+                    } 
+                    else if(ItemCreator.ItemCreatorType.SIMPLERSSFEED.name.equals(icd.feedtype))
+                    {
+                        itemcreator = new SimpleRssFeedItemCreator(Control.this, icd.feedurl, icd.title);
+                        itemcreator.setType(ItemCreator.ItemCreatorType.SIMPLERSSFEED);
+                    } 
+                    else if(ItemCreator.ItemCreatorType.ATOMFEED.name.equals(icd.feedtype))
+                    {
+                        itemcreator = new AtomFeedItemCreator(Control.this, icd.feedurl, icd.title);
+                        itemcreator.setType(ItemCreator.ItemCreatorType.ATOMFEED);
+                    } 
+                    else if(ItemCreator.ItemCreatorType.RSSIDENTICAFEED.name.equals(icd.feedtype))
+                    {
+                        itemcreator = new RssFeedItemCreator(Control.this, icd.feedurl, icd.title);
+                        itemcreator.setType(ItemCreator.ItemCreatorType.RSSIDENTICAFEED);
+                    } 
+                    else if(ItemCreator.ItemCreatorType.PODCASTFEED.name.equals(icd.feedtype))
+                    {
+                        itemcreator = new PodcastFeedItemCreator(Control.this, icd.feedurl, icd.title);
+                        itemcreator.setType(ItemCreator.ItemCreatorType.PODCASTFEED);
+                        if(channels[icd.channelindex].configelements.containsKey("adddownloaditems"))
+                        {
+                            ((PodcastFeedItemCreator) itemcreator).setAddLimit(Integer.parseInt(channels[icd.channelindex].configelements.get("adddownloaditems")));
+                        }
+                    }
+                    itemcreator.setSleep(icd.sleep);
+                    itemcreator.setTitlePrefix(icd.titleprefix);
+                    itemcreator.setDays(icd.days);
+                    itemcreator.setHours(icd.hours);
+                    itemcreator.setAppendDescription(icd.appenddescription);
+                    itemcreator.setPattern(icd.pattern);
+                    itemcreator.setChannelindex(icd.channelindex);
+                    addItemCreator(itemcreator);
                     Thread.sleep(sleep);
                 }
-            }
+            } 
             catch(Exception ex)
             {
                 L.log(Level.SEVERE, "Error during itemcreators startup ", ex);
@@ -745,9 +778,9 @@ public class Control
     }
 
     /* For the shutdownhook in Main */
-    public synchronized HashMap<String, SortedSet<Item>> getAllItems()
+    public synchronized Map<String, SortedSet<Item>> getAllItems()
     {
-        final HashMap ret = new HashMap<String, SortedSet<Item>>();
+        final Map<String, SortedSet<Item>> ret = new HashMap<String, SortedSet<Item>>();
         for(int ii=0; ii<channels.length; ii++)
         {
             ret.put(channels[ii].name, channels[ii].itemdata.getAllItems());
