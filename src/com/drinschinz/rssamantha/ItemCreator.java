@@ -25,11 +25,11 @@ package com.drinschinz.rssamantha;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
  */
 public abstract class ItemCreator extends Thread
 {
-    protected final ArrayList<Item> items = new ArrayList<Item>();
+    protected final List<Item> items = new ArrayList<Item>();
     protected Control control;
     protected String creatorname;
     protected long sleep;
@@ -51,7 +51,7 @@ public abstract class ItemCreator extends Thread
 
     protected int channelindex;
 
-    protected HashMap<String, Matcher> pattern;
+    protected Map<String, Matcher> pattern;
 
     public ItemCreator()
     {
@@ -78,19 +78,10 @@ public abstract class ItemCreator extends Thread
     {
         return this.creatorname;
     }
-
-    public void initPattern(final String key, final String s)
+    
+    public void setPattern(final Map<String, Matcher> p)
     {
-        if(s == null || s.length() == 0)
-        {
-            return;
-        }
-        if(pattern == null)
-        {
-            this.pattern = new HashMap<String, Matcher>();
-        }
-        final Pattern p = Pattern.compile(s);
-        this.pattern.put(key, p.matcher(""));
+        this.pattern = p;
     }
 
     public void setHours(final String [] s)
