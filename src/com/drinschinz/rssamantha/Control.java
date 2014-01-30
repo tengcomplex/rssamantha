@@ -807,7 +807,8 @@ public class Control
         FINISHEDDOWNLOAD(9),
         HTTP_GET(10),
         HTTP_POST(11),
-        HTTP_NOACCEPT(12);
+        HTTP_NOACCEPT(12),
+        PROCESSED(13);
 
         private int ix = 0;
 
@@ -827,6 +828,7 @@ public class Control
      */
     private CountEvent isAddable(final Item i, final int ix)
     {
+        stats.count(CountEvent.PROCESSED);
         if(i.getElements().getElementValue("title") == null || i.getElements().getElementValue("title").length() == 0)
         {   
             stats.count(CountEvent.INVALID);
@@ -975,9 +977,9 @@ public class Control
             }
         }
 
-        public void count(final CountEvent air)
+        public int count(final CountEvent air)
         {
-            this.countresults[air.getIndex()].incrementAndGet();
+            return this.countresults[air.getIndex()].incrementAndGet();
         }
 
         /**
