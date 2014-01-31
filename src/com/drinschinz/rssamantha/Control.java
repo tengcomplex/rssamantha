@@ -827,8 +827,7 @@ public class Control
      *
      */
     private CountEvent isAddable(final Item i, final int ix)
-    {
-        stats.count(CountEvent.PROCESSED);
+    {   
         if(i.getElements().getElementValue("title") == null || i.getElements().getElementValue("title").length() == 0)
         {   
             stats.count(CountEvent.INVALID);
@@ -964,16 +963,17 @@ public class Control
     {
         return this.stats;
     }
-
+    
+    /** Special handling for PROCESSED, we don't increment during lifetime, we calculate at access time. */
     public final class RSSamanthaStatistics extends Statistics
     {
-        private AtomicInteger[] countresults = new AtomicInteger[CountEvent.values().length];
+        private AtomicInteger[] countresults = new AtomicInteger[CountEvent.values().length -1];
 
         public RSSamanthaStatistics()
         {
             for(int ii=0; ii<countresults.length; ii++)
             {
-                countresults[ii] = new AtomicInteger();
+                countresults[ii] = ii == CountEvent.PROCESSED.getIndex() ? null : new AtomicInteger();
             }
         }
 
@@ -999,12 +999,13 @@ public class Control
                 str.append("ix:").append(ii).append(" ").append(channels[ii].name).append(" ").append(channels[ii].itemdata.getNumberOfItems()).append("/").append(channels[ii].itemdata.getStoreLimit()).append(" items (").append(formatPercentage(channels[ii].itemdata.getNumberOfItems(), channels[ii].itemdata.getStoreLimit())).append(") ");
             }
             str.append("Holding summary ").append(getNumberOfAllItems()).append("/").append(storelimit).append(" items (").append(formatPercentage(getNumberOfAllItems(), storelimit)).append(" full at total)");
-            str.append(downloadcontrol != null ? " known downloads:" + downloadcontrol.getKnownDownloads().size() : "");
+            str.append(downloadcontrol != null ? " known downloads:"+downloadcontrol.getKnownDownloads().size() : "");
             str.append(" ").append(super.getStatus());
             str.append(" numoperations:[");
-            for(int ii=0; ii<CountEvent.values().length; ii++)
+            for(CountEvent ce : CountEvent.values())
             {
-                str.append(CountEvent.values()[ii]).append(":").append(countresults[CountEvent.values()[ii].getIndex()].get()).append(" ");
+                /* Instead of incrementing PROCESSED during lifetime, we just add up here */
+                str.append(ce).append(":").append(ce != CountEvent.PROCESSED ? countresults[ce.getIndex()].get() : countresults[CountEvent.ADDED.getIndex()].get() + countresults[CountEvent.TOOOLD.getIndex()].get() + countresults[CountEvent.ALREADYKNOWN.getIndex()].get()).append(" ");
             }
             str.deleteCharAt(str.length()-1);
             str.append("] ");
