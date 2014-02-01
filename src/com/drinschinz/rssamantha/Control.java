@@ -553,7 +553,7 @@ public class Control
         @SuppressWarnings("SleepWhileHoldingLock")
         public void run()
         {
-            final int sleep = System.getProperties().containsKey(Control.this.getClass().getPackage().getName() + ".starterdelay") ? Integer.parseInt(System.getProperty(Control.this.getClass().getPackage().getName() + ".starterdelay")) : DEFAULTSTARTERDELAY;
+            final int sleep = System.getProperties().containsKey(PNAME+".starterdelay") ? Integer.parseInt(System.getProperty(PNAME+".starterdelay")) : DEFAULTSTARTERDELAY;
             L.log(Level.INFO, "Starting {0} itemcreators, delay:{1}ms", new Object[]{itemcreators.size(), String.valueOf(sleep)});
             try
             {
