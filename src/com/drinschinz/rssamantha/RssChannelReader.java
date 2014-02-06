@@ -58,7 +58,7 @@ public class RssChannelReader extends ChannelReader
                 if(fieldNode.getNodeType() == Node.ELEMENT_NODE)
                 {
                     final Element fieldElement = (Element) fieldNode;
-                    final DateInfo di = getCreated(fieldElement, new String[]{"pubDate","dc:date"});
+                    final DateInfo di = getCreated(fieldElement, new String[]{"pubDate", "dc:date"});
                     item = new Item(di.getTimestamp(), getValue(fieldElement, "title"), getValue(fieldElement, "description"), itemcreatorname, type);
                     item.setFoundrsscreated(di.isFoundCreated());
                     item.putElement("link", getValue(fieldElement, "link"));
