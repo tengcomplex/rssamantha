@@ -65,7 +65,7 @@ public class HtmlFileHandler extends TxtFileHandler
     @Override
     protected String getAsString(final List<Item> items)
     {
-        return getAsString(items, String.valueOf((sleep*1000)), null);
+        return getAsString(items, String.valueOf((sleep * Statistics.SECOND)), null);
     }
     
     protected String getAsString(final List<Item> items, final String refresh, final String css)
