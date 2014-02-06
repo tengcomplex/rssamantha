@@ -32,11 +32,11 @@ import java.text.NumberFormat;
 public class Statistics
 {
     private final long started = System.currentTimeMillis();
-    private final int SECOND  = 1000;
-    private final int MINUTE  = SECOND * 60;
-    private final int HOUR    = MINUTE * 60;
-    private final int DAY     = HOUR * 24;
-    private final NumberFormat formatter = new DecimalFormat("####.##");
+    static public final int SECOND  = 1000;
+    static public final int MINUTE  = SECOND * 60;
+    static public final int HOUR    = MINUTE * 60;
+    static public final int DAY     = HOUR * 24;
+    static public final NumberFormat formatter = new DecimalFormat("####.##");
 
     /**
      * 
