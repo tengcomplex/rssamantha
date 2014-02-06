@@ -45,6 +45,7 @@ public class TxtFileHandler extends FileHandler
         this.datetimeformat = pattern == null ? null : new SimpleDateFormat(pattern);
     }
 
+    @Override
     protected void write()
     {
         final List<Item> items = control.getSortedItems(channelindices);
