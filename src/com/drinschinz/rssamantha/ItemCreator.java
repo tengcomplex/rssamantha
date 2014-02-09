@@ -37,7 +37,7 @@ import java.util.regex.Matcher;
  */
 public abstract class ItemCreator extends Thread
 {
-    protected final List<Item> items = new ArrayList<Item>();
+    protected final List<Item> items = new ArrayList<>();
     protected Control control;
     protected String creatorname;
     protected long sleep;
