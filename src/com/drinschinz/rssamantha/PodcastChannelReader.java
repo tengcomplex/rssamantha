@@ -54,7 +54,7 @@ public class PodcastChannelReader extends RssChannelReader
         {
             final Document doc = getDocument(url);
             final NodeList listFields = doc.getElementsByTagName("item");
-            for (int ss = 0; ss<listFields.getLength(); ss++)
+            for(int ss = 0; ss<listFields.getLength(); ss++)
             {
                 Item item = null;
                 final Node fieldNode = listFields.item(ss);
