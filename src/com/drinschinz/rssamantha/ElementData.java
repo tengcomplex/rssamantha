@@ -33,11 +33,11 @@ import java.util.Iterator;
  */
 public class ElementData implements Serializable
 {
-    private HashMap<String, String> elements;
+    private final HashMap<String, String> elements;
 
     public ElementData()
     {
-        elements = new HashMap<String, String>();
+        elements = new HashMap<>();
     }
 
     public void putElementValue(final String key, final String value)
