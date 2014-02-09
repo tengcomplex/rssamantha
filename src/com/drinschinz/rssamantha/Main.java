@@ -36,11 +36,9 @@ public class Main
     public final static Properties applicationproperties = new Properties();
     static
     {
-        try
+        try(InputStream is = Main.class.getResourceAsStream("application.properties"))
         {
-            final InputStream is = Main.class.getResourceAsStream("application.properties");
             applicationproperties.load(is);
-            is.close();
         }
         catch(IOException e)
         {
