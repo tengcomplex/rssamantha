@@ -45,7 +45,7 @@ public class ItemData
      *  as integer of those.
      *  @see addItem
      */
-    private final HashSet<Integer> titles = new HashSet<Integer>();
+    private final HashSet<Integer> titles = new HashSet<>();
     private final int showlimit, storelimit;
 
     public ItemData(final int showlimit, final int storelimit)
@@ -128,6 +128,9 @@ public class ItemData
 
     /**
      * @return List<Item> of size <= limit in order of cloned Item instances.
+     * @param numitems The maximum number of items.
+     * @param cutoff The time cutoff, in milliseconds since epoch.
+     * @param pt_title Optional #Pattern for #Item title.
      */
     public List<Item> getSortedItems(final int numitems, final long cutoff, final Pattern pt_title)
     {
@@ -137,8 +140,8 @@ public class ItemData
         {
             matcher = pt_title.matcher("");
         }
-        final ArrayList<Item> copy = new ArrayList<Item>(limit);
-        Iterator<Item> iter = items.iterator();
+        final ArrayList<Item> copy = new ArrayList<>(limit);
+        final Iterator<Item> iter = items.iterator();
         int count = 0;
         while(count < limit && iter.hasNext())
         {
@@ -165,7 +168,6 @@ public class ItemData
             copy.add((Item)i.clone());
             count++;
         }
-        iter = null;
         return copy;
     }
 
