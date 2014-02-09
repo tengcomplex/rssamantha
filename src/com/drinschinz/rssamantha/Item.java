@@ -178,6 +178,7 @@ public class Item implements Comparable<Item>, Serializable
     /** 
      * Youngest on top. If created is equals sort by title alphabetically.
      */
+    @Override
     public int compareTo(final Item another)
     {
         return (this.created < another.created ? 1 : (this.created == another.created ? this.elements.getElementValue("title").compareTo(another.elements.getElementValue("title")) : -1));
