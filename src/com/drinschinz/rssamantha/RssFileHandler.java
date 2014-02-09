@@ -148,6 +148,7 @@ public class RssFileHandler extends FileHandler
         return null;
     }
 
+    @Override
     protected void write()
     {
         List<Item> items = control.getSortedItems(channelindices);
@@ -195,6 +196,7 @@ System.out.print("\r\n");
     }
 
     @Override
+    @SuppressWarnings("SleepWhileInLoop")
     public void run()
     {
         for(;;)
