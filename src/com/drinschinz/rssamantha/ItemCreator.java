@@ -151,9 +151,9 @@ public abstract class ItemCreator extends Thread
         if(times != null)
         {
             Calendar cal = null;
-            for(int ii=0; ii<times.length; ii++)
+            for(String time : times)
             {
-                if("*".equals(times[ii]))
+                if("*".equals(time))
                 {
 //Control.L.log(Level.FINEST, "channel:[{0}] creatorname:{1} {2}[{3}]:{4} - reading time", new Object[]{control.getChannelDataToShortString(channelindex), creatorname, timename, ii, times[ii]});
                     return true;
@@ -165,7 +165,7 @@ public abstract class ItemCreator extends Thread
                         cal = Calendar.getInstance();
                     }
 //Control.L.log(Level.FINEST, "channel:[{0}] creatorname:{1} {2}[{3}]:{4} realtime:{5} - {6}", new Object[]{control.getChannelDataToShortString(channelindex), creatorname, timename, ii, times[ii], cal.get(calfieldtocheck), Integer.valueOf(times[ii]) == cal.get(calfieldtocheck) ? "reading time" : "skipping"});
-                    if(Integer.valueOf(times[ii]) == cal.get(calfieldtocheck))
+                    if(Integer.valueOf(time) == cal.get(calfieldtocheck))
                     {
                         return true;
                     }
