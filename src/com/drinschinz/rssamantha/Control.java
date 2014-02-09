@@ -60,6 +60,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 import org.w3c.dom.*;
@@ -110,7 +111,7 @@ public class Control
     private DownloadControl downloadcontrol;
     /** We add ItemCreators when initializing, start them in ItemCreatorsStarter and get rid of this stack eventually. */
     //private LinkedList<ItemCreator> itemcreators = new LinkedList<ItemCreator>();
-    private LinkedList<ItemCreatorData> itemcreators = new LinkedList<ItemCreatorData>();
+    private LinkedList<ItemCreatorData> itemcreators = new LinkedList<>();
     private final RSSamanthaStatistics stats = new RSSamanthaStatistics();
 
     public static Logger L;
@@ -153,7 +154,7 @@ public class Control
     {
         int ix;
         String name;
-        final Map<String, String> channelelements = new HashMap<String, String>(), configelements = new HashMap<String, String>();
+        final Map<String, String> channelelements = new HashMap<>(), configelements = new HashMap<>();
         RssFileHandler rsswriter;
         TxtFileHandler txtwriter;
         HtmlFileHandler htmlwriter;
@@ -245,7 +246,7 @@ public class Control
             }
             if(pattern == null)
             {
-                this.pattern = new HashMap<String, Matcher>();
+                this.pattern = new HashMap<>();
             }
             final Pattern p = Pattern.compile(s);
             this.pattern.put(key, p.matcher(""));
@@ -261,7 +262,7 @@ public class Control
             final DocumentReader dr = new DocumentReader();
             if("true".equals(System.getProperty(PNAME+".preprocessconfig")))
             {
-                final HashMap<String, String> repl = new HashMap<String, String>();
+                final HashMap<String, String> repl = new HashMap<>();
                 for(Iterator<Object> iter = System.getProperties().keySet().iterator(); iter.hasNext();)
                 {
                     final String next = iter.next().toString();
@@ -374,7 +375,10 @@ public class Control
         return this.futuredump;
     }
 
-    /** Helper for  @Itemacceptor*/
+    /** 
+     * Helper for #Itemacceptor.
+     * @return All channel names as a String[].
+     */
     public String[] getAllChannelNames()
     {
         final String[] ret = new String[channels.length];
@@ -385,13 +389,20 @@ public class Control
         return ret;
     }
     
-     /** Helper for  @Itemacceptor*/
+     /** 
+      * Helper for #Itemacceptor.
+      * @return The number of channels.
+      */
     public int getChannelCount()
     {
         return this.channels.length;
     }
 
-    /** Helper for  @Itemacceptor*/
+    /** 
+     * Helper for #Itemacceptor
+     * @param ix The index.
+     * @return The channel name of given index.
+     */
     public String getChannelName(final int ix)
     {
         return isValidChannelIndex(ix) ? channels[ix].name : "invalid channel";
@@ -413,7 +424,11 @@ public class Control
         return ret.toString();
     }
 
-    /** Helper for @initItemStorage() and @Itemacceptor*/
+    /** 
+     * Helper for #initItemStorage() and #Itemacceptor.
+     * @param name the name of given channel.
+     * @return The channel index of given name.
+     */
     public int getChannelIndex(final String name)
     {
         if(name != null && name.length() > 0)
@@ -467,7 +482,11 @@ public class Control
         }
     }
 
-    /** For logging. */
+    /** 
+     * Helper for logging. 
+     * @param ix The channel index.
+     * @return Channel data as short string of given index.
+     */
     public String getChannelDataToShortString(final int ix)
     {
         return channels[ix].toShortString();
@@ -657,23 +676,20 @@ public class Control
          * Start ItemCreator
          */
         new ItemCreatorsStarter().start();
-        /*
-         * Start filehandler
-         */
-        for(int ii=0; ii<channels.length; ii++)
+        for(ChannelData cd : channels)
         {
-            L.log(Level.FINEST, "channel:{0}", channels[ii].toString());
-            if(channels[ii].rsswriter != null)
-            {  
-                channels[ii].rsswriter.start();
-            }
-            if(channels[ii].txtwriter != null)
+            L.log(Level.FINEST, "channel:{0}", cd.toString());
+            if(cd.rsswriter != null)
             {
-                channels[ii].txtwriter.start();
+                cd.rsswriter.start();
             }
-            if(channels[ii].htmlwriter != null)
+            if(cd.txtwriter != null)
             {
-                channels[ii].htmlwriter.start();
+                cd.txtwriter.start();
+            }
+            if(cd.htmlwriter != null)
+            {
+                cd.htmlwriter.start();
             }
         }
     }
@@ -730,7 +746,7 @@ public class Control
     
     public synchronized List<Item> getSortedItems(final int[] ixs, final long cutoff, final int numitems, final Pattern pt_title)
     {
-        final List<Item> ret = new ArrayList<Item>();
+        final List<Item> ret = new ArrayList<>();
         final boolean defsize = numitems == -1;
         final boolean maxsize = numitems == Integer.MAX_VALUE;
         int limit = defsize || !maxsize ? numitems : Integer.MAX_VALUE;
@@ -780,10 +796,10 @@ public class Control
     /* For the shutdownhook in Main */
     public synchronized Map<String, SortedSet<Item>> getAllItems()
     {
-        final Map<String, SortedSet<Item>> ret = new HashMap<String, SortedSet<Item>>();
-        for(int ii=0; ii<channels.length; ii++)
+        final Map<String, SortedSet<Item>> ret = new HashMap<>();
+        for(ChannelData cd : channels)
         {
-            ret.put(channels[ii].name, channels[ii].itemdata.getAllItems());
+            ret.put(cd.name, cd.itemdata.getAllItems());
         }
         return ret;
     }
@@ -905,7 +921,7 @@ public class Control
             L.log(Level.FINE, "Original: {0} Compressed: {1}", new Object[]{input.length, output.length});
             return output;
         }
-        catch(Exception ex)
+        catch(IOException ex)
         {
             L.log(Level.SEVERE, ex.getMessage(), ex);
         }
@@ -929,7 +945,7 @@ public class Control
             baos.close();
             return new String(baos.toByteArray());
         }
-        catch(Exception ex)
+        catch(DataFormatException | IOException ex)
         {
             L.log(Level.SEVERE, ex.getMessage(), ex);
         }
@@ -967,7 +983,7 @@ public class Control
     /** Special handling for PROCESSED, we don't increment during lifetime, we calculate at access time. */
     public final class RSSamanthaStatistics extends Statistics
     {
-        private AtomicInteger[] countresults = new AtomicInteger[CountEvent.values().length -1];
+        private final AtomicInteger[] countresults = new AtomicInteger[CountEvent.values().length -1];
 
         public RSSamanthaStatistics()
         {
@@ -984,18 +1000,17 @@ public class Control
 
         /**
          * For logging.
+         * @return The status or the running program in detail as string.
          */
         @Override
         public synchronized String getStatus()
         {
             int storelimit = 0;
+            final StringBuilder str = new StringBuilder(512);
+            str.append(getNumberOfItemCreators()).append(" itemcreators in ").append(getNumberOfChannels()).append(" channels running. ");
             for(int ii=0; ii<channels.length; ii++)
             {
                 storelimit += channels[ii].itemdata.getStoreLimit();
-            }
-            final StringBuilder str = new StringBuilder(getNumberOfItemCreators()+" itemcreators in "+getNumberOfChannels()+" channels running. ");
-            for(int ii=0; ii<channels.length; ii++)
-            {
                 str.append("ix:").append(ii).append(" ").append(channels[ii].name).append(" ").append(channels[ii].itemdata.getNumberOfItems()).append("/").append(channels[ii].itemdata.getStoreLimit()).append(" items (").append(formatPercentage(channels[ii].itemdata.getNumberOfItems(), channels[ii].itemdata.getStoreLimit())).append(") ");
             }
             str.append("Holding summary ").append(getNumberOfAllItems()).append("/").append(storelimit).append(" items (").append(formatPercentage(getNumberOfAllItems(), storelimit)).append(" full at total)");
@@ -1086,7 +1101,7 @@ public class Control
     
     public synchronized static List<String> readFile(final File file)
     {
-        final List<String> ret = new ArrayList<String>();
+        final List<String> ret = new ArrayList<>();
         try
         {
             if(!file.exists())
@@ -1245,16 +1260,17 @@ public class Control
     {
         private final Date dat = new Date();
         private final static String format = "{0,date} {0,time}";
-        private MessageFormat formatter = new MessageFormat(format);
+        private final MessageFormat formatter = new MessageFormat(format);
 
-        private Object args[] = new Object[1];
-        private String lineSeparator = System.getProperty("line.separator");
+        private final Object args[] = new Object[1];
+        private final String lineSeparator = System.getProperty("line.separator");
 
         /**
          * Format the given LogRecord.
          * @param record the log record to be formatted.
          * @return a formatted log record
          */
+        @Override
         public synchronized String format(final LogRecord record)
         {
             final StringBuilder sb = new StringBuilder();
