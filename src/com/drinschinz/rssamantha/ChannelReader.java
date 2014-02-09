@@ -72,7 +72,7 @@ public abstract class ChannelReader extends DocumentReader
     
     public ChannelReader()
     {
-        this.items = new ArrayList<Item>();
+        this.items = new ArrayList<>();
     }
 
     public ChannelReader(final String url, final String itemcreatorname)
@@ -171,7 +171,7 @@ public abstract class ChannelReader extends DocumentReader
     /**
      * 
      * @param fieldElement
-     * @param tagname
+     * @param tagnames
      * @return A DateInfo object.<br>
      * @see Item.foundrsscreated<br>
      * @see DateInfo
@@ -181,9 +181,9 @@ public abstract class ChannelReader extends DocumentReader
     {
         DateInfo ret = new DateInfo();
         NodeList trs_pd = null;
-        for(int ii=0; ii<tagnames.length; ii++)
+        for(String tn : tagnames)
         {
-            trs_pd = fieldElement.getElementsByTagName(tagnames[ii]);
+            trs_pd = fieldElement.getElementsByTagName(tn);
             if(trs_pd != null && trs_pd.getLength() > 0)
             {
                 break;
