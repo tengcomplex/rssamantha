@@ -21,6 +21,7 @@
  */
 package com.drinschinz.rssamantha;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
@@ -41,7 +42,7 @@ public class Main
             applicationproperties.load(is);
             is.close();
         }
-        catch(Exception e)
+        catch(IOException e)
         {
             // Shouldn't happen
             e.printStackTrace(System.err);
