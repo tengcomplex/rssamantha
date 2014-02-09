@@ -177,6 +177,7 @@ public class Item implements Comparable<Item>, Serializable
 
     /** 
      * Youngest on top. If created is equals sort by title alphabetically.
+     * @param another The #Item to compare against.
      */
     @Override
     public int compareTo(final Item another)
