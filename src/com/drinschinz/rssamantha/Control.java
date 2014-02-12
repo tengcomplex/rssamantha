@@ -532,16 +532,13 @@ public class Control
          */
         private ItemCreator.ItemCreatorType detectFeedType(final String url)
         {
-            BufferedReader in;
             int numlines = 0;
             ItemCreator.ItemCreatorType ret = ItemCreator.ItemCreatorType.UNKNOWN;
-            try
-            {
-                in = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
+            try(BufferedReader in = new BufferedReader(new InputStreamReader(new URL(url).openStream()));)
+            {   
                 String inputLine;
                 while((inputLine = in.readLine()) != null)
-                {
-                    //System.out.println(inputLine);
+                { 
                     if(inputLine.indexOf("</item>") != -1)
                     {
                         ret = ItemCreator.ItemCreatorType.RSSFEED;
@@ -561,7 +558,7 @@ public class Control
                 in.close();
                 L.log(Level.INFO, "Detected feed type:{0} from URL:{1}", new Object[]{ret, url});
             } 
-            catch(Exception ex)
+            catch(IOException ex)
             {
                 //ignore
             }
