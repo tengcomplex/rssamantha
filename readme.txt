@@ -239,6 +239,7 @@ Changes
 Version: 0.802
 Release: soon
 ------------------
+- Upgrade to java 1.7 compiler, no longer supports 1.6.
 - Add automatic feedtype detection.
 - Just set "http.agent" property with APPNAME if respective system property 
   empty.
@@ -250,6 +251,8 @@ Release: soon
     Alternatively it's possible to use twitter API and adding items from an 
     external process.
     See https://github.com/tengcomplex/twittertorssamantha
+- Set hard log entry datetime pattern "yyyy-MM-dd'T'HH:mm:ss.S", introducing
+  milliseconds.
 
 -------------------
 Version: 0.801
