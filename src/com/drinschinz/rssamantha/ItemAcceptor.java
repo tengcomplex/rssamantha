@@ -53,7 +53,7 @@ public class ItemAcceptor implements Runnable
     private String css = null;
     private final List<String>acceptorlist;
     static int timeout = 0;
-    private final Vector<ClientThread> threads;
+    private final List<ClientThread> threads;
     /* max # worker threads */
     private final int maxworkers;
     
@@ -75,7 +75,7 @@ public class ItemAcceptor implements Runnable
         }
         timeout = 5000;
         this.maxworkers = maxworkers;
-        threads = new Vector<>(maxworkers);
+        threads = Collections.synchronizedList(new ArrayList());
         if(System.getProperties().containsKey(Control.PNAME+".cssfile"))
         {   
             final StringBuilder s = new StringBuilder();
