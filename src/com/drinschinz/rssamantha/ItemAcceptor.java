@@ -63,7 +63,7 @@ public class ItemAcceptor implements Runnable
     {
         this.control = control;
         this.port = port;
-        this.acceptorlist = new ArrayList<String>();
+        this.acceptorlist = new ArrayList<>();
         channelixs = chix;
         if(System.getProperties().containsKey(Control.PNAME+".acceptorlist"))
         {
@@ -75,7 +75,7 @@ public class ItemAcceptor implements Runnable
         }
         timeout = 5000;
         this.maxworkers = maxworkers;
-        threads = new Vector<ClientThread>(maxworkers);
+        threads = new Vector<>(maxworkers);
         if(System.getProperties().containsKey(Control.PNAME+".cssfile"))
         {   
             final StringBuilder s = new StringBuilder();
@@ -326,7 +326,7 @@ class ClientThread implements Runnable
     private void readRequest() throws Exception
     {
         /* read request-rows */
-        final List<StringBuilder> request = new ArrayList<StringBuilder>(10);
+        final List<StringBuilder> request = new ArrayList<>(10);
         StringBuilder sb = new StringBuilder(100);
         int c;
         int contentlength = 0;
@@ -432,7 +432,7 @@ class ClientThread implements Runnable
     private HashMap<String,String> getArgsFromUrl(final String s) throws Exception
     {
         final String [] el = (s.startsWith("?") ? s.substring(1) : s).split("&");
-        final HashMap<String, String> hm = new HashMap<String, String>();
+        final HashMap<String, String> hm = new HashMap<>();
         int[] channelix = new int[2];
         for(int ii=0; ii<el.length; ii++)
         {
@@ -635,7 +635,7 @@ class ClientThread implements Runnable
             Control.L.log(Level.FINEST, "returning all {0} channels", new Object[]{itemacceptor.getAllChannelIndicies().length});
             return itemacceptor.getAllChannelIndicies();
         }
-        final List<Integer> tmp = new ArrayList<Integer>(itemacceptor.getControl().getChannelCount());
+        final List<Integer> tmp = new ArrayList<>(itemacceptor.getControl().getChannelCount());
         for(int ii=0; ii<itemacceptor.getControl().getChannelCount(); ii++)
         {
             int addix = itemacceptor.getControl().getChannelIndex(hm.get("channel"+ii)); // returns -1 for an invalid
