@@ -1252,11 +1252,14 @@ public class Control
         }
         return true;
     }
-
+    
+    /**
+     * TODO: DateTime formatting by hand could be faster.
+     */
     private static class RssFeedCreatorLogFormatter extends Formatter
     {
         private final Date dat = new Date();
-        private final static String format = "{0,date} {0,time}";
+        private final static String format = "{0,date} {0,time,HH:mm:ss.S}";
         private final MessageFormat formatter = new MessageFormat(format);
 
         private final Object args[] = new Object[1];
