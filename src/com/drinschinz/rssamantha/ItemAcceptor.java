@@ -188,7 +188,7 @@ public class ItemAcceptor implements Runnable
 class ClientThread implements Runnable
 {
     /** For logging */
-    private long pre = System.currentTimeMillis();
+    private final long pre = System.currentTimeMillis();
     private Socket socket;
     private int id;
     private PrintStream out;
