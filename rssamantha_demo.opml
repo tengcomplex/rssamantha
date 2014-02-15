@@ -24,6 +24,7 @@
             <source title="wdr verkehr" feedtype="rss" feedUrl="http://www.wdr.de/verkehrslage/rss.xml" delay="60000" matchpattern_title="A43|A44|A45" dayofweek="2,3,4,5,6" hourofday="8,9" appenddescription="true"/>
             <source title="el universal" feedtype="rss" feedUrl="http://www.eluniversal.com/rss/pol_avances.xml"/>
             <source title="Internet Archive" feedtype="rss" feedUrl="http://www.archive.org/services/collection-rss.php" matchpattern_title="^(?!SFGTV)." matchpattern_category="^movies."/>
+            <source title="Linux und Ich" feedUrl="http://linuxundich.de/feed/" delay="58754747"/>
         </outline>
 		<outline
             config.name="mysecondfeed"
