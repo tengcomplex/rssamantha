@@ -249,7 +249,7 @@ Release: soon
   empty.
 - Clean titles, remove newline when reading items.
 - Add type="rss" to channels.opml output.
-- Introduce CountEvent.PROCESSED, increment for every incoming item.
+- Introduce CountEvent.PROCESSED, representing the sum of every incoming item.
 - Improve entrypage generation, writing directly to the stream.
 - Remove type rsstwitter. (Twitter stopped public RSS support in summer 2013)
     Alternatively it's possible to use twitter API and adding items from an 
