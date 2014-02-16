@@ -22,6 +22,10 @@ $JVM \
 -D$PKG.futuredump=true \
 -D$PKG.logfolder=log/ \
 -D$PKG.itemacceptor=true \
+-D$PKG.cssfile=styles.css \
+-D$PKG.scriptfile=additionalhtml.js \
+-D$PKG.bodyfile=additionalhtml.html \
+-D$PKG.onloadfile=additionalhtml.onload \
 -D$PKG.itemacceptorport=8082 \
 -D$PKG.acceptorlist=127.0.0.1,0:0:0:0:0:0:0:1 \
 -D$PKG.httpreferrer=http://www.myreferrer.com \

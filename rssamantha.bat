@@ -8,5 +8,9 @@ set PKG=com.drinschinz.rssamantha
 -D%PKG%.futuredump=true ^
 -D%PKG%.logfolder=log\ ^
 -D%PKG%.httpreferrer=http://www.myreferrer.com ^
+-D$PKG.cssfile=styles.css ^
+-D$PKG.scriptfile=additionalhtml.js ^
+-D$PKG.bodyfile=additionalhtml.html ^
+-D$PKG.onloadfile=additionalhtml.onload ^
 -jar ^
 %RSSAMANTHAHOME%\rssamantha.jar %RSSAMANTHAHOME%\rssamantha_demo.opml
