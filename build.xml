@@ -103,6 +103,10 @@
         <copy file="${dist.dir}/gpl.txt" tofile="deploy/rssamantha/gpl.txt"/>
         <copy file="rssamantha.bsh" tofile="deploy/rssamantha/rssamantha.bsh"/>
         <copy file="rssamantha.bat" tofile="deploy/rssamantha/rssamantha.bat"/>
+        <copy file="styles.css" tofile="deploy/rssamantha/styles.css"/>
+        <copy file="additionalhtml.js" tofile="deploy/rssamantha/additionalhtml.js"/>
+        <copy file="additionalhtml.html" tofile="deploy/rssamantha/additionalhtml.html"/>
+        <copy file="additionalhtml.onload" tofile="deploy/rssamantha/additionalhtml.onload"/>
         <copy file="rssamantha_demo.opml" tofile="deploy/rssamantha/rssamantha_demo.opml"/>
         <echo>create deploy subfolder rsssamatha/feeds </echo>
         <mkdir dir="deploy/rssamantha/feeds"/>
