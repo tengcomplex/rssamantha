@@ -91,21 +91,22 @@ public class ItemAcceptor implements Runnable
             body = init("bodyfile");
         }
         
-        private String init(String what)
+        private String init(final String what)
         {
             if(System.getProperties().containsKey(Control.PNAME+"."+what))
             {   
                 final StringBuilder s = new StringBuilder();
                 for(String ln : Control.readFile(System.getProperties().getProperty(Control.PNAME+"."+what).toString()))
                 {
-                    s.append(ln).append(Control.LINESEP);
+                    s.append(ln);
+                    s.append(Control.LINESEP);
                 }
                 if(s.length() == 0)
                 {
                     Control.L.log(Level.WARNING, "{0} was not available or empty", what);
                 }
                 else
-                {
+                { 
                     Control.L.log(Level.INFO, "{0} initialized, length:{1}", new Object[]{what, s.length()});
                     return s.toString();
                 }
