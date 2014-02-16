@@ -7,9 +7,9 @@ var months = new Array('January','February','March','April','May','June','July',
 function startTime()
 {
 	var today = new Date();
-	document.getElementById('txtdate').innerHTML="Date: "+days[today.getDay()] + ", "+months[today.getMonth()]+" "+zeroPre(today.getDate())+", "+(fourdigits(today.getYear()));
-	document.getElementById('txttime').innerHTML="Time: "+zeroPre(today.getHours())+":"+zeroPre(today.getMinutes())+":"+zeroPre(today.getSeconds());
-	t=setTimeout(function(){startTime()},1000);
+	document.getElementById('txtdate').innerHTML = days[today.getDay()] + ", "+months[today.getMonth()]+" "+zeroPre(today.getDate())+", "+(fourdigits(today.getYear()));
+	document.getElementById('txttime').innerHTML = zeroPre(today.getHours())+":"+zeroPre(today.getMinutes())+":"+zeroPre(today.getSeconds());
+	t=setTimeout(function(){startTime()}, 1000);
 }
 
 function zeroPre(i)
