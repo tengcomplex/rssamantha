@@ -22,6 +22,7 @@
 
 package com.drinschinz.rssamantha;
 
+import com.drinschinz.rssamantha.ItemAcceptor.AdditionalHtml;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -68,7 +69,7 @@ public class HtmlFileHandler extends TxtFileHandler
         return getAsString(items, String.valueOf((sleep * Statistics.SECOND)), null);
     }
     
-    protected String getAsString(final List<Item> items, final String refresh, final String css)
+    protected String getAsString(final List<Item> items, final String refresh, final AdditionalHtml additionalHtml)
     {
         final Calendar now = Calendar.getInstance();
         final StringBuilder table = new StringBuilder(32);
@@ -103,11 +104,20 @@ public class HtmlFileHandler extends TxtFileHandler
             time = timeformat.format(now.getTime());
         }
         str.append("<TITLE>").append(control.getChannelName(channelindices)).append(" [").append(numitems).append("] ").append(time).append("</TITLE>"+ClientThread.EOL);
-        if(css != null)
+        if(additionalHtml != null && additionalHtml.getCss() != null)
         {
-            str.append("<STYLE>").append(ClientThread.EOL).append(css).append("</STYLE>").append(ClientThread.EOL);
+            str.append("<STYLE>").append(ClientThread.EOL).append(additionalHtml.getCss()).append("</STYLE>").append(ClientThread.EOL);
         }
-        str.append("</HEAD>").append(ClientThread.EOL).append("<BODY>").append(ClientThread.EOL);
+        if(additionalHtml != null && additionalHtml.getScript() != null)
+        {
+            str.append("<SCRIPT>").append(ClientThread.EOL).append(additionalHtml.getScript()).append("</SCRIPT>").append(ClientThread.EOL);
+        }
+        str.append("</HEAD>").append(ClientThread.EOL);
+        str.append("<BODY"+(additionalHtml != null && additionalHtml.getOnload() != null ? " onload=\""+additionalHtml.getOnload()+"\"" : "")+">").append(ClientThread.EOL);
+        if(additionalHtml != null && additionalHtml.getBody() != null)
+        {
+            str.append(additionalHtml.getBody()).append(ClientThread.EOL);
+        }
         str.append(table.toString());
         str.append("</BODY>").append(ClientThread.EOL).append("</HTML>").append(ClientThread.EOL);
         return str.toString();

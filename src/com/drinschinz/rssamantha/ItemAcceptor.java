@@ -50,7 +50,7 @@ public class ItemAcceptor implements Runnable
     private final int port;
     private final String host = System.getProperty(Control.PNAME+".itemacceptorhost", "localhost");
     private final SimpleDateFormat htmlhandlerdatetimeformat = new SimpleDateFormat(System.getProperty(Control.PNAME+".htmlfiledatetimeformat", HtmlFileHandler.DEFAULTDATETIMEHTMLPATTERN));
-    private String css = null;
+    private final AdditionalHtml additionalHtml;
     private final List<String>acceptorlist;
     static int timeout = 0;
     private final List<ClientThread> threads;
@@ -76,21 +76,62 @@ public class ItemAcceptor implements Runnable
         timeout = 5000;
         this.maxworkers = maxworkers;
         threads = Collections.synchronizedList(new ArrayList());
-        if(System.getProperties().containsKey(Control.PNAME+".cssfile"))
-        {   
-            final StringBuilder s = new StringBuilder();
-            for(String ln : Control.readFile(System.getProperties().getProperty(Control.PNAME+".cssfile").toString()))
-            {
-                s.append(ln).append(Control.LINESEP);
+        additionalHtml = new AdditionalHtml();
+    }
+    
+    public static class AdditionalHtml
+    {
+        private final String css, script, onload, body;
+        
+        private AdditionalHtml()
+        {
+            css = init("cssfile");
+            script = init("scriptfile");
+            onload = init("onloadfile");
+            body = init("bodyfile");
+        }
+        
+        private String init(final String what)
+        {
+            if(System.getProperties().containsKey(Control.PNAME+"."+what))
+            {   
+                final StringBuilder s = new StringBuilder();
+                for(String ln : Control.readFile(System.getProperties().getProperty(Control.PNAME+"."+what).toString()))
+                {
+                    s.append(ln);
+                    s.append(Control.LINESEP);
+                }
+                if(s.length() == 0)
+                {
+                    Control.L.log(Level.WARNING, "{0} was not available or empty", what);
+                }
+                else
+                { 
+                    Control.L.log(Level.INFO, "{0} initialized, length:{1}", new Object[]{what, s.length()});
+                    return s.toString();
+                }
             }
-            if(s.length() == 0)
-            {
-                Control.L.log(Level.WARNING, "cssfile was not available or empty");
-            }
-            else
-            {
-                css = s.toString();
-            }
+            return null;
+        }
+        
+        public String getCss()
+        {
+            return css;
+        }
+
+        public String getScript()
+        {
+            return script;
+        }
+
+        public String getOnload()
+        {
+            return onload;
+        }
+
+        public String getBody()
+        {
+            return body;
         }
     }
     
@@ -104,9 +145,9 @@ public class ItemAcceptor implements Runnable
         return this.htmlhandlerdatetimeformat;
     }
     
-    protected String getCss()
+    protected AdditionalHtml getAdditionalHtml()
     {
-        return this.css;
+        return this.additionalHtml;
     }
 
     protected int getPort()
@@ -797,7 +838,7 @@ class ClientThread implements Runnable
         }
         if("html".equals(type))
         {
-            out.print((new HtmlFileHandler(itemacceptor.getControl(), cis, null, 0, itemacceptor.getHtmlDatetimeFormat())).getAsString(items, refresh, itemacceptor.getCss()));
+            out.print((new HtmlFileHandler(itemacceptor.getControl(), cis, null, 0, itemacceptor.getHtmlDatetimeFormat())).getAsString(items, refresh, itemacceptor.getAdditionalHtml()));
         }
         else if("txt".equals(type))
         {
