@@ -48,6 +48,9 @@ Usage:
  [-Dcom.drinschinz.rssamantha.itemacceptorthreads=number] (20)
  [-Dcom.drinschinz.rssamantha.acceptorlist=IP1,IP,I*,...IPN] (0:0:0:0:0:0:0:1)
  [-Dcom.drinschinz.rssamantha.cssfile=filename] (null)
+ [-Dcom.drinschinz.rssamantha.scriptfile=filename] (null)
+ [-Dcom.drinschinz.rssamantha.bodyfile=filename] (null)
+ [-Dcom.drinschinz.rssamantha.onloadfile=filename] (null)
  [-Dcom.drinschinz.rssamantha.htmlfiledatetimeformat=pattern] (dd MMM yyyy HH:mm:ss)
  [-Dcom.drinschinz.rssamantha.knowndownloadsfile=filename]
  [-Dcom.drinschinz.rssamantha.downloadthreadsleep=number] (60000)
@@ -241,6 +244,7 @@ Release: soon
 ------------------
 - Upgrade to java 1.7 compiler, no longer supports 1.6.
 - Add automatic feedtype detection.
+- Add additional html output capabilities.
 - Just set "http.agent" property with APPNAME if respective system property 
   empty.
 - Clean titles, remove newline when reading items.
