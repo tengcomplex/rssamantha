@@ -248,6 +248,7 @@ Release: soon
 - Just set "http.agent" property with APPNAME if respective system property 
   empty.
 - Clean titles, remove newline when reading items.
+- Add datetime format "E',' dd MMM yyyy KK:mm a z".
 - Add type="rss" to channels.opml output.
 - Introduce CountEvent.PROCESSED, representing the sum of every incoming item.
 - Improve entrypage generation, writing directly to the stream.
