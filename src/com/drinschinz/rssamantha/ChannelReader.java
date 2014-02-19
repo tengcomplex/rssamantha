@@ -66,8 +66,10 @@ public abstract class ChannelReader extends DocumentReader
         new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy", Locale.US),
         new SimpleDateFormat("E','dd MMM yyyy HH:mm:ss Z", Locale.US),
         new SimpleDateFormat("E',' dd. MMM yyyy HH:mm:ss Z", Locale.US), //Sun, 28. Jun 2009 20:00:35 +0100
+        new SimpleDateFormat("E',' dd MMM yyyy KK:mm a z", Locale.US), // Tue, 18 Feb 2014 6:50 am CET
         new SimpleDateFormat("E',' dd MMM yyyy", Locale.US),
         new SimpleDateFormat("E',' dd MMM yyyy HH:mm:ss Z", new Locale("es")),
+        
     };
     
     public ChannelReader()
