@@ -825,7 +825,7 @@ class ClientThread implements Runnable
                 return;
             }
         }
-        List<Item> items = itemacceptor.getControl().getSortedItems(cis, cutoff, numitems, pt_title);
+        List<Item> items = itemacceptor.getControl().getSortedItems(cis, cutoff, numitems, pt_title, "xml".equals(type));
 //System.out.println("numitems:"+items.size());        
         out.print("HTTP/1.0 "+HTTP_OK+" OK"+EOL);
         out.print("Content-type: text/"+type+"; charset=utf-8"+EOL);
