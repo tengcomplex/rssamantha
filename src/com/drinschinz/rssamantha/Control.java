@@ -741,7 +741,7 @@ public class Control
         return creators.size();
     }
     
-    public synchronized List<Item> getSortedItems(final int[] ixs, final long cutoff, final int numitems, final Pattern pt_title)
+    public synchronized List<Item> getSortedItems(final int[] ixs, final long cutoff, final int numitems, final Pattern pt_title, final boolean extract)
     {
         final List<Item> ret = new ArrayList<>();
         final boolean defsize = numitems == -1;
@@ -761,7 +761,7 @@ public class Control
             }
             ret.remove(jj);
         }
-        if(this.compression != Deflater.NO_COMPRESSION)
+        if(extract && this.compression != Deflater.NO_COMPRESSION)
         {
             for(Item i : ret)
             {
@@ -777,7 +777,7 @@ public class Control
     
     public List<Item> getSortedItems(final int ix, final long cutoff, final int numitems, final Pattern pt_title)
     {
-        return getSortedItems(new int[]{ix}, cutoff, numitems, pt_title);
+        return getSortedItems(new int[]{ix}, cutoff, numitems, pt_title, true);
     }
 
     public List<Item> getSortedItems(final int ix)
@@ -787,7 +787,7 @@ public class Control
     
     public List<Item> getSortedItems(final int[] ixs)
     {
-        return getSortedItems(ixs, -1, -1, null);
+        return getSortedItems(ixs, -1, -1, null, true);
     }
 
     /* For the shutdownhook in Main */
