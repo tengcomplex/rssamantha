@@ -258,6 +258,7 @@ Release: soon
     See https://github.com/tengcomplex/twittertorssamantha
 - Set hard log entry datetime pattern "yyyy-MM-dd'T'HH:mm:ss.S", introducing
   milliseconds.
+- Don't decompress item description when serving html/txt via http.
 
 -------------------
 Version: 0.801
