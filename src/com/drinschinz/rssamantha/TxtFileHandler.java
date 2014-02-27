@@ -64,7 +64,7 @@ public class TxtFileHandler extends FileHandler
         final StringBuilder str = new StringBuilder("");
         for(Item ii : items)
         {
-            if(isFutureDump(ii, now))
+            if(isIgnoreFuture(ii, now))
             {
                 continue;
             }

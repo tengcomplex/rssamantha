@@ -77,7 +77,7 @@ public class HtmlFileHandler extends TxtFileHandler
         int numitems = 0;
         for(Item ii : items)
         {
-            if(isFutureDump(ii, now))
+            if(isIgnoreFuture(ii, now))
             {
                 continue;
             }

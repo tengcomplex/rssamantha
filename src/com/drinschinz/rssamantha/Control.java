@@ -88,7 +88,7 @@ public class Control
     /* Where we hold running ItemCreators during lifetime */
     private final List<ItemCreator> creators = Collections.synchronizedList(new ArrayList<ItemCreator>());
     /** If true we don't write Item's with created(pubDate) greater $now */
-    private final boolean futuredump;
+    private final boolean ignorefutureitems;
     /** Might be:
      * <ul>
      *  <li>9: BEST_COMPRESSION
@@ -125,7 +125,7 @@ public class Control
         L.info("System properties\n");
         L.info(getPropertiesAsString(System.getProperties()));
         L.setLevel(Level.parse(System.getProperty(PNAME+".loglevel", "INFO")));
-        this.futuredump =  "true".equals(System.getProperty(PNAME+".futuredump"));
+        this.ignorefutureitems =  "true".equals(System.getProperty(PNAME+".ignorefutureitems"));
         this.compression =  System.getProperties().containsKey(PNAME+".compression") ? Integer.valueOf(System.getProperty(PNAME+".compression")) : Deflater.NO_COMPRESSION;
         if(this.compression != Deflater.NO_COMPRESSION)
         {
@@ -370,9 +370,9 @@ public class Control
         return this.compression;
     }
 
-    public boolean isFutureDump()
+    public boolean isIgnoreFutureItems()
     {
-        return this.futuredump;
+        return this.ignorefutureitems;
     }
 
     /** 

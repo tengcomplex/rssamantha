@@ -554,7 +554,7 @@ class ClientThread implements Runnable
     {
         final String msg = "java version:"+System.getProperty("java.runtime.version")+BR
                 +"app version:"+Main.APPNAME+" "+Main.APPVERSION+BR
-                +"futuredump:"+itemacceptor.getControl().isFutureDump()+BR
+                +"ignorefutureitems:"+itemacceptor.getControl().isIgnoreFutureItems()+BR
                 +"compression:"+itemacceptor.getControl().getCompression()+BR
                 +"loglevel:"+Control.L.getLevel()+"</b>"+BR+BR
                 +"Status:"+BR+itemacceptor.getControl().getStatus();

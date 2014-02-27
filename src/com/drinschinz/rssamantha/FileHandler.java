@@ -52,9 +52,9 @@ public abstract class FileHandler extends Thread
         return "channel:["+control.getChannelDataToShortString(channelindices)+"] sleep:"+sleep+" lastwrittenfilename:"+lastwrittenhashcode+" filename:"+filename;
     }
 
-    protected boolean isFutureDump(final Item i, final Calendar c)
+    protected boolean isIgnoreFuture(final Item i, final Calendar c)
     {
-        if(control.isFutureDump() && i.getCreated() > c.getTimeInMillis())
+        if(control.isIgnoreFutureItems() && i.getCreated() > c.getTimeInMillis())
         {
             if(Control.L.isLoggable(Level.FINE))
             {

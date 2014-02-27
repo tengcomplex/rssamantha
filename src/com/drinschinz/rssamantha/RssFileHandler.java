@@ -121,7 +121,7 @@ public class RssFileHandler extends FileHandler
             for(int ii=0; ii<items.size(); ii++)
             {
                 final Item item = items.get(ii);
-                if(isFutureDump(item, now))
+                if(isIgnoreFuture(item, now))
                 {
                     continue;
                 }

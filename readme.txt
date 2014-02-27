@@ -56,7 +56,7 @@ Usage:
  [-Dcom.drinschinz.rssamantha.downloadthreadsleep=number] (60000)
  [-Dcom.drinschinz.rssamantha.concurrentdownloads=number] (2)
  [-Dcom.drinschinz.rssamantha.addpodcastitems=number] (5)
- [-Dcom.drinschinz.rssamantha.futuredump={true|false}] (false)
+ [-Dcom.drinschinz.rssamantha.ignorefutureitems={true|false}] (false)
  [-Dcom.drinschinz.rssamantha.titleprefix={true|false}] (true)
  [-Dcom.drinschinz.rssamantha.compression=number] (0))
  [-Dcom.drinschinz.rssamantha.preprocessconfig={true|false}] (false)
@@ -266,6 +266,7 @@ Release: soon
   milliseconds.
 - Don't decompress item description when serving html/txt via http, reduces
   memory consumption.
+- Rename system property futuredump to ignorefutureitems.
 
 -------------------
 Version: 0.801
