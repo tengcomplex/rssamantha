@@ -254,8 +254,8 @@ Release: soon
 - Just set "http.agent" property with APPNAME if respective system property 
   empty.
 - Clean titles, remove newline when reading items.
-- Add datetime format "E',' dd MMM yyyy KK:mm a z".
-- Add type="rss" to channels.opml output.
+- Add support for datetime format "E',' dd MMM yyyy KK:mm a z".
+- Add type="rss" to channels.opml output, making Liferea happy.
 - Introduce CountEvent.PROCESSED, representing the sum of every incoming item.
 - Improve entrypage generation, writing directly to the stream.
 - Remove type rsstwitter. (Twitter stopped public RSS support in summer 2013)
@@ -264,7 +264,8 @@ Release: soon
     See https://github.com/tengcomplex/twittertorssamantha
 - Set hard log entry datetime pattern "yyyy-MM-dd'T'HH:mm:ss.S", introducing
   milliseconds.
-- Don't decompress item description when serving html/txt via http.
+- Don't decompress item description when serving html/txt via http, reduces
+  memory consumption.
 
 -------------------
 Version: 0.801
