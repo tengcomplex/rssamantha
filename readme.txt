@@ -136,6 +136,12 @@ Channels configuration is read from an opml configfile.
 -------------------
 Supported subscription types
 -------------------
+Note that since version 0.802 a feedtype detector was introduced.
+This feature can set the most common types rss/atom automatically if a channel 
+has no feedtype tag defined. 
+If downloading content from a podcast feed is desired or a different parser
+should be used, the feedtype is still needed.
+
 rss (Using DOM parser from sun libs)
 simplerss (Using a SAX like parser from qdmxl classes,
   thanks to Steven R. Brandt,
