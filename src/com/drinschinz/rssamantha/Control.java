@@ -140,6 +140,7 @@ public class Control
         {
             System.setProperty("http.agent", Main.APPNAME+" "+Main.APPVERSION);
         }
+        System.out.println("Initializing channels from "+configfilename);
         if(!initChannels(configfilename))
         {
             System.exit(1);
