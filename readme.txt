@@ -129,6 +129,18 @@ type: Accepts xml,txt or html.
 refresh: Sets a meta tag, available only if type=html is given.
 search_title: Just return titles matching regular expression.
 
+-------------------
+Change appearance of generated html
+-------------------
+With the command line arguments:
+    [-Dcom.drinschinz.rssamantha.cssfile=filename] (null)
+    [-Dcom.drinschinz.rssamantha.scriptfile=filename] (null)
+    [-Dcom.drinschinz.rssamantha.bodyfile=filename] (null)
+    [-Dcom.drinschinz.rssamantha.onloadfile=filename] (null)
+it's possible to configure additional content delivered to clients requesting
+data with type html.
+See example additional.* and styles.css demo files as a start.
+
 Configuration
 ================================================================================
 Channels configuration is read from an opml configfile.
