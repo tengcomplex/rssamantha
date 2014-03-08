@@ -257,7 +257,7 @@ Changes
 ================================================================================
 -------------------
 Version: 0.802
-Release: soon
+Release: 20140308
 ------------------
 - Upgrade to java 1.7 compiler, no longer supports 1.6.
 - Add automatic feedtype detection.
