@@ -25,8 +25,7 @@ Usage
 -------------------
 Installation
 -------------------
-A java runtime environment is required. The binaries are compiled with 1.6,
-source should compile and run with 1.5. Tested with 1.6 and 1.7 runtime.
+A java SE runtime environment >=1.7 is required.
 
 Unzip rssamantha.zip, edit configuration file as needed.
 There are example wrapper scripts rssamantha.bsh/rssamantha.bat and an example
