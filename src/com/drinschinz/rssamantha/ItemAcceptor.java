@@ -237,11 +237,11 @@ class ClientThread implements Runnable
     private String cmd, url, httpversion;
     private String content;
     private final ItemAcceptor itemacceptor;
-    private final static SimpleDateFormat formatter = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");//Fri, 31 Dec 1999 23:59:59 GMT
+    private final static SimpleDateFormat HTTP_RESPONSE_FORMATTER = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");//Fri, 31 Dec 1999 23:59:59 GMT
     private static Transformer transformer = null;
     static
     {
-        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+        HTTP_RESPONSE_FORMATTER.setTimeZone(TimeZone.getTimeZone("GMT"));
         try
         {
             transformer = TransformerFactory.newInstance().newTransformer();
@@ -832,9 +832,9 @@ class ClientThread implements Runnable
         out.print("Server: "+Main.APPNAME+"/"+Main.APPVERSION+EOL);
         final Date dt = new Date();
         out.print("Date: "+dt+EOL);
-        synchronized(formatter)
+        synchronized(HTTP_RESPONSE_FORMATTER)
         {
-            out.print("Last-Modified: "+formatter.format(dt)+EOL+EOL);
+            out.print("Last-Modified: "+HTTP_RESPONSE_FORMATTER.format(dt)+EOL+EOL);
         }
         if("html".equals(type))
         {
