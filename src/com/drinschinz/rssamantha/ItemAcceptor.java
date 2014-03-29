@@ -238,19 +238,25 @@ class ClientThread implements Runnable
     private String content;
     private final ItemAcceptor itemacceptor;
     private final static SimpleDateFormat HTTP_RESPONSE_FORMATTER = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");//Fri, 31 Dec 1999 23:59:59 GMT
-    private static Transformer transformer = null;
+    private final static Transformer transformer = newTransformer();
     static
     {
         HTTP_RESPONSE_FORMATTER.setTimeZone(TimeZone.getTimeZone("GMT"));
+    }
+    
+    private static Transformer newTransformer()
+    {
         try
         {
-            transformer = TransformerFactory.newInstance().newTransformer();
+            return TransformerFactory.newInstance().newTransformer();
         }
         catch(TransformerConfigurationException ex)
         {
             Control.L.log(Level.SEVERE, null, ex);
         }
+        return null;
     }
+    
     private final static SimpleDateFormat CUTOFF_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//1999-12-22 23:59:59
     public final static String EOL = "\r\n";
     public final static String BR = "<BR>";
