@@ -251,7 +251,7 @@ class ClientThread implements Runnable
             Control.L.log(Level.SEVERE, null, ex);
         }
     }
-    private final static SimpleDateFormat cuttoffformatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//1999-12-22 23:59:59
+    private final static SimpleDateFormat CUTOFF_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//1999-12-22 23:59:59
     public final static String EOL = "\r\n";
     public final static String BR = "<BR>";
     public final static String ALL = "ALL";
@@ -768,11 +768,11 @@ class ClientThread implements Runnable
             }
             else
             {
-                synchronized(cuttoffformatter)
+                synchronized(CUTOFF_FORMATTER)
                 {
                     try
                     {
-                        cutoff = cuttoffformatter.parse(hm.get("cutoff")).getTime();
+                        cutoff = CUTOFF_FORMATTER.parse(hm.get("cutoff")).getTime();
                     }
                     catch(ParseException pe)
                     {
