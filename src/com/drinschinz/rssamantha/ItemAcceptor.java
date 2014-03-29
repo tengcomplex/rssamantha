@@ -238,12 +238,12 @@ class ClientThread implements Runnable
     private String content;
     private final ItemAcceptor itemacceptor;
     private final static SimpleDateFormat HTTP_RESPONSE_FORMATTER = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");//Fri, 31 Dec 1999 23:59:59 GMT
-    private final static Transformer transformer = newTransformer();
     static
     {
         HTTP_RESPONSE_FORMATTER.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
     
+    private final static Transformer transformer = newTransformer();
     private static Transformer newTransformer()
     {
         try
