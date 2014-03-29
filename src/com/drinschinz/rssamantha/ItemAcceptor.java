@@ -752,7 +752,7 @@ class ClientThread implements Runnable
         int numitems = -1;
         if(hm.containsKey("numitems"))
         {
-            numitems = ALL.equals(hm.get("numitems").toUpperCase()) ? Integer.MAX_VALUE : Integer.valueOf(hm.get("numitems"));
+            numitems = ALL.equals(hm.get("numitems").toUpperCase()) ? Integer.MAX_VALUE : Integer.parseInt(hm.get("numitems"));
         }
         long cutoff = -1;
         if(hm.containsKey("cutoff") && hm.get("cutoff").length() > 0)
