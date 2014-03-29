@@ -42,7 +42,7 @@ public class Main
         }
         catch(IOException e)
         {
-            // Shouldn't happen
+            // Shouldn't happen, unless we rename our properties file.
             e.printStackTrace(System.err);
         }
     }
