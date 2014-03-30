@@ -514,7 +514,7 @@ class ClientThread implements Runnable
         }
         else
         {
-            ix = Integer.valueOf(hm.get("ix0"));
+            ix = Integer.parseInt(hm.get("ix0"));
         }
         if(!itemacceptor.getControl().isValidChannelIndex(ix))
         {
