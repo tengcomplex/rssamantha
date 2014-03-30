@@ -2,6 +2,7 @@
 HOST=localhost
 PORT=8081
 CHANNEL="test"
+
 STATUS=$(wget -qO- "http://$HOST:$PORT/status" | grep 'java version' | awk '{
 			t = substr($0, index($0, "%) Holding summary")+3);
 			gsub(/\%/, "%25", t);
