@@ -784,7 +784,7 @@ class ClientThread implements Runnable
                     {
                         try
                         {
-                            cutoff = Long.valueOf(hm.get("cutoff")); // if we fail here we throw in caller
+                            cutoff = Long.parseLong(hm.get("cutoff")); // if we fail here we throw in caller
                         }
                         catch(NumberFormatException nfe)
                         {
