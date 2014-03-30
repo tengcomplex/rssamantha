@@ -165,7 +165,7 @@ public abstract class ItemCreator extends Thread
                         cal = Calendar.getInstance();
                     }
 //Control.L.log(Level.FINEST, "channel:[{0}] creatorname:{1} {2}[{3}]:{4} realtime:{5} - {6}", new Object[]{control.getChannelDataToShortString(channelindex), creatorname, timename, ii, times[ii], cal.get(calfieldtocheck), Integer.valueOf(times[ii]) == cal.get(calfieldtocheck) ? "reading time" : "skipping"});
-                    if(Integer.valueOf(time) == cal.get(calfieldtocheck))
+                    if(Integer.parseInt(time) == cal.get(calfieldtocheck))
                     {
                         return true;
                     }
