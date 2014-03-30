@@ -25,6 +25,7 @@ package com.drinschinz.rssamantha;
 import com.drinschinz.rssamantha.ItemCreator.ItemCreatorType;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
@@ -150,7 +151,7 @@ public class Item implements Comparable<Item>, Serializable
     {
         return 679
                 + (this.elements.getElementValue("title") != null ? this.elements.getElementValue("title").hashCode() : 0)
-                + (this.elements.getElementValue("description") != null ? this.elements.getElementValue("description").hashCode() : (description != null ? description.hashCode() : 0) )
+                + (this.elements.getElementValue("description") != null ? this.elements.getElementValue("description").hashCode() : (description != null ? Arrays.hashCode(description) : 0) )
                 + (this.elements.getElementValue("source") != null ? this.elements.getElementValue("source").hashCode() : 0);
     }
 
