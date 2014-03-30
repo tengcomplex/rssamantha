@@ -1,0 +1,13 @@
+#!/bin/bash
+HOST=localhost
+PORT=8081
+CHANNEL="test"
+STATUS=$(wget -qO- "http://$HOST:$PORT/status" | grep 'java version' | awk '{
+			t = substr($0, index($0, "%) Holding summary")+3);
+			gsub(/\%/, "%25", t);
+			print t;
+		}'
+	)
+#echo $STATUS
+wget -qO- --post-data="title=""$STATUS""&description=""$STATUS""&channel0="$CHANNEL http://$HOST:$PORT/ > /dev/null
+
