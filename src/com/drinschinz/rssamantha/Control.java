@@ -114,7 +114,7 @@ public class Control
     private LinkedList<ItemCreatorData> itemcreators = new LinkedList<>();
     private final RSSamanthaStatistics stats = new RSSamanthaStatistics();
 
-    public static Logger L;
+    protected static Logger L;
 
     public Control(final String configfilename)
     {
