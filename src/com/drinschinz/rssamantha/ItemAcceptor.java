@@ -518,7 +518,7 @@ class ClientThread implements Runnable
         }
         if(!itemacceptor.getControl().isValidChannelIndex(ix))
         {
-            httpAnswer(HTTP_INTERNAL_ERROR,"Invalid channelindex","Invalid channelindex"+"<BR><BR>"+getHttpUsage(false),"Error");
+            httpAnswer(HTTP_INTERNAL_ERROR, "Invalid channelindex", "Invalid channelindex"+"<BR><BR>"+getHttpUsage(false),"Error");
             return;
         }
         final String title = hm.get("title");
