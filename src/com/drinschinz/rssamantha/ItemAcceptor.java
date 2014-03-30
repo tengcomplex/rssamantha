@@ -692,7 +692,7 @@ class ClientThread implements Runnable
             }
             try
             {
-                addix = Integer.valueOf(hm.get("ix"+ii)); 
+                addix = Integer.parseInt(hm.get("ix"+ii)); 
                 if(addix >= 0 && addix < itemacceptor.getControl().getChannelCount() && !tmp.contains(addix))
                 {
                     tmp.add(addix);
