@@ -407,7 +407,7 @@ class ClientThread implements Runnable
                 {
                     if(sb.toString().startsWith("Content-Length:"))
                     {
-                        contentlength = Integer.valueOf(sb.toString().substring(16, sb.toString().length()))+2;
+                        contentlength = Integer.parseInt(sb.toString().substring(16, sb.toString().length()))+2;
                         contentcount = 0;
                     }
                     request.add(sb);
