@@ -70,16 +70,7 @@ public class DownloadControl extends Thread implements Observer
             knownDownloads = new HashMap<>();
             return;
         }
-        final Object o = Control.readObject(knownDownloadsFilename);
-        if(o instanceof HashSet)
-        {
-            // legacy, this was a set in versions < 0.798
-            knownDownloads = new HashMap<>();
-        }
-        else
-        {
-            knownDownloads = (HashMap<String, Long>)o;
-        }
+        knownDownloads = (HashMap<String, Long>)Control.readObject(knownDownloadsFilename);
         Control.L.log(Level.INFO, "Initialized {0} known downloads.", new Object[]{knownDownloads.size()});
         Control.L.log(Level.FINEST, "Known downloads:{0}", Arrays.toString(knownDownloads.keySet().toArray()));
     }
