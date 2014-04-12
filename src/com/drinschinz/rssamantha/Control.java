@@ -122,20 +122,17 @@ public class Control
         {
             ret =  Logger.getLogger(PNAME);
             java.util.logging.FileHandler fh;
-            if(filename != null)
+            fh = new java.util.logging.FileHandler(filename, 1024*1024, 10, true);
+            fh.setFormatter(new RssFeedCreatorLogFormatter());
+            for(Handler h : ret.getHandlers())
             {
-                fh = new java.util.logging.FileHandler(filename, 1024*1024, 10, true);
-                fh.setFormatter(new RssFeedCreatorLogFormatter());
-                for(Handler h : ret.getHandlers())
-                {
-                    ret.removeHandler(h);
-                }
-                for(Handler h : ret.getParent().getHandlers())
-                {
-                    ret.getParent().removeHandler(h);
-                }
-                ret.addHandler(fh);
+                ret.removeHandler(h);
             }
+            for(Handler h : ret.getParent().getHandlers())
+            {
+                ret.getParent().removeHandler(h);
+            }
+            ret.addHandler(fh);
             ret.setLevel(Level.parse(System.getProperty(PNAME+".loglevel", "INFO")));
         }
         catch(IOException e)
