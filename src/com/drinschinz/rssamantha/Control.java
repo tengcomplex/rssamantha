@@ -110,7 +110,6 @@ public class Control
     
     private DownloadControl downloadcontrol;
     /** We add ItemCreators when initializing, start them in ItemCreatorsStarter and get rid of this stack eventually. */
-    //private LinkedList<ItemCreator> itemcreators = new LinkedList<ItemCreator>();
     private LinkedList<ItemCreatorData> itemcreators = new LinkedList<>();
     private final RSSamanthaStatistics stats = new RSSamanthaStatistics();
 
