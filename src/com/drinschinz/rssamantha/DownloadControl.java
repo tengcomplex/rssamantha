@@ -44,8 +44,8 @@ public class DownloadControl extends Thread implements Observer
      */
     private final static long MAX_OLD_KNOWNDOWNLOADS = 1000l * 60l * 60l * 24l * 300l;
     
-    private final LinkedList<Item> dlqueue = new LinkedList<Item>();
-    private final LinkedList<Observable> dlactive = new LinkedList<Observable>();
+    private final LinkedList<Item> dlqueue = new LinkedList<>();
+    private final LinkedList<Observable> dlactive = new LinkedList<>();
     private final long sleep;
     private final int concurrentlimit;
     private final String knownDownloadsFilename;
