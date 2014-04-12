@@ -134,6 +134,7 @@ public class Control
                 {
                     ret.getParent().removeHandler(h);
                 }
+                ret.addHandler(fh);
             }
             ret.setLevel(Level.parse(System.getProperty(PNAME+".loglevel", "INFO")));
         }
