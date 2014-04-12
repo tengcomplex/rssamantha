@@ -126,13 +126,13 @@ public class Control
             {
                 fh = new java.util.logging.FileHandler(filename, 1024*1024, 10, true);
                 fh.setFormatter(new RssFeedCreatorLogFormatter());
-                for(Handler h : L.getHandlers())
+                for(Handler h : ret.getHandlers())
                 {
-                    L.removeHandler(h);
+                    ret.removeHandler(h);
                 }
-                for(Handler h : L.getParent().getHandlers())
+                for(Handler h : ret.getParent().getHandlers())
                 {
-                    L.getParent().removeHandler(h);
+                    ret.getParent().removeHandler(h);
                 }
             }
             ret.setLevel(Level.parse(System.getProperty(PNAME+".loglevel", "INFO")));
