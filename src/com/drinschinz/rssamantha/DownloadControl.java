@@ -67,14 +67,14 @@ public class DownloadControl extends Thread implements Observer
         if(!Control.existsFile(knownDownloadsFilename))
         {
             Control.L.log(Level.FINE, "{0} is not existant", knownDownloadsFilename);
-            knownDownloads = new HashMap<String, Long>();
+            knownDownloads = new HashMap<>();
             return;
         }
         final Object o = Control.readObject(knownDownloadsFilename);
         if(o instanceof HashSet)
         {
             // legacy, this was a set in versions < 0.798
-            knownDownloads = new HashMap<String, Long>();
+            knownDownloads = new HashMap<>();
         }
         else
         {
