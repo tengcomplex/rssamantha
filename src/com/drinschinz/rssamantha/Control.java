@@ -121,8 +121,7 @@ public class Control
         try
         {
             ret =  Logger.getLogger(PNAME);
-            java.util.logging.FileHandler fh;
-            fh = new java.util.logging.FileHandler(filename, 1024*1024, 10, true);
+            java.util.logging.FileHandler fh = new java.util.logging.FileHandler(filename, 1024*1024, 10, true);
             fh.setFormatter(new RssFeedCreatorLogFormatter());
             for(Handler h : ret.getHandlers())
             {
