@@ -1059,7 +1059,6 @@ public class Control
      */
     public synchronized static String decodeHtml(final String s)
     {
-//System.out.println("s:"+s);
         return replaceHtmlCharacter(removeHtmlTags(s));
     }
 
@@ -1068,7 +1067,11 @@ public class Control
         return s.trim().replaceAll("\\<.*?\\>", "");
     }
 
-    /** Umlauts etc. */
+    /** 
+     * Remove Umlauts etc. 
+     * @param s HTML encoded string.
+     * @return Human readable String.
+     */
     public synchronized static String replaceHtmlCharacter(final String s)
     {
         return s.trim().replaceAll("&nbsp;", " ").replaceAll("&auml;", "ä").replaceAll("&Auml;", "Ä").replaceAll("&ouml;", "ö").replaceAll("&Ouml;", "Ö").replaceAll("&uuml;", "ü").replaceAll("&Uuml;", "Ü").replaceAll("&szlig;", "ß").replaceAll("&amp;", "&");
