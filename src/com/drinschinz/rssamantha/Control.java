@@ -114,17 +114,44 @@ public class Control
     private LinkedList<ItemCreatorData> itemcreators = new LinkedList<>();
     private final RSSamanthaStatistics stats = new RSSamanthaStatistics();
 
-    protected static Logger L;
+    public final static Logger L = newLogger();
+    private static Logger newLogger()
+    {
+        Logger ret = null;
+        final String filename = System.getProperty(PNAME+".logfolder", "")+"rssamantha%g.log";
+        try
+        {
+            ret =  Logger.getLogger(PNAME);
+            java.util.logging.FileHandler fh;
+            if(filename != null)
+            {
+                fh = new java.util.logging.FileHandler(filename, 1024*1024, 10, true);
+                fh.setFormatter(new RssFeedCreatorLogFormatter());
+                for(Handler h : L.getHandlers())
+                {
+                    L.removeHandler(h);
+                }
+                for(Handler h : L.getParent().getHandlers())
+                {
+                    L.getParent().removeHandler(h);
+                }
+            }
+            ret.setLevel(Level.parse(System.getProperty(PNAME+".loglevel", "INFO")));
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace(System.err);
+        }
+        return ret;
+    }
 
     public Control(final String configfilename)
-    {
-        initLogger(PNAME, System.getProperty(PNAME+".logfolder", "")+"rssamantha%g.log", 1024*1024, 10, false, new RssFeedCreatorLogFormatter());
+    {   
         System.out.println("Logging into "+System.getProperty(PNAME+".logfolder", ""));
-        checkVersion();
         L.log(Level.INFO, "{0}{1}", new Object[]{System.getProperty("line.separator"), getAppWelcome(Main.APPNAME, Main.APPVERSION, Main.applicationproperties.getProperty("app.vendor"))});
         L.info("System properties\n");
         L.info(getPropertiesAsString(System.getProperties()));
-        L.setLevel(Level.parse(System.getProperty(PNAME+".loglevel", "INFO")));
+        checkVersion();
         this.ignorefutureitems =  "true".equals(System.getProperty(PNAME+".ignorefutureitems"));
         this.compression =  System.getProperties().containsKey(PNAME+".compression") ? Integer.valueOf(System.getProperty(PNAME+".compression")) : Deflater.NO_COMPRESSION;
         if(this.compression != Deflater.NO_COMPRESSION)
@@ -1213,45 +1240,6 @@ public class Control
         }
         ret.append(LINESEP).append(LOGLINEDIVIDER);
         return ret.toString();
-    }
-    
-    public static boolean initLogger(final String name, final String filename, final int limit, final int count, final boolean parenthandlers, final Formatter formatter)
-    {
-        try
-        {
-            L =  Logger.getLogger(name);
-            java.util.logging.FileHandler fh = null;
-            if(filename != null)
-            {
-                fh = new java.util.logging.FileHandler(filename, limit, count, true);
-                fh.setFormatter(formatter);
-                Handler [] hdl = L.getHandlers();
-                for(int ii=0; ii<hdl.length; ii++)
-                {
-                    L.removeHandler(hdl[ii]);
-                }
-                if(!parenthandlers)
-                {
-                    hdl = L.getParent().getHandlers();
-                    for(int ii=0; ii<hdl.length; ii++)
-                    {
-                        L.getParent().removeHandler(hdl[ii]);
-                    }
-                }
-                if(fh != null)
-                {
-                    L.addHandler(fh);
-                }
-                L.info("just filehandler from here");
-            }
-            L.setLevel(Level.FINEST);
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace(System.err);
-            return false;
-        }
-        return true;
     }
     
     /**
