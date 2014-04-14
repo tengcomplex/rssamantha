@@ -73,7 +73,7 @@ public class Main
         }
         else
         {
-            System.out.println(System.getProperty("line.separator")+Control.getAppWelcome(APPNAME, APPVERSION, applicationproperties.getProperty("app.vendor"))+System.getProperty("line.separator")+"Running...");
+            System.out.println(Control.LINESEP+Control.getAppWelcome(APPNAME, APPVERSION, applicationproperties.getProperty("app.vendor"))+Control.LINESEP+"Running...");
             final Control control = new Control(args[0]);
             try
             {
