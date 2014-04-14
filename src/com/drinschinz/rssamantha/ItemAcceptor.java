@@ -831,7 +831,7 @@ class ClientThread implements Runnable
                 return;
             }
         }
-        List<Item> items = itemacceptor.getControl().getSortedItems(cis, cutoff, numitems, pt_title, "xml".equals(type));
+        final List<Item> items = itemacceptor.getControl().getSortedItems(cis, cutoff, numitems, pt_title, "xml".equals(type));
 //System.out.println("numitems:"+items.size());        
         out.print("HTTP/1.0 "+HTTP_OK+" OK"+EOL);
         out.print("Content-type: text/"+type+"; charset=utf-8"+EOL);
@@ -852,18 +852,16 @@ class ClientThread implements Runnable
         }
         else
         {
-            Document doc = (new RssFileHandler(itemacceptor.getControl(), cis, null, 0)).getDocument(items);
+            final Document doc = (new RssFileHandler(itemacceptor.getControl(), cis, null, 0)).getDocument(items);
             synchronized(transformer)
             {
                 transformer.reset();
                 transformer.setOutputProperty("indent", "yes");
                 transformer.transform(new DOMSource(doc), new StreamResult(out));
             }
-            doc = null;
         }
         Control.L.log(Level.INFO, "Served channel:{0} type:{1} number of items:{2}", new Object[]{itemacceptor.getControl().getChannelName(cis), type, items.size()});
         items.clear();
-        items = null;
     }
     /** 
      * TODO: Add search_title
