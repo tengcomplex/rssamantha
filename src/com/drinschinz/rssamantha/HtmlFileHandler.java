@@ -53,8 +53,7 @@ public class HtmlFileHandler extends TxtFileHandler
      */
     public HtmlFileHandler(final Control c, final int [] channelindices, final String rssfilename, final long sleep, final DateFormat datetimeformat)
     {
-        super(c, channelindices, rssfilename, sleep, null);
-        this.datetimeformat = datetimeformat;
+        super(c, channelindices, rssfilename, sleep, datetimeformat);
         initialsleep = 6000;
     }
         

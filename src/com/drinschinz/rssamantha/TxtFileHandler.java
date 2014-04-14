@@ -36,13 +36,19 @@ import java.util.logging.Level;
 public class TxtFileHandler extends FileHandler
 {
     public final static String DEFAULTDATETIMETXTPATTERN = "HH:mm:ss";
-    protected DateFormat datetimeformat;
+    protected final DateFormat datetimeformat;
     protected int initialsleep = 3000;
 
     public TxtFileHandler(final Control c, final int[] channelindices, final String rssfilename, final long sleep, final String pattern)
     {
         super(c, channelindices, rssfilename, sleep);
         this.datetimeformat = pattern == null ? null : new SimpleDateFormat(pattern);
+    }
+    
+    public TxtFileHandler(final Control c, final int[] channelindices, final String rssfilename, final long sleep, final DateFormat datetimeformat)
+    {
+        super(c, channelindices, rssfilename, sleep);
+        this.datetimeformat = datetimeformat;
     }
 
     @Override
