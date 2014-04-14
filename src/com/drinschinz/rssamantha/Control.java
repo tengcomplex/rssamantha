@@ -687,8 +687,8 @@ public class Control
         if(System.getProperties().containsKey(PNAME+".knowndownloadsfile"))
         {
             downloadcontrol = new DownloadControl(System.getProperty(PNAME+".knowndownloadsfile"), 
-                                Integer.valueOf(System.getProperty(PNAME+".downloadthreadsleep", String.valueOf(DEFAULTDOWNLOADTHRADSLEEP))), 
-                                Integer.valueOf(System.getProperty(PNAME+".concurrentdownloads", String.valueOf(DEFAULTCONCURRENTDOWNLOAD))),
+                                Integer.parseInt(System.getProperty(PNAME+".downloadthreadsleep", String.valueOf(DEFAULTDOWNLOADTHRADSLEEP))), 
+                                Integer.parseInt(System.getProperty(PNAME+".concurrentdownloads", String.valueOf(DEFAULTCONCURRENTDOWNLOAD))),
                                 this);
             downloadcontrol.setPriority(Thread.MIN_PRIORITY);
             downloadcontrol.start();
