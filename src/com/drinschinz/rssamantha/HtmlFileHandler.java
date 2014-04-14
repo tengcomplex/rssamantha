@@ -83,7 +83,6 @@ public class HtmlFileHandler extends TxtFileHandler
             numitems++;
             table.append("<TR>").append(ClientThread.EOL);
             table.append("<TD>");
-            /* We are never changing the formatter reference */
             synchronized(datetimeformat)
             {
                 table.append(datetimeformat.format(ii.getCreated()));
