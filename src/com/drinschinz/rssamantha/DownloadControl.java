@@ -173,7 +173,7 @@ public class DownloadControl extends Thread implements Observer
             }
             control.getStatistics().count(Control.CountEvent.FINISHEDDOWNLOAD);
             Control.L.log(Level.INFO, "Finished download {0} size:{1} adding item {2}", new Object[]{dl.getUrl(), dl.getSize(), dl.getItem().toShortString()});
-            this.control.addItem(dl.getItem(), Integer.valueOf(dl.getItem().getElements().getElementValue("itemindex")));
+            this.control.addItem(dl.getItem(), Integer.parseInt(dl.getItem().getElements().getElementValue("itemindex")));
             Control.writeObject(this.knownDownloads, knownDownloadsFilename);
             Control.L.log(Level.INFO, "Written {0} known downloads.", new Object[]{knownDownloads.size()});
         }
