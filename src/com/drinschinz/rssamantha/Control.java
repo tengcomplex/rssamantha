@@ -242,7 +242,7 @@ public class Control
         
         void initItemCreator(final NamedNodeMap nnmfeeds) throws Exception
         {
-            sleep = nnmfeeds.getNamedItem("delay") != null && nnmfeeds.getNamedItem("delay").getNodeValue().length() > 0 ? Long.valueOf(nnmfeeds.getNamedItem("delay").getNodeValue()) : DEFAULTREADITEMSLEEP;
+            sleep = nnmfeeds.getNamedItem("delay") != null && nnmfeeds.getNamedItem("delay").getNodeValue().length() > 0 ? Long.parseLong(nnmfeeds.getNamedItem("delay").getNodeValue()) : DEFAULTREADITEMSLEEP;
             titleprefix = nnmfeeds.getNamedItem("titleprefix") != null && nnmfeeds.getNamedItem("titleprefix").getNodeValue().length() > 0 ? Boolean.valueOf(nnmfeeds.getNamedItem("titleprefix").getNodeValue()) : DEFAULTTITLEPREFIX;
             days = nnmfeeds.getNamedItem("dayofweek") != null && nnmfeeds.getNamedItem("dayofweek").getNodeValue().length() > 0 ? nnmfeeds.getNamedItem("dayofweek").getNodeValue().split(",") : null;
             hours = nnmfeeds.getNamedItem("hourofday") != null && nnmfeeds.getNamedItem("hourofday").getNodeValue().length() > 0 ? nnmfeeds.getNamedItem("hourofday").getNodeValue().split(",") : null;
