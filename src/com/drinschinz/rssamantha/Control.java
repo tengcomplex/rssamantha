@@ -144,7 +144,7 @@ public class Control
     public Control(final String configfilename)
     {   
         System.out.println("Logging into "+System.getProperty(PNAME+".logfolder", ""));
-        L.log(Level.INFO, "{0}{1}", new Object[]{System.getProperty("line.separator"), getAppWelcome(Main.APPNAME, Main.APPVERSION, Main.applicationproperties.getProperty("app.vendor"))});
+        L.log(Level.INFO, "{0}{1}", new Object[]{LINESEP, getAppWelcome(Main.APPNAME, Main.APPVERSION, Main.applicationproperties.getProperty("app.vendor"))});
         L.info("System properties\n");
         L.info(getPropertiesAsString(System.getProperties()));
         checkVersion();
@@ -1251,7 +1251,6 @@ public class Control
         private final MessageFormat formatter = new MessageFormat(format);
 
         private final Object args[] = new Object[1];
-        private final String lineSeparator = System.getProperty("line.separator");
 
         /**
          * Format the given LogRecord.
@@ -1287,7 +1286,7 @@ public class Control
             sb.append(record.getLevel().getLocalizedName());
             sb.append(": ");
             sb.append(message);
-            sb.append(lineSeparator);
+            sb.append(LINESEP);
             if(record.getThrown() != null)
             {
                 try
