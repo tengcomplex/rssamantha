@@ -149,7 +149,7 @@ public class Control
         L.info(getPropertiesAsString(System.getProperties()));
         checkVersion();
         this.ignorefutureitems =  "true".equals(System.getProperty(PNAME+".ignorefutureitems"));
-        this.compression =  System.getProperties().containsKey(PNAME+".compression") ? Integer.valueOf(System.getProperty(PNAME+".compression")) : Deflater.NO_COMPRESSION;
+        this.compression =  System.getProperties().containsKey(PNAME+".compression") ? Integer.parseInt(System.getProperty(PNAME+".compression")) : Deflater.NO_COMPRESSION;
         if(this.compression != Deflater.NO_COMPRESSION)
         {
             deflater = new Deflater(compression);
@@ -317,8 +317,8 @@ public class Control
                     final NamedNodeMap nnm = fieldNode.getAttributes();
                    
                     this.channels[ii].name = nnm.getNamedItem("config.name").getNodeValue();
-                    this.channels[ii].itemdata = new ItemData(Integer.valueOf(nnm.getNamedItem("config.showlimit") != null ? nnm.getNamedItem("config.showlimit").getNodeValue() : String.valueOf(DEFAULTSHOWLIMIT)),
-                                                       Integer.valueOf(nnm.getNamedItem("config.storelimit") != null ? nnm.getNamedItem("config.storelimit").getNodeValue() : String.valueOf(DEFAULTSTORELIMIT)));
+                    this.channels[ii].itemdata = new ItemData(Integer.parseInt(nnm.getNamedItem("config.showlimit") != null ? nnm.getNamedItem("config.showlimit").getNodeValue() : String.valueOf(DEFAULTSHOWLIMIT)),
+                                                       Integer.parseInt(nnm.getNamedItem("config.storelimit") != null ? nnm.getNamedItem("config.storelimit").getNodeValue() : String.valueOf(DEFAULTSTORELIMIT)));
                     for(int zz=0; zz<nnm.getLength(); zz++)
                     {
                         final Node n = nnm.item(zz);
@@ -336,20 +336,20 @@ public class Control
                     {
                         this.channels[ii].rsswriter = new RssFileHandler(this, new int[]{ii},
                                                                     nnm.getNamedItem("config.rssfilename").getNodeValue(),
-                                                                    Integer.valueOf(nnm.getNamedItem("config.rsswritesleep") != null ? nnm.getNamedItem("config.rsswritesleep").getNodeValue() : String.valueOf(DEFAULTWRITESLEEP)));
+                                                                    Integer.parseInt(nnm.getNamedItem("config.rsswritesleep") != null ? nnm.getNamedItem("config.rsswritesleep").getNodeValue() : String.valueOf(DEFAULTWRITESLEEP)));
                     }
                     if(nnm.getNamedItem("config.txtfilename") != null)
                     {
                         this.channels[ii].txtwriter = new TxtFileHandler(this, new int[]{ii},
                                                                     nnm.getNamedItem("config.txtfilename").getNodeValue(),
-                                                                    Integer.valueOf(nnm.getNamedItem("config.txtwritesleep") != null ? nnm.getNamedItem("config.txtwritesleep").getNodeValue() : String.valueOf(DEFAULTWRITESLEEP)),
+                                                                    Integer.parseInt(nnm.getNamedItem("config.txtwritesleep") != null ? nnm.getNamedItem("config.txtwritesleep").getNodeValue() : String.valueOf(DEFAULTWRITESLEEP)),
                                                                     nnm.getNamedItem("config.txtdatetimeformat") != null ? nnm.getNamedItem("config.txtdatetimeformat").getNodeValue() : TxtFileHandler.DEFAULTDATETIMETXTPATTERN);
                     }
                     if(nnm.getNamedItem("config.htmlfilename") != null)
                     {
                         this.channels[ii].htmlwriter = new HtmlFileHandler(this, new int[]{ii},
                                                                     nnm.getNamedItem("config.htmlfilename").getNodeValue(),
-                                                                    Integer.valueOf(nnm.getNamedItem("config.htmlwritesleep") != null ? nnm.getNamedItem("config.htmlwritesleep").getNodeValue() : String.valueOf(DEFAULTWRITESLEEP)),
+                                                                    Integer.parseInt(nnm.getNamedItem("config.htmlwritesleep") != null ? nnm.getNamedItem("config.htmlwritesleep").getNodeValue() : String.valueOf(DEFAULTWRITESLEEP)),
                                                                     nnm.getNamedItem("config.htmldatetimeformat") != null ? nnm.getNamedItem("config.htmldatetimeformat").getNodeValue() : HtmlFileHandler.DEFAULTDATETIMEHTMLPATTERN);
                     }
                     final NodeList feeds = fieldNode.getChildNodes();
