@@ -242,7 +242,7 @@ public abstract class ChannelReader extends DocumentReader
             if(datematcher.usePattern(pt_a).reset(s).matches())
             {
                 /* ts looks like 2013-04-12T19:19:04Z and should be in UTC -> We replace to 2013-04-12T19:19:04+0000 */
-                s = s.substring(0,s.length()-1)+"+0000";
+                s = s.substring(0, s.length()-1)+"+0000";
             }
             else if(datematcher.usePattern(pt_b).reset(s).matches())
             {
@@ -258,7 +258,7 @@ public abstract class ChannelReader extends DocumentReader
             else if(datematcher.usePattern(pt_d).reset(s).matches())
             {
                 /* ts looks like Fri, 31 Aug 2012 17:59:19 UT -> We replace to Fri, 31 Aug 2012 17:59:19 GMT */
-                s = s.substring(0,s.length()-2)+" GMT";
+                s = s.substring(0, s.length()-2)+" GMT";
             }
             else
             {
