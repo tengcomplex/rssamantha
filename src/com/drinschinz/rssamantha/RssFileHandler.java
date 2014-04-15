@@ -107,8 +107,8 @@ public class RssFileHandler extends FileHandler
             final Element channelel = document.createElement("channel");
             root.appendChild(channelel);
 
-            Element el = null;
-            Text text = null;
+            Element el;
+            Text text;
 
             for(Iterator<String> iter = channel.getElements().getElementKeys(); iter.hasNext();)
             {
@@ -140,7 +140,7 @@ public class RssFileHandler extends FileHandler
             return document;
 //System.out.println("lastwrittenhashcode:"+lastwrittenhashcode);
         }
-        catch(Exception ex)
+        catch(ParserConfigurationException | DOMException ex)
         {
             Control.L.log(Level.SEVERE, "Error writing {0} {1}", new Object[]{filename, ex.getMessage()});
             //ex.printStackTrace(System.err);
