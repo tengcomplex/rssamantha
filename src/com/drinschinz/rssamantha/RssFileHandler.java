@@ -24,6 +24,7 @@ package com.drinschinz.rssamantha;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -151,7 +152,7 @@ public class RssFileHandler extends FileHandler
     @Override
     protected void write()
     {
-        List<Item> items = control.getSortedItems(channelindices);
+        final List<Item> items = control.getSortedItems(channelindices);
 //System.out.println("RssFileHandler.write(), writing to "+filename+" number of items: " + items.size());
 /*
 System.out.print("RssFileHandler.write(), number of items: " + items.size() + " ");
@@ -176,22 +177,23 @@ System.out.print("\r\n");
         {
             final Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty("indent", "yes");
-            Document doc = getDocument(items);
+            final Document doc = getDocument(items);
             final DOMSource source = new DOMSource(doc);
             final FileOutputStream os = new FileOutputStream(new File(filename));
             final StreamResult result = new StreamResult(os);
             transformer.transform(source, result);
             os.close();
             lastwrittenhashcode = hash;
-            items.clear();
-            items = null;
-            doc = null;
 //System.out.println("lastwrittenhashcode:"+lastwrittenhashcode);
         } 
-        catch(Exception ex)
+        catch(IllegalArgumentException | TransformerException | IOException ex)
         {
             Control.L.log(Level.SEVERE, "Error writing {0} {1}", new Object[]{filename, ex.getMessage()});
             ex.printStackTrace(System.err);
+        }
+        finally
+        {
+            items.clear();
         }
     }
 
