@@ -147,6 +147,24 @@ public class DownloadControl extends Thread implements Observer
         return false;
     }
     
+    /**
+     * Called on complete download.
+     */
+    private void removeOldKnownDownloads()
+    {
+        final long now = System.currentTimeMillis();
+        for(Iterator<String> iter = knownDownloads.keySet().iterator(); iter.hasNext();)
+        {
+            final String fn = iter.next();
+//System.out.println("fn:"+fn+" la:"+knownDownloads.get(fn)+" now:"+now+" diff:"+(now - knownDownloads.get(fn))+" MAX_OLD_KNOWNDOWNLOADS:"+MAX_OLD_KNOWNDOWNLOADS);                    
+            if(now-knownDownloads.get(fn) > MAX_OLD_KNOWNDOWNLOADS)
+            {
+                iter.remove();
+                Control.L.log(Level.FINE, "Removed known download {0}", new Object[]{fn}); 
+            }
+        }
+    }
+    
     @SuppressWarnings("SynchronizeOnNonFinalField")
     @Override
     public void update(final Observable arg0, final Object arg1)
@@ -158,18 +176,8 @@ public class DownloadControl extends Thread implements Observer
             synchronized(knownDownloads)
             {
                 knownDownloads.put(dl.getUrl(), System.currentTimeMillis());
-                final long now = System.currentTimeMillis();
                 Control.L.log(Level.FINEST, "Put to known downloads {0}", new Object[]{dl.getUrl()});
-                for(Iterator<String> iter = knownDownloads.keySet().iterator(); iter.hasNext();)
-                {
-                    final String fn = iter.next();
-//System.out.println("fn:"+fn+" la:"+knownDownloads.get(fn)+" now:"+now+" diff:"+(now - knownDownloads.get(fn))+" MAX_OLD_KNOWNDOWNLOADS:"+MAX_OLD_KNOWNDOWNLOADS);                    
-                    if(now - knownDownloads.get(fn) > MAX_OLD_KNOWNDOWNLOADS)
-                    {
-                        iter.remove();
-                        Control.L.log(Level.FINE, "Removed known download {0}", new Object[]{fn}); 
-                    }
-                }
+                removeOldKnownDownloads();
             }
             control.getStatistics().count(Control.CountEvent.FINISHEDDOWNLOAD);
             Control.L.log(Level.INFO, "Finished download {0} size:{1} adding item {2}", new Object[]{dl.getUrl(), dl.getSize(), dl.getItem().toShortString()});
