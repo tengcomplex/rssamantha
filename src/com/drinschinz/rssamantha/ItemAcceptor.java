@@ -480,7 +480,7 @@ class ClientThread implements Runnable
     {
         final String [] el = (s.startsWith("?") ? s.substring(1) : s).split("&");
         final HashMap<String, String> hm = new HashMap<>();
-        int[] channelix = new int[2];
+        final int[] channelix = new int[2];
         for(int ii=0; ii<el.length; ii++)
         {
             final String t = URLDecoder.decode(el[ii], "UTF-8");
