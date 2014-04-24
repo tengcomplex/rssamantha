@@ -848,7 +848,7 @@ class ClientThread implements Runnable
         }
         else if("txt".equals(type))
         {
-            out.print((new TxtFileHandler(itemacceptor.getControl(), cis, null, 0, TxtFileHandler.DEFAULTDATETIMETXTPATTERN)).getContentAsString(items));
+            out.print((new TxtFileHandler(itemacceptor.getControl(), cis, null, 0, TxtFileHandler.DEFAULT_DATETIME_TXT_PATTERN)).getContentAsString(items));
         }
         else
         {

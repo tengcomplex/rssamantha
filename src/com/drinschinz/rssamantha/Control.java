@@ -343,7 +343,7 @@ public class Control
                         this.channels[ii].txtwriter = new TxtFileHandler(this, new int[]{ii},
                                                                     nnm.getNamedItem("config.txtfilename").getNodeValue(),
                                                                     Integer.parseInt(nnm.getNamedItem("config.txtwritesleep") != null ? nnm.getNamedItem("config.txtwritesleep").getNodeValue() : String.valueOf(DEFAULTWRITESLEEP)),
-                                                                    nnm.getNamedItem("config.txtdatetimeformat") != null ? nnm.getNamedItem("config.txtdatetimeformat").getNodeValue() : TxtFileHandler.DEFAULTDATETIMETXTPATTERN);
+                                                                    nnm.getNamedItem("config.txtdatetimeformat") != null ? nnm.getNamedItem("config.txtdatetimeformat").getNodeValue() : TxtFileHandler.DEFAULT_DATETIME_TXT_PATTERN);
                     }
                     if(nnm.getNamedItem("config.htmlfilename") != null)
                     {

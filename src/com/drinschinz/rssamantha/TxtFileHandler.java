@@ -36,7 +36,7 @@ import java.util.logging.Level;
  */
 public class TxtFileHandler extends FileHandler
 {
-    public final static String DEFAULTDATETIMETXTPATTERN = "HH:mm:ss";
+    public final static String DEFAULT_DATETIME_TXT_PATTERN = "HH:mm:ss";
     protected final DateFormat datetimeformat;
     protected int initialsleep = 3000;
 
