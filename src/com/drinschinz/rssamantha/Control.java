@@ -1074,20 +1074,18 @@ public class Control
         return s.trim().replaceAll("&nbsp;", " ").replaceAll("&auml;", "ä").replaceAll("&Auml;", "Ä").replaceAll("&ouml;", "ö").replaceAll("&Ouml;", "Ö").replaceAll("&uuml;", "ü").replaceAll("&Uuml;", "Ü").replaceAll("&szlig;", "ß").replaceAll("&amp;", "&");
     }
 
-    public synchronized static boolean writeFile(final String filename, final String content, final boolean append, final String charset)
+    public synchronized static void writeFile(final String filename, final String content, final boolean append, final String charset) throws IOException, NullPointerException
     {
         L.log(Level.FINE, "Writing filename:{0} content.length():{1} charset:{2}", new Object[]{filename, content == null ? "null" : content.length(), charset});
         try(final PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename, append), charset)))) 
         {
             pw.print(content);
             pw.flush();
-            return true;
         }
         catch(IOException | NullPointerException ex)
         {
-            L.log(Level.SEVERE, "Error writing to filename:"+filename, ex);
+            throw ex;
         }
-        return false;
     }
 
     public synchronized static void writeObject(final Object obj, final String filename)
