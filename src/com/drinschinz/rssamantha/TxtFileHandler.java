@@ -63,7 +63,7 @@ public class TxtFileHandler extends FileHandler
         }
         try
         {
-            Control.writeFile(filename, getAsString(items), false, "UTF-8");
+            Control.writeFile(filename, getContentAsString(items), false, "UTF-8");
         }
         catch(IOException | NullPointerException ex)
         {
@@ -72,7 +72,7 @@ public class TxtFileHandler extends FileHandler
         lastwrittenhashcode = hash;
     }
 
-    protected String getAsString(final List<Item> items)
+    protected String getContentAsString(final List<Item> items)
     {
         final Calendar now = Calendar.getInstance();
         final StringBuilder str = new StringBuilder("");

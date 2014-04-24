@@ -63,12 +63,12 @@ public class HtmlFileHandler extends TxtFileHandler
      * @return The html code, eventually written to harddisk.
      */
     @Override
-    protected String getAsString(final List<Item> items)
+    protected String getContentAsString(final List<Item> items)
     {
-        return getAsString(items, String.valueOf((sleep * Statistics.SECOND)), null);
+        return getContentAsString(items, String.valueOf((sleep * Statistics.SECOND)), null);
     }
     
-    protected String getAsString(final List<Item> items, final String refresh, final AdditionalHtml additionalHtml)
+    protected String getContentAsString(final List<Item> items, final String refresh, final AdditionalHtml additionalHtml)
     {
         final Calendar now = Calendar.getInstance();
         final StringBuilder table = new StringBuilder(32);
