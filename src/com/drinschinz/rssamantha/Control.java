@@ -1074,35 +1074,20 @@ public class Control
         return s.trim().replaceAll("&nbsp;", " ").replaceAll("&auml;", "ä").replaceAll("&Auml;", "Ä").replaceAll("&ouml;", "ö").replaceAll("&Ouml;", "Ö").replaceAll("&uuml;", "ü").replaceAll("&Uuml;", "Ü").replaceAll("&szlig;", "ß").replaceAll("&amp;", "&");
     }
 
-    public synchronized static String writeFile(final String filename, final String content, final boolean append, final String charset)
+    public synchronized static boolean writeFile(final String filename, final String content, final boolean append, final String charset)
     {
-        if(content == null || content.length() == 0)
+        L.log(Level.FINE, "Writing filename:{0} content.length():{1} charset:{2}", new Object[]{filename, content == null ? "null" : content.length(), charset});
+        try(final PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename, append), charset)))) 
         {
-            L.fine("No content to write");
-            return "empty content";
-        }
-        L.log(Level.FINE, "Writing filename:{0} content.length():{1} charset:{2}", new Object[]{filename, content.length(), charset});
-        PrintWriter pw = null;
-        try
-        {
-            pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename, append), charset)));
             pw.print(content);
             pw.flush();
-
+            return true;
         }
-        catch(IOException ex)
+        catch(IOException | NullPointerException ex)
         {
-            L.log(Level.SEVERE, "", ex);
-            return ex.getMessage();
+            L.log(Level.SEVERE, "Error writing to filename:"+filename, ex);
         }
-        finally
-        {
-            if(pw != null)
-            {
-                pw.close();
-            }
-        }
-        return null;
+        return false;
     }
 
     public synchronized static void writeObject(final Object obj, final String filename)
