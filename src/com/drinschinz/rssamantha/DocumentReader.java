@@ -62,7 +62,7 @@ public class DocumentReader
                 this.stream.close();
                 this.stream = null;
             }
-            catch (IOException ex)
+            catch(IOException ex)
             {
                 Control.L.log(Level.SEVERE, null, ex);
             }
