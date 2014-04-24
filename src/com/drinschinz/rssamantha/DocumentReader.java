@@ -137,7 +137,6 @@ public class DocumentReader
         }
         final Document doc = docBuilder.parse(is);
         doc.getDocumentElement().normalize();
-        docBuilder = null;
         return doc;
     }
     
