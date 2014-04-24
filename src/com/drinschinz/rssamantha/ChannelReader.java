@@ -226,7 +226,7 @@ public abstract class ChannelReader extends DocumentReader
         }
     }
     
-    /* TODO: this could be done nicer */
+    /* TODO: this could be done nicer, maybe a loop? */
     private final static Pattern pt_a = Pattern.compile(".*\\d{2}:\\d{2}:\\d{2}Z$");
     private final static Pattern pt_b = Pattern.compile(".*\\.\\d{3}[\\+-]\\d{2}:\\d{2}$");
     private final static Pattern pt_c = Pattern.compile(".*[\\+-]\\d{2}:\\d{2}$");
