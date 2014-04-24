@@ -37,6 +37,7 @@ import java.util.logging.Level;
 public class TxtFileHandler extends FileHandler
 {
     public final static String DEFAULT_DATETIME_TXT_PATTERN = "HH:mm:ss";
+    public final static String DEFAULT_FILE_ENCODING = "UTF-8";
     protected final DateFormat datetimeformat;
     protected int initialsleep = 3000;
 
@@ -63,7 +64,7 @@ public class TxtFileHandler extends FileHandler
         }
         try
         {
-            Control.writeFile(filename, getContentAsString(items), false, "UTF-8");
+            Control.writeFile(filename, getContentAsString(items), false, DEFAULT_FILE_ENCODING);
         }
         catch(IOException | NullPointerException ex)
         {
