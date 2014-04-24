@@ -259,7 +259,8 @@ Changes
 Version: 0.803
 Release: soon
 ------------------
-- Tiny performance improvements.
+- Various minor performance improvements.
+- Add read support for dateformat "E',' dd MMM yyyy HH:mm:ss Z", in locale "de".
 
 -------------------
 Version: 0.802
