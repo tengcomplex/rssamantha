@@ -618,7 +618,6 @@ Release: 20100116
 
 TODO
 ===============================================================================
-- 2014-04-15T17:29:24.770 com.drinschinz.rssamantha.ChannelReader getCreated SEVERE: Error reading http://www.boell.de/service/news-rss.xml Could not parse Mo, 16 Apr 2012 20:01:33 +0200
 - Make status avaible as rss feed itself.
 - It may be possible to smart trim every description at read() time.
 - Jun 27, 2011 6:35:19 AM com.drinschinz.rssfeedcreator.ChannelReader getCreated SEVERE: Error reading http://feeds.feedburner.com/francetv-sports?format=xml Couldn't parse dim 26 juin 2011 22:13:51 +0100
