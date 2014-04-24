@@ -22,6 +22,7 @@
 
 package com.drinschinz.rssamantha;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -60,7 +61,14 @@ public class TxtFileHandler extends FileHandler
         {
             return;
         }
-        Control.writeFile(filename, getAsString(items), false, "UTF-8");
+        try
+        {
+            Control.writeFile(filename, getAsString(items), false, "UTF-8");
+        }
+        catch(IOException | NullPointerException ex)
+        {
+            Control.L.log(Level.SEVERE, "Error writing to filename:"+filename, ex);
+        }
         lastwrittenhashcode = hash;
     }
 
