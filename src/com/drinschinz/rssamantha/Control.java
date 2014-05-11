@@ -791,19 +791,19 @@ public class Control
             ret.addAll(channels[ixs[ii]].itemdata.getSortedItems(defsize ? channels[ixs[ii]].itemdata.getShowLimit() : maxsize ? channels[ixs[ii]].itemdata.getNumberOfItems() : numitems, cutoff, pt_title));
         }
         Collections.sort(ret);
-        // It's sorted youngest to oldest now. 
-        // First, remove ignore items
+        // It's sorted youngest to oldest now.
+        // First, remove ignore items.
         while(!ret.isEmpty() && isIgnoreFuture(ret.get(0), now))
         {
             ret.remove(0);
         }
-        // Then, remove the older ones until we have desired size
+        // Then, remove the older ones until we have desired size.
         int ii = ret.size()-1;
         while(ret.size() > limit)
         {
             ret.remove(ii--);
         }
-        // Last, extract remaining, if necessary
+        // Last, extract remaining, if necessary.
         if(extract && this.compression != Deflater.NO_COMPRESSION)
         {
             for(Item i : ret)
