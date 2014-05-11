@@ -780,10 +780,10 @@ public class Control
     public synchronized List<Item> getSortedItems(final int[] ixs, final long cutoff, final int numitems, final Pattern pt_title, final boolean extract)
     {
         final long now = Calendar.getInstance().getTimeInMillis();
-        final List<Item> ret = new ArrayList<>();
         final boolean defsize = numitems == -1;
         final boolean maxsize = numitems == Integer.MAX_VALUE;
         int limit = defsize || !maxsize ? (numitems == -1 ? 0 : numitems) : Integer.MAX_VALUE;
+        final List<Item> ret = new ArrayList<>(ixs.length * Math.max(Math.min(limit, 100), 1)); // optimize initial capacity, reduce arraycopy
         for(int ii=0; ii<ixs.length; ii++)
         {
             limit += defsize ? channels[ixs[ii]].itemdata.getShowLimit() : 0;
