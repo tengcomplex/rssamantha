@@ -765,8 +765,22 @@ public class Control
         return creators.size();
     }
     
+    protected boolean isIgnoreFuture(final Item i, final long t)
+    {
+        if(ignorefutureitems && i.getCreated() > t)
+        {
+            if(L.isLoggable(Level.FINE))
+            {
+                L.log(Level.FINE, "Ignore in future published item:{0}", new String[]{i.toShortString()});
+            }
+            return true;
+        }
+        return false;
+    }
+    
     public synchronized List<Item> getSortedItems(final int[] ixs, final long cutoff, final int numitems, final Pattern pt_title, final boolean extract)
     {
+        final long now = Calendar.getInstance().getTimeInMillis();
         final List<Item> ret = new ArrayList<>();
         final boolean defsize = numitems == -1;
         final boolean maxsize = numitems == Integer.MAX_VALUE;
@@ -777,14 +791,19 @@ public class Control
             ret.addAll(channels[ixs[ii]].itemdata.getSortedItems(defsize ? channels[ixs[ii]].itemdata.getShowLimit() : maxsize ? channels[ixs[ii]].itemdata.getNumberOfItems() : numitems, cutoff, pt_title));
         }
         Collections.sort(ret);
-        for(int jj=ret.size()-1; jj>=0; jj--)
+        // It's sorted youngest to oldest now. 
+        // First, remove ignore items
+        while(!ret.isEmpty() && isIgnoreFuture(ret.get(0), now))
         {
-            if(ret.size() <= limit)
-            {
-                break;
-            }
-            ret.remove(jj);
+            ret.remove(0);
         }
+        // Then, remove the older ones until we have desired size
+        int ii = ret.size()-1;
+        while(ret.size() > limit)
+        {
+            ret.remove(ii--);
+        }
+        // Last, extract remaining, if necessary
         if(extract && this.compression != Deflater.NO_COMPRESSION)
         {
             for(Item i : ret)
