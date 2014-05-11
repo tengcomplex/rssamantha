@@ -79,10 +79,6 @@ public class TxtFileHandler extends FileHandler
         final StringBuilder str = new StringBuilder("");
         for(Item ii : items)
         {
-            if(isIgnoreFuture(ii, now))
-            {
-                continue;
-            }
             final String ti = ii.getElements().getElementValue("title");
             str.append(datetimeformat.format(new Date(ii.getCreated())));
             str.append(" ").append(ti).append(Control.LINESEP);
