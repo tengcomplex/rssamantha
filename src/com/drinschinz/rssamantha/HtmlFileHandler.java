@@ -76,10 +76,6 @@ public class HtmlFileHandler extends TxtFileHandler
         int numitems = 0;
         for(Item ii : items)
         {
-            if(isIgnoreFuture(ii, now))
-            {
-                continue;
-            }
             numitems++;
             table.append("<TR>").append(ClientThread.EOL);
             table.append("<TD>");
@@ -111,7 +107,7 @@ public class HtmlFileHandler extends TxtFileHandler
             str.append("<SCRIPT>").append(ClientThread.EOL).append(additionalHtml.getScript()).append("</SCRIPT>").append(ClientThread.EOL);
         }
         str.append("</HEAD>").append(ClientThread.EOL);
-        str.append("<BODY"+(additionalHtml != null && additionalHtml.getOnload() != null ? " onload=\""+additionalHtml.getOnload()+"\"" : "")+">").append(ClientThread.EOL);
+        str.append("<BODY").append(additionalHtml != null && additionalHtml.getOnload() != null ? " onload=\""+additionalHtml.getOnload()+"\"" : "").append(">").append(ClientThread.EOL);
         if(additionalHtml != null && additionalHtml.getBody() != null)
         {
             str.append(additionalHtml.getBody()).append(ClientThread.EOL);
