@@ -88,7 +88,7 @@ public class Control
     /* Where we hold running ItemCreators during lifetime */
     private final List<ItemCreator> creators = Collections.synchronizedList(new ArrayList<ItemCreator>());
     /** If true we don't write Item's with created(pubDate) greater $now */
-    private final boolean ignorefutureitems;
+    private static final boolean ignorefutureitems =  "true".equals(System.getProperty(PNAME+".ignorefutureitems"));
     /** Might be:
      * <ul>
      *  <li>9: BEST_COMPRESSION
@@ -148,7 +148,6 @@ public class Control
         L.info("System properties\n");
         L.info(getPropertiesAsString(System.getProperties()));
         checkVersion();
-        this.ignorefutureitems =  "true".equals(System.getProperty(PNAME+".ignorefutureitems"));
         this.compression =  System.getProperties().containsKey(PNAME+".compression") ? Integer.parseInt(System.getProperty(PNAME+".compression")) : Deflater.NO_COMPRESSION;
         if(this.compression != Deflater.NO_COMPRESSION)
         {
@@ -765,7 +764,7 @@ public class Control
         return creators.size();
     }
     
-    protected boolean isIgnoreFuture(final Item i, final long t)
+    public static boolean isIgnoreFuture(final Item i, final long t)
     {
         if(ignorefutureitems && i.getCreated() > t)
         {
@@ -784,20 +783,15 @@ public class Control
         final List<Item> ret = new ArrayList<>();
         final boolean defsize = numitems == -1;
         final boolean maxsize = numitems == Integer.MAX_VALUE;
-        int limit = defsize || !maxsize ? numitems : Integer.MAX_VALUE;
+        int limit = defsize || !maxsize ? (numitems == -1 ? 0 : numitems) : Integer.MAX_VALUE;
         for(int ii=0; ii<ixs.length; ii++)
         {
             limit += defsize ? channels[ixs[ii]].itemdata.getShowLimit() : 0;
-            ret.addAll(channels[ixs[ii]].itemdata.getSortedItems(defsize ? channels[ixs[ii]].itemdata.getShowLimit() : maxsize ? channels[ixs[ii]].itemdata.getNumberOfItems() : numitems, cutoff, pt_title));
+            ret.addAll(channels[ixs[ii]].itemdata.getSortedItems(defsize ? channels[ixs[ii]].itemdata.getShowLimit() : maxsize ? channels[ixs[ii]].itemdata.getNumberOfItems() : numitems, cutoff, pt_title, now));
         }
         Collections.sort(ret);
         // It's sorted youngest to oldest now.
-        // First, remove ignore items.
-        while(!ret.isEmpty() && isIgnoreFuture(ret.get(0), now))
-        {
-            ret.remove(0);
-        }
-        // Then, remove the older ones until we have desired size.
+        // Remove the older ones until we have desired size.
         int ii = ret.size()-1;
         while(ret.size() > limit)
         {
