@@ -256,6 +256,12 @@ RSSamantha.
 Changes
 ================================================================================
 -------------------
+Version: 0.804
+Release: soon
+------------------
+- Remove items to be ignore before shrinking summarized amount to a limit.
+
+-------------------
 Version: 0.803
 Release: 20140508
 ------------------
