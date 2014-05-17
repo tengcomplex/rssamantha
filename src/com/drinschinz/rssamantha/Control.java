@@ -94,7 +94,7 @@ public class Control
         }
         catch(NumberFormatException e)
         {
-            System.err.println("Unable to parse system property httpdefaultrefresh, using 60");
+            System.err.println("Unable to parse system property httpdefaultrefresh, using 60.");
             return "60";
         }
     }
