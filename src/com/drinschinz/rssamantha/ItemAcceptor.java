@@ -476,7 +476,7 @@ class ClientThread implements Runnable
      * @return
      * @throws Exception 
      */
-    private HashMap<String,String> getArgsFromUrl(final String s) throws Exception
+    private Map<String,String> getArgsFromUrl(final String s) throws Exception
     {
         final String [] el = (s.startsWith("?") ? s.substring(1) : s).split("&");
         final HashMap<String, String> hm = new HashMap<>();
@@ -505,7 +505,7 @@ class ClientThread implements Runnable
         return hm;
     }
 
-    private void handlePOST(final HashMap<String, String> hm)
+    private void handlePOST(final Map<String, String> hm)
     {
         int ix = -1;
         if(hm.containsKey("channel0"))
@@ -675,7 +675,7 @@ class ClientThread implements Runnable
      * @param hm input GET arguments. channel and ix keys indexed.
      * @return 
      */
-    private int[] getChannels(final HashMap<String, String> hm)
+    private int[] getChannels(final Map<String, String> hm)
     {   
         if(hm.containsKey("allchannels"))
         {
@@ -717,7 +717,7 @@ class ClientThread implements Runnable
         return ret;
     }
 
-    private void handleGET(final HashMap<String, String> hm) throws Exception
+    private void handleGET(final Map<String, String> hm) throws Exception
     {
         if(hm.isEmpty() || hm.containsKey("generator"))
         {
