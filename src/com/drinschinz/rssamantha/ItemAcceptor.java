@@ -801,7 +801,7 @@ class ClientThread implements Runnable
             Control.L.log(Level.WARNING, "Unknown type:{0}", type);
             return;
         }
-        String refresh = "60"; // TODO make default global and configurable.
+        String refresh = Control.DEFAULT_HTTP_REFRESH;
         if(hm.containsKey("refresh") && hm.get("refresh").length() > 0)
         {
             refresh = hm.get("refresh");

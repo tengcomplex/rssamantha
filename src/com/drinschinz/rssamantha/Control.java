@@ -83,6 +83,21 @@ public class Control
     public final static int DEFAULTREADITEMSLEEP                    = 3600000;
     public final static boolean DEFAULTTITLEPREFIX                  = true;
     
+    public static final String DEFAULT_HTTP_REFRESH                 = getDefaultHTTPRefresh();
+    private static String getDefaultHTTPRefresh()
+    {
+        try
+        {
+            final String s = System.getProperty(PNAME+".httpdefaultrefresh");
+            Integer.parseInt(s);
+            return s;
+        }
+        catch(NumberFormatException e)
+        {
+            System.err.println("Unable to parse system property httpdefaultrefresh, using 60");
+            return "60";
+        }
+    }
     /** Short package name */
     public final static String PNAME                                = Control.class.getPackage().getName();
     /* Where we hold running ItemCreators during lifetime */
