@@ -88,7 +88,7 @@ public class Control
     /* Where we hold running ItemCreators during lifetime */
     private final List<ItemCreator> creators = Collections.synchronizedList(new ArrayList<ItemCreator>());
     /** If true we don't write Item's with created(pubDate) greater $now */
-    private final boolean ignorefutureitems;
+    private static final boolean ignorefutureitems =  "true".equals(System.getProperty(PNAME+".ignorefutureitems"));
     /** Might be:
      * <ul>
      *  <li>9: BEST_COMPRESSION
@@ -148,7 +148,6 @@ public class Control
         L.info("System properties\n");
         L.info(getPropertiesAsString(System.getProperties()));
         checkVersion();
-        this.ignorefutureitems =  "true".equals(System.getProperty(PNAME+".ignorefutureitems"));
         this.compression =  System.getProperties().containsKey(PNAME+".compression") ? Integer.parseInt(System.getProperty(PNAME+".compression")) : Deflater.NO_COMPRESSION;
         if(this.compression != Deflater.NO_COMPRESSION)
         {
@@ -765,26 +764,40 @@ public class Control
         return creators.size();
     }
     
+    public static boolean isIgnoreFuture(final Item i, final long t)
+    {
+        if(ignorefutureitems && i.getCreated() > t)
+        {
+            if(L.isLoggable(Level.FINE))
+            {
+                L.log(Level.FINE, "Ignore in future published item:{0}", new String[]{i.toShortString()});
+            }
+            return true;
+        }
+        return false;
+    }
+    
     public synchronized List<Item> getSortedItems(final int[] ixs, final long cutoff, final int numitems, final Pattern pt_title, final boolean extract)
     {
-        final List<Item> ret = new ArrayList<>();
+        final long now = Calendar.getInstance().getTimeInMillis();
         final boolean defsize = numitems == -1;
         final boolean maxsize = numitems == Integer.MAX_VALUE;
-        int limit = defsize || !maxsize ? numitems : Integer.MAX_VALUE;
+        int limit = defsize || !maxsize ? (numitems == -1 ? 0 : numitems) : Integer.MAX_VALUE;
+        final List<Item> ret = new ArrayList<>(ixs.length * Math.max(Math.min(limit, 100), 1)); // optimize initial capacity, reduce arraycopy
         for(int ii=0; ii<ixs.length; ii++)
         {
             limit += defsize ? channels[ixs[ii]].itemdata.getShowLimit() : 0;
-            ret.addAll(channels[ixs[ii]].itemdata.getSortedItems(defsize ? channels[ixs[ii]].itemdata.getShowLimit() : maxsize ? channels[ixs[ii]].itemdata.getNumberOfItems() : numitems, cutoff, pt_title));
+            ret.addAll(channels[ixs[ii]].itemdata.getSortedItems(defsize ? channels[ixs[ii]].itemdata.getShowLimit() : maxsize ? channels[ixs[ii]].itemdata.getNumberOfItems() : numitems, cutoff, pt_title, now));
         }
         Collections.sort(ret);
-        for(int jj=ret.size()-1; jj>=0; jj--)
+        // It's sorted youngest to oldest now.
+        // Remove the older ones until we have desired size.
+        int ii = ret.size()-1;
+        while(ret.size() > limit)
         {
-            if(ret.size() <= limit)
-            {
-                break;
-            }
-            ret.remove(jj);
+            ret.remove(ii--);
         }
+        // Last, extract remaining, if necessary.
         if(extract && this.compression != Deflater.NO_COMPRESSION)
         {
             for(Item i : ret)

@@ -132,7 +132,7 @@ public class ItemData
      * @param cutoff The time cutoff, in milliseconds since epoch.
      * @param pt_title Optional #Pattern for #Item title.
      */
-    public List<Item> getSortedItems(final int numitems, final long cutoff, final Pattern pt_title)
+    public List<Item> getSortedItems(final int numitems, final long cutoff, final Pattern pt_title, final long t)
     {
         final int limit = items.size() < numitems ? items.size() : numitems;
         Matcher matcher = null;
@@ -145,20 +145,13 @@ public class ItemData
         int count = 0;
         while(count < limit && iter.hasNext())
         {
-            if(cutoff == -1 && matcher == null)
-            {
-                copy.add((Item)iter.next().clone());
-                count++;
-                continue;
-            }
             final Item i = iter.next();
-            if(cutoff != -1 && i.getCreated() < cutoff)
+            if(cutoff != -1 && i.getCreated() < cutoff || Control.isIgnoreFuture(i, t))
             {
                 continue;
             }
             if(matcher != null)
             {
-//System.out.println(i.getElements().getElementValue("title"));                
                 matcher.reset(i.getElements().getElementValue("title"));
                 if(!matcher.matches())
                 {
