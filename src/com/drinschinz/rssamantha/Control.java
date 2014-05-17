@@ -82,8 +82,10 @@ public class Control
 
     public final static int DEFAULTREADITEMSLEEP                    = 3600000;
     public final static boolean DEFAULTTITLEPREFIX                  = true;
-    
-    public static final String DEFAULT_HTTP_REFRESH                 = getDefaultHTTPRefresh();
+    /** Short package name */
+    public final static String PNAME                                = Control.class.getPackage().getName();
+    /** Used in ItemAcceptor.handleGet() */
+    public final static String DEFAULT_HTTP_REFRESH                 = getDefaultHTTPRefresh();
     private static String getDefaultHTTPRefresh()
     {
         try
@@ -98,8 +100,6 @@ public class Control
             return "60";
         }
     }
-    /** Short package name */
-    public final static String PNAME                                = Control.class.getPackage().getName();
     /* Where we hold running ItemCreators during lifetime */
     private final List<ItemCreator> creators = Collections.synchronizedList(new ArrayList<ItemCreator>());
     /** If true we don't write Item's with created(pubDate) greater $now */
