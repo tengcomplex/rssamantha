@@ -51,6 +51,7 @@ Usage:
  [-Dcom.drinschinz.rssamantha.bodyfile=filename] (null)
  [-Dcom.drinschinz.rssamantha.onloadfile=filename] (null)
  [-Dcom.drinschinz.rssamantha.htmlfiledatetimeformat=pattern] (dd MMM yyyy HH:mm:ss)
+ [-Dcom.drinschinz.rssamantha.httpdefaultrefresh=number] (60)
  [-Dcom.drinschinz.rssamantha.knowndownloadsfile=filename]
  [-Dcom.drinschinz.rssamantha.downloadthreadsleep=number] (60000)
  [-Dcom.drinschinz.rssamantha.concurrentdownloads=number] (2)
@@ -260,6 +261,7 @@ Version: 0.804
 Release: soon
 ------------------
 - Remove items to be ignore before shrinking summarized amount to a limit.
+- Introduce system property httpdefaultrefresh.
 
 -------------------
 Version: 0.803
