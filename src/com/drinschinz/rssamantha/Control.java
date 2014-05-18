@@ -1118,7 +1118,7 @@ public class Control
     public synchronized static void writeObject(final Object obj, final String filename)
     {
         final long pre = System.currentTimeMillis();
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename)))
+        try(final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename)))
         {
             oos.writeObject(obj);
             oos.flush();
@@ -1133,7 +1133,7 @@ public class Control
     public synchronized static List<String> readFile(final File file)
     {
         final List<String> ret = new ArrayList<>();
-        try(BufferedReader in = new BufferedReader(new FileReader(file)))
+        try(final BufferedReader in = new BufferedReader(new FileReader(file)))
         {
             if(!file.exists())
             {
@@ -1162,7 +1162,7 @@ public class Control
     {
         final long pre = System.currentTimeMillis();
         Object ret = null;
-        try(ObjectInputStream is = new ObjectInputStream(new FileInputStream(new File(filename))))
+        try(final ObjectInputStream is = new ObjectInputStream(new FileInputStream(new File(filename))))
         {
             ret = is.readObject();
         }
