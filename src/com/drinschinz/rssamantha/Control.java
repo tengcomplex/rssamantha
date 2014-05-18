@@ -1118,15 +1118,12 @@ public class Control
     public synchronized static void writeObject(final Object obj, final String filename)
     {
         final long pre = System.currentTimeMillis();
-        try
+        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename)))
         {
-            final FileOutputStream fos = new FileOutputStream(filename);
-            final ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(obj);
             oos.flush();
-            oos.close();
         }
-        catch (IOException ex)
+        catch(IOException ex)
         {
             L.log(Level.SEVERE, "", ex);
         }
