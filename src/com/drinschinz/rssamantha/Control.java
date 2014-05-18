@@ -1136,22 +1136,20 @@ public class Control
     public synchronized static List<String> readFile(final File file)
     {
         final List<String> ret = new ArrayList<>();
-        try
+        try(BufferedReader in = new BufferedReader(new FileReader(file)))
         {
             if(!file.exists())
             {
                 L.log(Level.WARNING, "File {0} does not exist", file.toString());
                 return ret;
             }
-            final BufferedReader in = new BufferedReader(new FileReader(file));
-            String line = "";
+            String line;
             while((line = in.readLine()) != null)
             {
                 ret.add(line);
             }
-            in.close();
         }
-        catch(Exception ex)
+        catch(IOException | SecurityException ex)
         {
              L.log(Level.SEVERE, "", ex);
         }
