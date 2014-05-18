@@ -295,7 +295,7 @@ public class Control
         ItemCreatorData icd = null;
         try
         {
-            Document doc = null;
+            Document doc;
             final DocumentReader dr = new DocumentReader();
             if("true".equals(System.getProperty(PNAME+".preprocessconfig")))
             {
