@@ -214,7 +214,7 @@ public class Control
     private void checkVersion()
     {
 //System.out.println("application.properties:"+getPropertiesAsString(Main.applicationproperties));
-        RssChannelReader rcr = new RssChannelReader(Main.applicationproperties.getProperty("app.files"), "checkversion");
+        final RssChannelReader rcr = new RssChannelReader(Main.applicationproperties.getProperty("app.files"), "checkversion");
         if(rcr.read() && rcr.getItems().size() > 0)
         {
             final String t = rcr.getItems().get(0).getElements().getElementValue("title");
@@ -242,7 +242,6 @@ public class Control
             System.err.println("Could not read latest version number.");
         }
         rcr.getItems().clear();
-        rcr = null;
     }
     
     private static final class ItemCreatorData
