@@ -226,7 +226,7 @@ public class Control
             }
             try
             {
-                final double v = Double.parseDouble(t.substring(fv+1,to));
+                final double v = Double.parseDouble(t.substring(fv+1, to));
                 if(Double.parseDouble(Main.APPVERSION) < v)
                 {
                     System.out.println("New version "+v+" available. See "+Main.applicationproperties.getProperty("app.home"));
