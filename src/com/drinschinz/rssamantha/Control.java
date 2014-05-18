@@ -1167,20 +1167,13 @@ public class Control
     {
         final long pre = System.currentTimeMillis();
         Object ret = null;
-        try
+        try(ObjectInputStream is = new ObjectInputStream(new FileInputStream(new File(filename))))
         {
-            final FileInputStream fs = new FileInputStream(new File(filename));
-            final ObjectInputStream is = new ObjectInputStream(fs);
             ret = is.readObject();
-            is.close();
         }
-        catch(IOException ex)
+        catch(IOException | ClassNotFoundException ex)
         {
              L.log(Level.SEVERE, "", ex);
-        }
-        catch(ClassNotFoundException cex)
-        {
-             L.log(Level.SEVERE, "", cex);
         }
         L.log(Level.FINE, "Read filename:{0} done. duration:{1}ms", new Object[]{filename, System.currentTimeMillis()-pre});
         return ret;
