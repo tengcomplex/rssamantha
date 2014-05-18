@@ -681,7 +681,7 @@ public class Control
          */
         if("true".equals(System.getProperty(PNAME+".itemacceptor")))
         {
-            final int port = Integer.parseInt(System.getProperty(PNAME+".itemacceptorport",DEFAULTITEMACCEPTORPORT));
+            final int port = Integer.parseInt(System.getProperty(PNAME+".itemacceptorport", DEFAULTITEMACCEPTORPORT));
             final int[] chix = new int[channels.length];
             int ix = 0;
             for(int ii=0; ii<chix.length; ii++)
@@ -690,7 +690,7 @@ public class Control
             }
             (new Thread(new ItemAcceptor(this, 
                                         port,
-                                        Integer.parseInt(System.getProperty(PNAME+".itemacceptorthreads",DEFAULTCONCURRENTITEMACCEPTORTHREADS)),
+                                        Integer.parseInt(System.getProperty(PNAME+".itemacceptorthreads", DEFAULTCONCURRENTITEMACCEPTORTHREADS)),
                                         chix))).start();
             System.out.println("Accepting HTTP requests on port "+port);
         }
