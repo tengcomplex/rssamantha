@@ -613,7 +613,7 @@ public class Control
                 while(!itemcreators.isEmpty())
                 {
                     ItemCreator itemcreator = null;
-                    ItemCreatorData icd = itemcreators.removeLast();
+                    final ItemCreatorData icd = itemcreators.removeLast();
                     if(icd.feedtype == null || icd.feedtype.length() == 0)
                     {
                         icd.feedtype = detectFeedType(icd.feedurl).name;
