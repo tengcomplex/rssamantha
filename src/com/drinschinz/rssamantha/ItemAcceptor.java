@@ -230,8 +230,8 @@ class ClientThread implements Runnable
 {
     /** For logging */
     private final long pre = System.currentTimeMillis();
-    private Socket socket;
-    private int id;
+    private final Socket socket;
+    private final int id;
     private PrintStream out;
     private InputStream in;
     private String cmd, url, httpversion;
@@ -343,7 +343,6 @@ class ClientThread implements Runnable
     public synchronized void run()
     {
         handleClient();
-        socket = null;
         itemacceptor.removeClient(this);
 //System.out.println(" size:"+ItemAcceptor.threads.size());
         if(Control.L.isLoggable(Level.FINE))
