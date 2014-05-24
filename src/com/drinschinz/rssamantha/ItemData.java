@@ -131,6 +131,7 @@ public class ItemData
      * @param numitems The maximum number of items.
      * @param cutoff The time cutoff, in milliseconds since epoch.
      * @param pt_title Optional #Pattern for #Item title.
+     * @param t The current time in millis, used for checking ignore future.
      */
     public List<Item> getSortedItems(final int numitems, final long cutoff, final Pattern pt_title, final long t)
     {
