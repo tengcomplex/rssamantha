@@ -347,7 +347,7 @@ class ClientThread implements Runnable
 //System.out.println(" size:"+ItemAcceptor.threads.size());
         if(Control.L.isLoggable(Level.FINE))
         {
-            Control.L.log(Level.FINE, "Done, handling {0} took {1} ms",new Object[]{content,String.valueOf(System.currentTimeMillis()-pre)});
+            Control.L.log(Level.FINE, "Done, handling {0} took {1} ms",new Object[]{content, String.valueOf(System.currentTimeMillis()-pre)});
         }
     }
 
