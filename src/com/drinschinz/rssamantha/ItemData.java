@@ -143,7 +143,7 @@ public class ItemData
         while(count < limit && iter.hasNext())
         {
             final Item i = iter.next();
-            if(cutoff != -1 && i.getCreated() < cutoff || Control.isIgnoreFuture(i, t))
+            if((cutoff != -1 && i.getCreated() < cutoff) || Control.isIgnoreFuture(i, t))
             {
                 continue;
             }
