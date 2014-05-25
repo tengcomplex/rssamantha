@@ -623,6 +623,11 @@ class ClientThread implements Runnable
         out.println("<FONT size=\"1\">[Java compliant regexp]</FONT>");
         out.println("</TD>");
         out.println("</TR>");
+        out.println("<TD>Unique Title:</TD>");
+        out.println("<TD>");
+        out.println("<INPUT name=\"uniquetitle\" type=\"checkbox\">");
+        out.println("</TD>");
+        out.println("</TR>");
         out.println("<TR>");
         out.println("<TD>Type:</TD>");
         out.println("<TD>");
@@ -816,9 +821,13 @@ class ClientThread implements Runnable
             }
         }
         boolean uniqueTitle = false;
-        if(hm.containsKey("uniquetitle") && hm.get("uniquetitle").equals("1"))
+        if(hm.containsKey("uniquetitle"))
         {
-            uniqueTitle = true;
+            final String ut = hm.get("uniquetitle");
+            if("1".equals(ut) || "on".equals(ut) || "true".equals(ut))
+            {
+                uniqueTitle = true;
+            }
         }
         Pattern pt_title = null;
         if(hm.containsKey("search_title") && hm.get("search_title").length() > 0)
