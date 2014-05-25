@@ -815,11 +815,6 @@ class ClientThread implements Runnable
                 return;
             }
         }
-        boolean uniqueTitle = false;
-        if(hm.containsKey("uniquetitle") && hm.get("uniquetitle").equals("1"))
-        {
-            uniqueTitle = true;
-        }
         Pattern pt_title = null;
         if(hm.containsKey("search_title") && hm.get("search_title").length() > 0)
         {
@@ -835,7 +830,7 @@ class ClientThread implements Runnable
                 return;
             }
         }
-        final List<Item> items = itemacceptor.getControl().getSortedItems(cis, cutoff, numitems, pt_title, "xml".equals(type), uniqueTitle);
+        final List<Item> items = itemacceptor.getControl().getSortedItems(cis, cutoff, numitems, pt_title, "xml".equals(type));
 //System.out.println("numitems:"+items.size());        
         out.print("HTTP/1.0 "+HTTP_OK+" OK"+EOL);
         out.print("Content-type: text/"+type+"; charset=utf-8"+EOL);

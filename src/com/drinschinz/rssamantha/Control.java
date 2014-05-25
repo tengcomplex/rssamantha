@@ -791,7 +791,7 @@ public class Control
         return false;
     }
     
-    public synchronized List<Item> getSortedItems(final int[] ixs, final long cutoff, final int numitems, final Pattern pt_title, final boolean extract, final boolean uniqueTitle)
+    public synchronized List<Item> getSortedItems(final int[] ixs, final long cutoff, final int numitems, final Pattern pt_title, final boolean extract)
     {
         final long now = Calendar.getInstance().getTimeInMillis();
         final boolean defsize = numitems == -1;
@@ -801,7 +801,7 @@ public class Control
         for(int ii=0; ii<ixs.length; ii++)
         {
             limit += defsize ? channels[ixs[ii]].itemdata.getShowLimit() : 0;
-            ret.addAll(channels[ixs[ii]].itemdata.getSortedItems(defsize ? channels[ixs[ii]].itemdata.getShowLimit() : maxsize ? channels[ixs[ii]].itemdata.getNumberOfItems() : numitems, cutoff, pt_title, now, uniqueTitle));
+            ret.addAll(channels[ixs[ii]].itemdata.getSortedItems(defsize ? channels[ixs[ii]].itemdata.getShowLimit() : maxsize ? channels[ixs[ii]].itemdata.getNumberOfItems() : numitems, cutoff, pt_title, now));
         }
         Collections.sort(ret);
         // It's sorted youngest to oldest now.
@@ -828,7 +828,7 @@ public class Control
     
     public List<Item> getSortedItems(final int ix, final long cutoff, final int numitems, final Pattern pt_title)
     {
-        return getSortedItems(new int[]{ix}, cutoff, numitems, pt_title, true, false);
+        return getSortedItems(new int[]{ix}, cutoff, numitems, pt_title, true);
     }
 
     public List<Item> getSortedItems(final int ix)
@@ -838,7 +838,7 @@ public class Control
     
     public List<Item> getSortedItems(final int[] ixs)
     {
-        return getSortedItems(ixs, -1, -1, null, true, false);
+        return getSortedItems(ixs, -1, -1, null, true);
     }
 
     /* For the shutdownhook in Main */
