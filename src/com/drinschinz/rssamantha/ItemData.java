@@ -136,11 +136,7 @@ public class ItemData
     public List<Item> getSortedItems(final int numitems, final long cutoff, final Pattern pt_title, final long t)
     {
         final int limit = items.size() < numitems ? items.size() : numitems;
-        Matcher matcher = null;
-        if(pt_title != null)
-        {
-            matcher = pt_title.matcher("");
-        }
+        final Matcher matcher = pt_title != null ? pt_title.matcher("") : null;
         final ArrayList<Item> copy = new ArrayList<>(limit);
         final Iterator<Item> iter = items.iterator();
         int count = 0;
