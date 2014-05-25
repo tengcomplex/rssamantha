@@ -623,6 +623,7 @@ class ClientThread implements Runnable
         out.println("<FONT size=\"1\">[Java compliant regexp]</FONT>");
         out.println("</TD>");
         out.println("</TR>");
+        out.println("<TR>");
         out.println("<TD>Unique Title:</TD>");
         out.println("<TD>");
         out.println("<INPUT name=\"uniquetitle\" type=\"checkbox\">");
