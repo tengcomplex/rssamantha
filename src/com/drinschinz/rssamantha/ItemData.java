@@ -157,7 +157,8 @@ public class ItemData
                 }
             }
             final String title = !uniqueTitle ? null : i.getElements().getElementValue("title");
-//if(i.getElements().getElementValue("title").startsWith("[wdr")) System.out.println(i.getCreated()+" "+i.getElements().getElementValue("title"));
+            /* We made sure element value title is never null at reading time, 
+               therefore title is always not null if we care for */
             if(!uniqueTitle || !itemTitles.contains(title))
             {
                 copy.add((Item)i.clone());
@@ -168,7 +169,6 @@ public class ItemData
                 count++;
             }
         }
- //System.out.println("----------");
         return copy;
     }
 
