@@ -133,11 +133,12 @@ public class ItemData
      * @param pt_title Optional #Pattern for #Item title.
      * @param t The current time in millis, used for checking ignore future.
      */
-    public List<Item> getSortedItems(final int numitems, final long cutoff, final Pattern pt_title, final long t)
+    public List<Item> getSortedItems(final int numitems, final long cutoff, final Pattern pt_title, final long t, final boolean uniqueTitle)
     {
         final int limit = items.size() < numitems ? items.size() : numitems;
         final Matcher matcher = pt_title != null ? pt_title.matcher("") : null;
         final ArrayList<Item> copy = new ArrayList<>(limit);
+        final HashSet<String> itemTitles = uniqueTitle ? new HashSet<String>(limit) : null;
         final Iterator<Item> iter = items.iterator();
         int count = 0;
         while(count < limit && iter.hasNext())
@@ -155,8 +156,18 @@ public class ItemData
                     continue;
                 }
             }
-            copy.add((Item)i.clone());
-            count++;
+            final String title = !uniqueTitle ? null : i.getElements().getElementValue("title");
+            /* We made sure element value title is never null at reading time, 
+               therefore title is always not null if we care for */
+            if(!uniqueTitle || !itemTitles.contains(title))
+            {
+                copy.add((Item)i.clone());
+                if(uniqueTitle)
+                {
+                    itemTitles.add(title);
+                }
+                count++;
+            }
         }
         return copy;
     }

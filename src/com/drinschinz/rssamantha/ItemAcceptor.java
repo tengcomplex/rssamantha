@@ -624,6 +624,12 @@ class ClientThread implements Runnable
         out.println("</TD>");
         out.println("</TR>");
         out.println("<TR>");
+        out.println("<TD>Unique Title:</TD>");
+        out.println("<TD>");
+        out.println("<INPUT name=\"uniquetitle\" type=\"checkbox\">");
+        out.println("</TD>");
+        out.println("</TR>");
+        out.println("<TR>");
         out.println("<TD>Type:</TD>");
         out.println("<TD>");
         out.println("<INPUT type=\"radio\" name=\"type\" value=\"xml\" checked>XML");
@@ -815,6 +821,15 @@ class ClientThread implements Runnable
                 return;
             }
         }
+        boolean uniqueTitle = false;
+        if(hm.containsKey("uniquetitle"))
+        {
+            final String ut = hm.get("uniquetitle");
+            if("1".equals(ut) || "on".equals(ut) || "true".equals(ut))
+            {
+                uniqueTitle = true;
+            }
+        }
         Pattern pt_title = null;
         if(hm.containsKey("search_title") && hm.get("search_title").length() > 0)
         {
@@ -830,7 +845,7 @@ class ClientThread implements Runnable
                 return;
             }
         }
-        final List<Item> items = itemacceptor.getControl().getSortedItems(cis, cutoff, numitems, pt_title, "xml".equals(type));
+        final List<Item> items = itemacceptor.getControl().getSortedItems(cis, cutoff, numitems, pt_title, "xml".equals(type), uniqueTitle);
 //System.out.println("numitems:"+items.size());        
         out.print("HTTP/1.0 "+HTTP_OK+" OK"+EOL);
         out.print("Content-type: text/"+type+"; charset=utf-8"+EOL);
@@ -883,7 +898,7 @@ wget --post-data='title=testtitle&description=testdescription&channel=tengtest&c
             ret.append("<OL>"+EOL);
                 ret.append("<LI>http://myhost/status</LI>"+EOL);
                 ret.append("<LI>http://myhost/opml</LI>"+EOL);
-                ret.append("<LI>http://myhost/[channel=$NAME1&channel$NAMEn][ix=$IX1&ix$IXn][&numitems={ALL|number}][&type={xml|html|txt}][&refresh={seconds}][&cutoff={TODAY|yyyy-MM-dd HH:mm:ss|epochtimeinmillis}]"+BR+EOL);
+                ret.append("<LI>http://myhost/[channel=$NAME1&channel$NAMEn][ix=$IX1&ix$IXn][&numitems={ALL|number}][&type={xml|html|txt}][&refresh={seconds}][&cutoff={TODAY|yyyy-MM-dd HH:mm:ss|epochtimeinmillis}][&uniquetitle={1|0}]"+BR+EOL);
                     ret.append("<SMALL>Available channels:").append(Arrays.toString(itemacceptor.getControl().getAllChannelNames())).append("</SMALL>");
                 ret.append("</LI>"+EOL);
             ret.append("</OL>"+EOL);
