@@ -264,6 +264,7 @@ Release: soon
 ------------------
 - Remove items to be ignore before shrinking summarized amount to a limit.
 - Introduce system property httpdefaultrefresh.
+- Introduce HTTP GET argument uniquetitle.
 
 -------------------
 Version: 0.803
