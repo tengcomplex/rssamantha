@@ -898,7 +898,7 @@ wget --post-data='title=testtitle&description=testdescription&channel=tengtest&c
             ret.append("<OL>"+EOL);
                 ret.append("<LI>http://myhost/status</LI>"+EOL);
                 ret.append("<LI>http://myhost/opml</LI>"+EOL);
-                ret.append("<LI>http://myhost/[channel=$NAME1&channel$NAMEn][ix=$IX1&ix$IXn][&numitems={ALL|number}][&type={xml|html|txt}][&refresh={seconds}][&cutoff={TODAY|yyyy-MM-dd HH:mm:ss|epochtimeinmillis}]"+BR+EOL);
+                ret.append("<LI>http://myhost/[channel=$NAME1&channel$NAMEn][ix=$IX1&ix$IXn][&numitems={ALL|number}][&type={xml|html|txt}][&refresh={seconds}][&cutoff={TODAY|yyyy-MM-dd HH:mm:ss|epochtimeinmillis}][&uniquetitle={1|0}]"+BR+EOL);
                     ret.append("<SMALL>Available channels:").append(Arrays.toString(itemacceptor.getControl().getAllChannelNames())).append("</SMALL>");
                 ret.append("</LI>"+EOL);
             ret.append("</OL>"+EOL);
