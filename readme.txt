@@ -112,6 +112,8 @@ Remove item:
 wget --post-data='title=testtitle&description=testdescription&ix=0&created=$CREATED&remove=1' http://host:port/ -O /dev/null
 wget --post-data='title=testtitle&description=testdescription&channel=tengtest&created=$CREATED&remove=1' http://host:port/ -O /dev/null
 
+When special characters are to be passed, encode in url-encoding.
+
 GET examples:
 http://$HOST:$PORT (-> generator)
 http://$HOST:$PORT/channel=CHANNELNAME1&channel=CHANNELNAME2
