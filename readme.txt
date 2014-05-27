@@ -114,9 +114,9 @@ wget --post-data='title=testtitle&description=testdescription&channel=tengtest&c
 
 GET examples:
 http://$HOST:$PORT (-> generator)
-http://$HOST:$PORT/channel=$CHANNELNAME1&channel$CHANNELNAME2
-http://$HOST:$PORT/ix=$CHANNELINDEX1&channel$CHANNELNAME2
-http://$HOST:$PORT/channel=$CHANNELNAME&type=$TYPE&$refresh$NUMBERINSECONDSnumitems=$NUMBER&cutoff=$EPOCHTIMEINMILLIS$search_title=$REGEXP
+http://$HOST:$PORT/channel=CHANNELNAME1&channel=CHANNELNAME2
+http://$HOST:$PORT/ix=CHANNELINDEX1&channel=CHANNELNAME2
+http://$HOST:$PORT/channel=CHANNELNAME&type=TYPE&refreshNUMBERINSECONDS&numitems=NUMBER&cutoff=EPOCHTIMEINMILLIS&search_title=REGEXP&uniquetitle=BOOL
 http://$HOST:$PORT/generator
 http://$HOST:$PORT/status
 http://$HOST:$PORT/opml
@@ -627,7 +627,8 @@ Release: 20100116
 
 TODO
 ===============================================================================
-- Make status avaible as rss feed itself.
+- Introduce ignorecreated per reading channel.
+- Make IP access list for GET/POST independent.
 - It may be possible to smart trim every description at read() time.
 - Jun 27, 2011 6:35:19 AM com.drinschinz.rssfeedcreator.ChannelReader getCreated SEVERE: Error reading http://feeds.feedburner.com/francetv-sports?format=xml Couldn't parse dim 26 juin 2011 22:13:51 +0100
     Seems wrong, french guys using weird days are not supported as it seems.
