@@ -232,6 +232,7 @@ public abstract class ChannelReader extends DocumentReader
     private final static Pattern pt_b = Pattern.compile(".*\\.\\d{3}[\\+-]\\d{2}:\\d{2}$");
     private final static Pattern pt_c = Pattern.compile(".*[\\+-]\\d{2}:\\d{2}$");
     private final static Pattern pt_d = Pattern.compile(".*\\d{2}:\\d{2}:\\d{2} UT$");
+    private final static Pattern pt_epoch = Pattern.compile("^\\d{10,12}$"); // should last until Fri, 27 Sep 33658 01:46:39 GMT
     
     private final static Matcher datematcher = pt_a.matcher("");
 
@@ -260,6 +261,11 @@ public abstract class ChannelReader extends DocumentReader
             {
                 /* ts looks like Fri, 31 Aug 2012 17:59:19 UT -> We replace to Fri, 31 Aug 2012 17:59:19 GMT */
                 s = s.substring(0, s.length()-2)+" GMT";
+            }
+            else if(datematcher.usePattern(pt_epoch).reset(s).matches())
+            {
+                /* ts looks like 1397512800 -> We replace to E',' dd MMM yyyy HH:mm:ss Z */
+                s = dateformats[0].format(new Date(Long.parseLong(s) * 1000));
             }
             else
             {
