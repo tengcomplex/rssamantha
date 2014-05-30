@@ -56,7 +56,10 @@ public class ItemAcceptor implements Runnable
     private final List<ClientThread> threads;
     /* max # worker threads */
     private final int maxworkers;
-    
+    /** See #ClientThread.doGenerator(). */
+    private final String generatorHtml;
+    /** JavaScript validation for the generator */
+    private final static String checkInput = new Scanner(ItemAcceptor.class.getResourceAsStream("checkInput.js")).useDelimiter("\\A").next();
     private static int[] channelixs;
     
     public ItemAcceptor(final Control control, final int port, final int maxworkers, final int[] chix)
@@ -77,6 +80,7 @@ public class ItemAcceptor implements Runnable
         this.maxworkers = maxworkers;
         threads = Collections.synchronizedList(new ArrayList());
         additionalHtml = new AdditionalHtml();
+        generatorHtml = initGeneratorHtml();
     }
     
     public static class AdditionalHtml
@@ -133,6 +137,100 @@ public class ItemAcceptor implements Runnable
         {
             return body;
         }
+    }
+    
+    private String initGeneratorHtml()
+    {
+        final StringBuilder s = new StringBuilder(4096);
+        final String[] channels = getControl().getAllChannelNames();
+        s.append("HTTP/1.0 ").append(ClientThread.HTTP_OK).append(" OK"+ClientThread.EOL);
+        s.append("Content-type: text/html; charset=utf-8"+ClientThread.EOL+ClientThread.EOL);
+        s.append("<HTML>"+ClientThread.EOL);
+        s.append("<HEAD>"+ClientThread.EOL);
+        s.append("<TITLE>").append(Main.APPNAME).append("</TITLE>"+ClientThread.EOL);
+        s.append("</HEAD>"+ClientThread.EOL);
+        s.append("<BODY>"+ClientThread.EOL);
+        s.append(ClientThread.BR+ClientThread.BR+ClientThread.EOL);
+        s.append(checkInput);
+        s.append("<FORM name=\"generate\" action=\"/\" method=\"get\" target=\"_blank\" onsubmit=\"return checkInput()\">"+ClientThread.EOL);
+        s.append("<TABLE>"+ClientThread.EOL);
+        s.append("<TR>"+ClientThread.EOL);
+        s.append("<TD>Channel:</TD>"+ClientThread.EOL);
+        s.append("<TD>"+ClientThread.EOL);
+        s.append("<SELECT name=\"channel\" size=\"5\" multiple>"+ClientThread.EOL);
+        for(int ii=0; ii<channels.length; ii++)
+        {
+            s.append("<OPTION").append(ii == 0 ? " selected>" : ">").append(channels[ii]).append("</OPTION>"+ClientThread.EOL);
+        }
+        s.append("</SELECT>"+ClientThread.EOL);
+        s.append("</TD>"+ClientThread.EOL);
+        s.append("</TR>"+ClientThread.EOL);
+        s.append("<TR>"+ClientThread.EOL);
+        s.append("<TD>Number of Items:</TD>"+ClientThread.EOL);
+        s.append("<TD>"+ClientThread.EOL);
+        s.append("<INPUT name=\"numitems\" type=\"text\" size=\"10\" maxlength=\"12\" value=\"100\">"+ClientThread.BR+ClientThread.EOL);
+        s.append("<FONT size=\"1\">[Integer or ALL]</FONT>"+ClientThread.EOL);
+        s.append("</TD>"+ClientThread.EOL);
+        s.append("</TR>"+ClientThread.EOL);
+        s.append("<TR>"+ClientThread.EOL);
+        s.append("<TD>Cutoff:</TD>"+ClientThread.EOL);
+        s.append("<TD>"+ClientThread.EOL);
+        s.append("<INPUT name=\"cutoff\" type=\"text\" size=\"19\" maxlength=\"19\" value=\"TODAY\">"+ClientThread.BR+ClientThread.EOL);
+        s.append("<FONT size=\"1\">[yyyy-mm-dd hh:mm:ss or milliseconds from epoch or TODAY]</FONT>"+ClientThread.EOL);
+        s.append("</TD>"+ClientThread.EOL);
+        s.append("</TR>"+ClientThread.EOL);
+        s.append("<TR>"+ClientThread.EOL);
+        s.append("<TD>Refresh:</TD>"+ClientThread.EOL);
+        s.append("<TD>"+ClientThread.EOL);
+        s.append("<INPUT name=\"refresh\" type=\"text\" size=\"19\" maxlength=\"19\" value=\"\">"+ClientThread.BR+ClientThread.EOL);
+        s.append("<FONT size=\"1\">[In seconds, works for HTML]</FONT>"+ClientThread.EOL);
+        s.append("</TD>"+ClientThread.EOL);
+        s.append("</TR>"+ClientThread.EOL);
+        s.append("<TR>"+ClientThread.EOL);
+        s.append("<TD>RegExp Title:</TD>"+ClientThread.EOL);
+        s.append("<TD>"+ClientThread.EOL);
+        s.append("<INPUT name=\"search_title\" type=\"text\" size=\"30\" maxlength=\"100\">"+ClientThread.BR+ClientThread.EOL);
+        s.append("<FONT size=\"1\">[Java compliant regexp]</FONT>"+ClientThread.EOL);
+        s.append("</TD>"+ClientThread.EOL);
+        s.append("</TR>"+ClientThread.EOL);
+        s.append("<TR>"+ClientThread.EOL);
+        s.append("<TD>Unique Title:</TD>"+ClientThread.EOL);
+        s.append("<TD>"+ClientThread.EOL);
+        s.append("<INPUT name=\"uniquetitle\" type=\"checkbox\">"+ClientThread.EOL);
+        s.append("</TD>"+ClientThread.EOL);
+        s.append("</TR>"+ClientThread.EOL);
+        s.append("<TR>"+ClientThread.EOL);
+        s.append("<TD>Type:</TD>"+ClientThread.EOL);
+        s.append("<TD>"+ClientThread.EOL);
+        s.append("<INPUT type=\"radio\" name=\"type\" value=\"xml\" checked>XML"+ClientThread.EOL);
+        s.append("<INPUT type=\"radio\" name=\"type\" value=\"html\">HTML"+ClientThread.EOL);
+        s.append("<INPUT type=\"radio\" name=\"type\" value=\"txt\">TXT"+ClientThread.EOL);
+        s.append("</TD>"+ClientThread.EOL);
+        s.append("</TR>"+ClientThread.EOL);
+        s.append("<TR>"+ClientThread.EOL);
+        s.append("<TD>"+ClientThread.EOL);
+        s.append("<INPUT type=\"submit\" value=\"Generate\">"+ClientThread.EOL);
+        s.append("</TD><TD></TD>"+ClientThread.EOL);
+        s.append("<TR>"+ClientThread.EOL);
+        s.append("</TABLE>"+ClientThread.EOL);
+        s.append("</FORM>"+ClientThread.EOL);
+        s.append(ClientThread.BR+ClientThread.BR+ClientThread.EOL+"Channels:<UL>"+ClientThread.EOL);
+        for(String c : channels)
+        {
+            s.append("<LI><A HREF=\"/channel=").append(c).append("\">").append(c).append("</A></LI>"+ClientThread.EOL);
+        }
+        s.append(ClientThread.BR+ClientThread.EOL+"</UL>"+ClientThread.EOL);
+        s.append(ClientThread.EOL+"All Channels as OPML:<UL>"+ClientThread.EOL);
+        s.append("<LI><A HREF=/opml>").append(Main.APPNAME.toLowerCase()).append(".opml</A></LI>"+ClientThread.EOL);
+        s.append(ClientThread.BR+ClientThread.EOL+"</UL>"+ClientThread.EOL);
+        s.append("</BODY>"+ClientThread.EOL);
+        s.append("</HTML>");
+        return s.toString();
+    }
+    
+    public String getGeneratorHtml()
+    {
+        return this.generatorHtml;
     }
     
     protected int[] getAllChannelIndicies()
@@ -272,9 +370,6 @@ class ClientThread implements Runnable
 
     /** 5XX: server error */
     public static final int HTTP_INTERNAL_ERROR = 501;
-    
-    /** JavaScript validation for the generator */
-    private final static String checkInput = new Scanner(ItemAcceptor.class.getResourceAsStream("checkInput.js")).useDelimiter("\\A").next();
     
     /**
      * 
@@ -570,91 +665,9 @@ class ClientThread implements Runnable
      * 
      * @throws Exception 
      */
-    private void doGenerator() throws Exception
+    private void doGenerator()
     {
-        final String[] channels = itemacceptor.getControl().getAllChannelNames();
-        out.print("HTTP/1.0 "+HTTP_OK+" OK"+EOL);
-        out.print("Content-type: text/html; charset=utf-8"+EOL+EOL);
-        out.println("<HTML>");
-        out.println("<HEAD>");
-        out.println("<TITLE>"+Main.APPNAME+"</TITLE>");
-        out.println("</HEAD>");
-        out.println("<BODY>");
-        out.println(BR+BR+EOL);
-        out.println(checkInput);
-        out.println("<FORM name=\"generate\" action=\"/\" method=\"get\" target=\"_blank\" onsubmit=\"return checkInput()\">");
-        out.println("<TABLE>");
-        out.println("<TR>");
-        out.println("<TD>Channel:</TD>");
-        out.println("<TD>");
-        out.println("<SELECT name=\"channel\" size=\"5\" multiple>");
-        for(int ii=0; ii<channels.length; ii++)
-        {
-            out.println("<OPTION"+(ii == 0 ? " selected>" : ">")+channels[ii]+"</OPTION>");
-        }
-        out.println("</SELECT>");
-        out.println("</TD>");
-        out.println("</TR>");
-        out.println("<TR>");
-        out.println("<TD>Number of Items:</TD>");
-        out.println("<TD>");
-        out.println("<INPUT name=\"numitems\" type=\"text\" size=\"10\" maxlength=\"12\" value=\"100\">"+BR);
-        out.println("<FONT size=\"1\">[Integer or ALL]</FONT>");
-        out.println("</TD>");
-        out.println("</TR>");
-        out.println("<TR>");
-        out.println("<TD>Cutoff:</TD>");
-        out.println("<TD>");
-        out.println("<INPUT name=\"cutoff\" type=\"text\" size=\"19\" maxlength=\"19\" value=\"TODAY\">"+BR);
-        out.println("<FONT size=\"1\">[yyyy-mm-dd hh:mm:ss or milliseconds from epoch or TODAY]</FONT>");
-        out.println("</TD>");
-        out.println("</TR>");
-        out.println("<TR>");
-        out.println("<TD>Refresh:</TD>");
-        out.println("<TD>");
-        out.println("<INPUT name=\"refresh\" type=\"text\" size=\"19\" maxlength=\"19\" value=\"\">"+BR);
-        out.println("<FONT size=\"1\">[In seconds, works for HTML]</FONT>");
-        out.println("</TD>");
-        out.println("</TR>");
-        out.println("<TR>");
-        out.println("<TD>RegExp Title:</TD>");
-        out.println("<TD>");
-        out.println("<INPUT name=\"search_title\" type=\"text\" size=\"30\" maxlength=\"100\">"+BR);
-        out.println("<FONT size=\"1\">[Java compliant regexp]</FONT>");
-        out.println("</TD>");
-        out.println("</TR>");
-        out.println("<TR>");
-        out.println("<TD>Unique Title:</TD>");
-        out.println("<TD>");
-        out.println("<INPUT name=\"uniquetitle\" type=\"checkbox\">");
-        out.println("</TD>");
-        out.println("</TR>");
-        out.println("<TR>");
-        out.println("<TD>Type:</TD>");
-        out.println("<TD>");
-        out.println("<INPUT type=\"radio\" name=\"type\" value=\"xml\" checked>XML");
-        out.println("<INPUT type=\"radio\" name=\"type\" value=\"html\">HTML");
-        out.println("<INPUT type=\"radio\" name=\"type\" value=\"txt\">TXT");
-        out.println("</TD>");
-        out.println("</TR>");
-        out.println("<TR>");
-        out.println("<TD>");
-        out.println("<INPUT type=\"submit\" value=\"Generate\">");
-        out.println("</TD><TD></TD>");
-        out.println("<TR>");
-        out.println("</TABLE>");
-        out.println("</FORM>");
-        out.println(BR+BR+EOL+"Channels:<UL>");
-        for(String c : channels)
-        {
-            out.println("<LI><A HREF=\"/channel="+c+"\">"+c+"</A></LI>");
-        }
-        out.println(BR+EOL+"</UL>");
-        out.println(EOL+"All Channels as OPML:<UL>");
-        out.println("<LI><A HREF=/opml>"+Main.APPNAME.toLowerCase()+".opml</A></LI>");
-        out.println(BR+EOL+"</UL>");
-        out.println("</BODY>");
-        out.println("</HTML>");
+        out.println(itemacceptor.getGeneratorHtml());
     }
     
     private void doOpml() throws Exception
