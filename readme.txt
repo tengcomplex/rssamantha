@@ -265,6 +265,8 @@ Release: soon
 - Remove items to be ignored before shrinking summarized amount to a limit.
 - Introduce system property httpdefaultrefresh.
 - Introduce HTTP GET argument uniquetitle.
+- Add read support for dateformat "dd.MM.yy". [#5]
+- Add support for epochtime pubDate (in seconds). [#5]
 
 -------------------
 Version: 0.803
