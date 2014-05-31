@@ -75,13 +75,11 @@ public class TxtFileHandler extends FileHandler
 
     protected String getContentAsString(final List<Item> items)
     {
-        final Calendar now = Calendar.getInstance();
-        final StringBuilder str = new StringBuilder("");
+        final StringBuilder str = new StringBuilder(Math.max(32, Math.min(4096, items.size()*256)));
         for(Item ii : items)
         {
-            final String ti = ii.getElements().getElementValue("title");
             str.append(datetimeformat.format(new Date(ii.getCreated())));
-            str.append(" ").append(ti).append(Control.LINESEP);
+            str.append(" ").append(ii.getElements().getElementValue("title")).append(Control.LINESEP);
         }
         return str.toString();
     }
