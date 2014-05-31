@@ -103,7 +103,7 @@ public class Control
     /* Where we hold running ItemCreators during lifetime */
     private final List<ItemCreator> creators = Collections.synchronizedList(new ArrayList<ItemCreator>());
     /** If true we don't write Item's with created(pubDate) greater $now */
-    private static final boolean ignorefutureitems =  "true".equals(System.getProperty(PNAME+".ignorefutureitems"));
+    public static final boolean ignorefutureitems =  "true".equals(System.getProperty(PNAME+".ignorefutureitems"));
     /** Might be:
      * <ul>
      *  <li>9: BEST_COMPRESSION
@@ -405,11 +405,6 @@ public class Control
     public int getCompression()
     {
         return this.compression;
-    }
-
-    public boolean isIgnoreFutureItems()
-    {
-        return this.ignorefutureitems;
     }
 
     /** 
