@@ -149,26 +149,11 @@ public class RssFileHandler extends FileHandler
     protected void write()
     {
         final List<Item> items = control.getSortedItems(channelindices);
-//System.out.println("RssFileHandler.write(), writing to "+filename+" number of items: " + items.size());
-/*
-System.out.print("RssFileHandler.write(), number of items: " + items.size() + " ");
-for (int ii = 0; ii < items.size(); ii++)
-{
-    System.out.print("item " + (ii) + ": [" + items.get(ii).toString() + "] ");
-}
-System.out.print("\r\n");
-*/      
         final int hash = items.hashCode();
         if(!hasChanged(hash))
         {
             return;
         }
-        final Calendar now = Calendar.getInstance();
-        synchronized(formatter)
-        {
-            channel.putElement("lastBuildDate", formatter.format(now.getTime()));
-        }
-        channel.setItems(items);
         try
         {
             final Transformer transformer = TransformerFactory.newInstance().newTransformer();
