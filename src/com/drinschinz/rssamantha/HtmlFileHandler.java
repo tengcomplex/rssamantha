@@ -71,7 +71,7 @@ public class HtmlFileHandler extends TxtFileHandler
     protected String getContentAsString(final List<Item> items, final String refresh, final AdditionalHtml additionalHtml)
     {
         final Calendar now = Calendar.getInstance();
-        final StringBuilder table = new StringBuilder(32);
+        final StringBuilder table = new StringBuilder(Math.max(32, Math.min(4096, items.size()*256)));
         table.append("<TABLE border=\"0\">");
         int numitems = 0;
         for(Item ii : items)
@@ -88,7 +88,7 @@ public class HtmlFileHandler extends TxtFileHandler
             table.append("</TR>").append(ClientThread.EOL);
         }
         table.append("</TABLE>").append(ClientThread.EOL);
-        final StringBuilder str = new StringBuilder(512);
+        final StringBuilder str = new StringBuilder(512+table.length());
         str.append("<HTML>");
         str.append(ClientThread.EOL).append("<HEAD>").append(ClientThread.EOL);
         str.append("<META HTTP-EQUIV=\"refresh\" CONTENT=\"").append(refresh).append("\">"+ClientThread.EOL);
