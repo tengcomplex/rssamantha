@@ -56,8 +56,10 @@ public class ItemAcceptor implements Runnable
     private final List<ClientThread> threads;
     /* max # worker threads */
     private final int maxworkers;
-    /** See #ClientThread.doGenerator(). */
+    /** See #initGeneratorHtml() and #ClientThread.doGenerator(). */
     private final String generatorHtml;
+    /** See #initOpml() and #ClientThread.doOpml(). */
+    private final String opml;
     /** JavaScript validation for the generator */
     private final static String checkInput = new Scanner(ItemAcceptor.class.getResourceAsStream("checkInput.js")).useDelimiter("\\A").next();
     private static int[] channelixs;
@@ -80,7 +82,9 @@ public class ItemAcceptor implements Runnable
         this.maxworkers = maxworkers;
         threads = Collections.synchronizedList(new ArrayList());
         additionalHtml = new AdditionalHtml();
-        generatorHtml = initGeneratorHtml();
+        final String[] channels = this.control.getAllChannelNames();
+        generatorHtml = initGeneratorHtml(channels);
+        opml = initOpml(channels);
     }
     
     public static class AdditionalHtml
@@ -139,10 +143,29 @@ public class ItemAcceptor implements Runnable
         }
     }
     
-    private String initGeneratorHtml()
+    private String initOpml(final String[] channels)
+    {
+        final StringBuilder s = new StringBuilder(512);
+        s.append("HTTP/1.0 ").append(ClientThread.HTTP_OK).append(" OK"+ClientThread.EOL);
+        s.append("Content-type: text/xml"+ClientThread.EOL+ClientThread.EOL);
+        s.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        s.append("<opml>");
+        s.append("<head>");
+        s.append("<title>").append(Main.APPNAME).append("</title>");
+        s.append("</head>");
+        s.append("<body>");
+        for(String c : channels)
+        {
+            s.append("<outline type=\"rss\" text=\"").append(c).append("\" xmlUrl=\"http://").append(host).append(":").append(port).append("/channel=").append(c).append("\" />");
+        }
+        s.append("</body>");
+        s.append("</opml>");
+        return s.toString();
+    }
+    
+    private String initGeneratorHtml(final String[] channels)
     {
         final StringBuilder s = new StringBuilder(4096);
-        final String[] channels = getControl().getAllChannelNames();
         s.append("HTTP/1.0 ").append(ClientThread.HTTP_OK).append(" OK"+ClientThread.EOL);
         s.append("Content-type: text/html; charset=utf-8"+ClientThread.EOL+ClientThread.EOL);
         s.append("<HTML>"+ClientThread.EOL);
@@ -233,6 +256,11 @@ public class ItemAcceptor implements Runnable
         return this.generatorHtml;
     }
     
+    public String getOpml()
+    {
+        return this.opml;
+    }
+    
     protected int[] getAllChannelIndicies()
     {
         return channelixs;
@@ -246,16 +274,6 @@ public class ItemAcceptor implements Runnable
     protected AdditionalHtml getAdditionalHtml()
     {
         return this.additionalHtml;
-    }
-
-    protected int getPort()
-    {
-        return this.port;
-    }
-
-    protected String getHost()
-    {
-        return this.host;
     }
 
     protected Control getControl()
@@ -670,22 +688,9 @@ class ClientThread implements Runnable
         out.println(itemacceptor.getGeneratorHtml());
     }
     
-    private void doOpml() throws Exception
+    private void doOpml()
     {
-        out.print("HTTP/1.0 "+HTTP_OK+" OK"+EOL);
-        out.print("Content-type: text/xml"+EOL+EOL);
-        out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        out.println("<opml>");
-        out.println("<head>");
-        out.println("<title>"+Main.APPNAME+"</title>");
-        out.println("</head>");
-        out.println("<body>");
-        for(String c : itemacceptor.getControl().getAllChannelNames())
-        {
-            out.println("<outline type=\"rss\" text=\""+c+"\" xmlUrl=\"http://"+itemacceptor.getHost()+":"+itemacceptor.getPort()+"/channel="+c+"\" />");
-        }
-        out.println("</body>");
-        out.println("</opml>");
+        out.println(itemacceptor.getOpml());
     }
     
     /**
