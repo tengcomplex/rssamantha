@@ -22,7 +22,6 @@
 
 package com.drinschinz.rssamantha;
 
-import java.util.Calendar;
 import java.util.logging.Level;
 
 /**
