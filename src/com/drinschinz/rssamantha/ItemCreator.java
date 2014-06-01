@@ -139,14 +139,14 @@ public abstract class ItemCreator extends Thread
     }
     
     /**
-     * getChannelDataToShortString() is considerable cheap.
+     * 
      * @param times
      * @param timename
      * @param calfieldtocheck
-     * @return
+     * @return true if now is matching a value time, otherwise false.
      * @throws Exception 
      */
-    private boolean isReadTime(final int[] times, final String timename, final int calfieldtocheck) throws Exception
+    private boolean isReadTime(final int[] times, final int calfieldtocheck) throws Exception
     {
         if(times != null)
         {
@@ -155,7 +155,6 @@ public abstract class ItemCreator extends Thread
             {
                 if(time == -1)
                 {
-//Control.L.log(Level.FINEST, "channel:[{0}] creatorname:{1} {2}[{3}]:{4} - reading time", new Object[]{control.getChannelDataToShortString(channelindex), creatorname, timename, ii, times[ii]});
                     return true;
                 }
                 else
@@ -164,17 +163,14 @@ public abstract class ItemCreator extends Thread
                     {
                         cal = Calendar.getInstance();
                     }
-//Control.L.log(Level.FINEST, "channel:[{0}] creatorname:{1} {2}[{3}]:{4} realtime:{5} - {6}", new Object[]{control.getChannelDataToShortString(channelindex), creatorname, timename, ii, times[ii], cal.get(calfieldtocheck), Integer.valueOf(times[ii]) == cal.get(calfieldtocheck) ? "reading time" : "skipping"});
                     if(time == cal.get(calfieldtocheck))
                     {
                         return true;
                     }
                 }
             }
-//Control.L.log(Level.FINEST, "channel:[{0}] creatorname:{1} finally no reading time", new Object[]{control.getChannelDataToShortString(channelindex), creatorname});
             return false;
         }
-//Control.L.log(Level.FINEST, "channel:[{0}] creatorname:{1} no {2} set - reading time", new Object[]{control.getChannelDataToShortString(channelindex), creatorname, timename});
         return true;
     }
 
@@ -279,7 +275,7 @@ public abstract class ItemCreator extends Thread
         {
             for(;;)
             {
-                if(isReadTime(days, "days", Calendar.DAY_OF_WEEK) && isReadTime(hours, "hours", Calendar.HOUR_OF_DAY))
+                if(isReadTime(days, Calendar.DAY_OF_WEEK) && isReadTime(hours, Calendar.HOUR_OF_DAY))
                 {
                     if(read())
                     {
