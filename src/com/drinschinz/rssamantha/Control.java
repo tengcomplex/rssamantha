@@ -247,7 +247,7 @@ public class Control
     private static final class ItemCreatorData
     {
         String title = "", feedtype = "", feedurl = "";
-        String[] days, hours;
+        int[] days, hours;
         boolean appenddescription, titleprefix;
         long sleep;
         int channelindex;
@@ -257,8 +257,8 @@ public class Control
         {
             sleep = nnmfeeds.getNamedItem("delay") != null && nnmfeeds.getNamedItem("delay").getNodeValue().length() > 0 ? Long.parseLong(nnmfeeds.getNamedItem("delay").getNodeValue()) : DEFAULTREADITEMSLEEP;
             titleprefix = nnmfeeds.getNamedItem("titleprefix") != null && nnmfeeds.getNamedItem("titleprefix").getNodeValue().length() > 0 ? Boolean.valueOf(nnmfeeds.getNamedItem("titleprefix").getNodeValue()) : DEFAULTTITLEPREFIX;
-            days = nnmfeeds.getNamedItem("dayofweek") != null && nnmfeeds.getNamedItem("dayofweek").getNodeValue().length() > 0 ? nnmfeeds.getNamedItem("dayofweek").getNodeValue().split(",") : null;
-            hours = nnmfeeds.getNamedItem("hourofday") != null && nnmfeeds.getNamedItem("hourofday").getNodeValue().length() > 0 ? nnmfeeds.getNamedItem("hourofday").getNodeValue().split(",") : null;
+            days = initTimes(nnmfeeds.getNamedItem("dayofweek"), true, new int[]{0, 7});
+            hours = initTimes(nnmfeeds.getNamedItem("hourofday"), false, new int[]{0, 23});
             appenddescription = nnmfeeds.getNamedItem("appenddescription") != null && "true".equals(nnmfeeds.getNamedItem("appenddescription").getNodeValue());
             for(int ii=0; ii<nnmfeeds.getLength(); ii++)
             {
@@ -272,6 +272,47 @@ public class Control
                 {
                     initPattern(s.substring(s.indexOf("_")+1), value);
                 }
+            }
+        }
+        
+        /**
+         * 
+         * @param node
+         * @param dowadjust If true we adjust day of week from cron to java.
+         * @param bounds Lower and upper limit, if violated we throw a RuntimeException.
+         * @return 
+         */
+        int[] initTimes(final Node node, final boolean dowadjust, final int[] bounds)
+        {
+            if(node == null || node.getNodeValue().length() == 0)
+            {
+                return null;
+            }
+            else
+            {
+                final String [] sa = node.getNodeValue().split(",");
+                final int[] ret = new int[sa.length];
+                for(int ii=0; ii<sa.length; ii++)
+                {
+                    if("*".equals(sa[ii]))
+                    {
+                        ret[ii] = -1;
+                    }
+                    else
+                    {
+                        int i = Integer.parseInt(sa[ii]);
+                        if(i < bounds[0] || i > bounds[1])
+                        {
+                            throw new RuntimeException("Invalid time value "+i+" not in range "+bounds[0]+"-"+bounds[1]);
+                        }
+                        if(dowadjust)
+                        {
+                            i = i == 7 ? 1 : i+1;
+                        }
+                        ret[ii] = i;
+                    }
+                }
+                return ret;
             }
         }
         
