@@ -42,8 +42,8 @@ public abstract class ItemCreator extends Thread
     protected String creatorname;
     protected long sleep;
     protected ItemCreatorType type;
-    /* TODO: this could be done by holding integers, -1 as a '*' replacement.*/
-    protected String [] days, hours;
+    /** -1 means any. */
+    protected int [] days, hours;
     /** Appends description to title if true. Default false. */
     protected boolean appenddescription = false;
     /** If true "[channelname] $title", otherwise just "$title" */
@@ -84,12 +84,12 @@ public abstract class ItemCreator extends Thread
         this.pattern = p;
     }
 
-    public void setHours(final String [] s)
+    public void setHours(final int [] s)
     {
         this.hours = s;
     }
 
-    public void setDays(final String[] d)
+    public void setDays(final int[] d)
     {
         this.days = d;
     }
@@ -146,14 +146,14 @@ public abstract class ItemCreator extends Thread
      * @return
      * @throws Exception 
      */
-    private boolean isReadTime(final String[] times, final String timename, final int calfieldtocheck) throws Exception
+    private boolean isReadTime(final int[] times, final String timename, final int calfieldtocheck) throws Exception
     {
         if(times != null)
         {
             Calendar cal = null;
-            for(String time : times)
+            for(int time : times)
             {
-                if("*".equals(time))
+                if(time == -1)
                 {
 //Control.L.log(Level.FINEST, "channel:[{0}] creatorname:{1} {2}[{3}]:{4} - reading time", new Object[]{control.getChannelDataToShortString(channelindex), creatorname, timename, ii, times[ii]});
                     return true;
@@ -165,7 +165,7 @@ public abstract class ItemCreator extends Thread
                         cal = Calendar.getInstance();
                     }
 //Control.L.log(Level.FINEST, "channel:[{0}] creatorname:{1} {2}[{3}]:{4} realtime:{5} - {6}", new Object[]{control.getChannelDataToShortString(channelindex), creatorname, timename, ii, times[ii], cal.get(calfieldtocheck), Integer.valueOf(times[ii]) == cal.get(calfieldtocheck) ? "reading time" : "skipping"});
-                    if(Integer.parseInt(time) == cal.get(calfieldtocheck))
+                    if(time == cal.get(calfieldtocheck))
                     {
                         return true;
                     }

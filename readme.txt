@@ -181,7 +181,8 @@ In ms. Once a day means 86400000, once an hour 3600000.
 
 dayofweek/hourofday:
 Commaseparated list of reading days/hours.
-See http://docs.oracle.com/javase/6/docs/api/constant-values.html#java.util.Calendar.DAY_OF_WEEK
+A '*' means all, other cron constructs are not supported.
+See https://en.wikipedia.org/wiki/Cron
 
 appenddescripton:
 If true we add the full description to the title of an item. Default false.
@@ -267,6 +268,8 @@ Release: soon
 - Introduce HTTP GET argument uniquetitle.
 - Add read support for dateformat "dd.MM.yy". [#5]
 - Add support for epochtime pubDate (in seconds). [#5]
+- Configuration of day of week per channel changed to cron definition.
+  Now 1 is monday, 0 or 7 sunday etc.
 
 -------------------
 Version: 0.803
