@@ -132,6 +132,7 @@ public class ItemData
      * @param cutoff The time cutoff, in milliseconds since epoch.
      * @param pt_title Optional #Pattern for #Item title.
      * @param t The current time in millis, used for checking ignore future.
+     * @param uniqueTitle If true we return every distinct title just once, the youngest. Otherwise all Items.
      */
     public List<Item> getSortedItems(final int numitems, final long cutoff, final Pattern pt_title, final long t, final boolean uniqueTitle)
     {
@@ -157,7 +158,7 @@ public class ItemData
                 }
             }
             final String title = !uniqueTitle ? null : i.getElements().getElementValue("title");
-            /* We made sure element value title is never null at reading time, 
+            /* We made sure at reading time element value title is never null, 
                therefore title is always not null if we care for */
             if(!uniqueTitle || !itemTitles.contains(title))
             {
