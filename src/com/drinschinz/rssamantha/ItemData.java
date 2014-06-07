@@ -161,7 +161,7 @@ public class ItemData
                therefore title is always not null if we care for */
             if(!uniqueTitle || !itemTitles.contains(title))
             {
-                copy.add((Item)i.clone());
+                copy.add(i.clone());
                 if(uniqueTitle)
                 {
                     itemTitles.add(title);
