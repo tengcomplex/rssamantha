@@ -116,7 +116,8 @@ public class Item implements Comparable<Item>, Serializable
     }
 
     @Override
-    public Object clone()
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    public Item clone()
     {
         final Item ret = new Item(this.created, this.type, this.description);
         for(Iterator<String> iter = elements.getElementKeys(); iter.hasNext();)
