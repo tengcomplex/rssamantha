@@ -1,0 +1,16 @@
+#!/bin/bash
+HOST=localhost
+PORT=8081
+CHANNEL="test"
+
+DF=$(df -h --total | grep 'truecrypt\|total\|/dev/mapper/mint\|/boot' | awk '{
+			t = $1" "$5" ("$4" free)";
+			gsub(/\%/, "%25", t);
+			gsub(/\//, "%2F", t);
+			gsub(/\,/, "%2C", t);
+			print t;
+		}'
+	)
+DF=$(echo $DF | tr "\n" " ")
+wget -qO- --post-data="title=""$DF""&description=""$DF""&channel0="$CHANNEL http://$HOST:$PORT/ > /dev/null
+
