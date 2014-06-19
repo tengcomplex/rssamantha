@@ -51,7 +51,7 @@ class Download extends Observable implements Runnable
     private int size; // size of download in bytes
     private int downloaded; // number of bytes downloaded
     private int status; // current status of download
-    private Item item;
+    private final Item item;
     
     public Download(final Item i) throws Exception
     {
@@ -137,6 +137,7 @@ class Download extends Observable implements Runnable
     }
 
     /** Download file. */
+    @Override
     public void run()
     {
         RandomAccessFile file = null;
@@ -206,7 +207,7 @@ class Download extends Observable implements Runnable
                 stateChanged();
             }
         }
-        catch (Exception e)
+        catch(Exception e)
         {
             error();
         }
@@ -219,7 +220,7 @@ class Download extends Observable implements Runnable
                 {
                     file.close();
                 }
-                catch (Exception e)
+                catch(IOException e)
                 {
                 }
             }
@@ -230,7 +231,7 @@ class Download extends Observable implements Runnable
                 {
                     stream.close();
                 }
-                catch (Exception e)
+                catch(IOException e)
                 {
                 }
             }
