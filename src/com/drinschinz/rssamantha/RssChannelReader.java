@@ -41,7 +41,7 @@ public class RssChannelReader extends ChannelReader
     }
     
     /**
-     * TODO: Do we add null Item if fieldNode.getNodeType() != Node.ELEMENT_NODE?
+     * 
      * @return 
      */
     @Override
@@ -53,13 +53,12 @@ public class RssChannelReader extends ChannelReader
             final NodeList listFields = doc.getElementsByTagName("item");
             for(int ss = 0; ss<listFields.getLength(); ss++)
             {
-                Item item = null;
                 final Node fieldNode = listFields.item(ss);
                 if(fieldNode.getNodeType() == Node.ELEMENT_NODE)
                 {
                     final Element fieldElement = (Element) fieldNode;
                     final DateInfo di = getCreated(fieldElement, new String[]{"pubDate", "dc:date"});
-                    item = new Item(di.getTimestamp(), getValue(fieldElement, "title"), getValue(fieldElement, "description"), itemcreatorname, type);
+                    final Item item = new Item(di.getTimestamp(), getValue(fieldElement, "title"), getValue(fieldElement, "description"), itemcreatorname, type);
                     item.setFoundrsscreated(di.isFoundCreated());
                     item.putElement("link", getValue(fieldElement, "link"));
                     item.putElement("category", getValue(fieldElement, "category"));
@@ -72,8 +71,8 @@ public class RssChannelReader extends ChannelReader
                     {
                         item.putElement("source", getValue(fieldElement, "source"));
                     }
+                    items.add(item);
                 }
-                items.add(item);
             }
         }
         catch(Exception ex)
