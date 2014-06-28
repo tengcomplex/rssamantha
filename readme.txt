@@ -261,7 +261,7 @@ Changes
 ================================================================================
 -------------------
 Version: 0.804
-Release: soon
+Release: 20140628
 ------------------
 - Remove items to be ignored before shrinking summarized amount to a limit.
 - Introduce system property httpdefaultrefresh.
