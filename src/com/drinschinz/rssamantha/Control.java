@@ -724,10 +724,11 @@ public class Control
             {
                 chix[ii] = ix++;
             }
-            (new Thread(new ItemAcceptor(this, 
-                                        port,
-                                        Integer.parseInt(System.getProperty(PNAME+".itemacceptorthreads", DEFAULTCONCURRENTITEMACCEPTORTHREADS)),
-                                        chix))).start();
+//            (new Thread(new ItemAcceptor(this, 
+//                                        port,
+//                                        Integer.parseInt(System.getProperty(PNAME+".itemacceptorthreads", DEFAULTCONCURRENTITEMACCEPTORTHREADS)),
+//                                        chix))).start();
+            new HttpAcceptor(this).start(port);
             System.out.println("Accepting HTTP requests on port "+port);
         }
         /*
