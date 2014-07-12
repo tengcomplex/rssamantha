@@ -22,7 +22,7 @@
 
 package com.drinschinz.rssamantha;
 
-import com.drinschinz.rssamantha.ItemAcceptor.AdditionalHtml;
+import com.drinschinz.rssamantha.HttpAcceptor.AdditionalHtml;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

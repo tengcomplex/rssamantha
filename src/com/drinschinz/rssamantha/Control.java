@@ -728,7 +728,7 @@ public class Control
 //                                        port,
 //                                        Integer.parseInt(System.getProperty(PNAME+".itemacceptorthreads", DEFAULTCONCURRENTITEMACCEPTORTHREADS)),
 //                                        chix))).start();
-            new HttpAcceptor(this).start(port);
+            new HttpAcceptor(this, port, chix).start();
             System.out.println("Accepting HTTP requests on port "+port);
         }
         /*
