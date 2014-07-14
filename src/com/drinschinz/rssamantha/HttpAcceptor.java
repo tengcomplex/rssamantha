@@ -8,21 +8,27 @@ package com.drinschinz.rssamantha;
 import static com.drinschinz.rssamantha.ClientThread.BR;
 import static com.drinschinz.rssamantha.ClientThread.EOL;
 import static com.drinschinz.rssamantha.ClientThread.HTTP_BAD_REQUEST;
-import static com.drinschinz.rssamantha.ClientThread.HTTP_NOT_FOUND;
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InterruptedIOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -67,7 +73,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.apache.http.Header;
+import org.apache.http.entity.FileEntity;
+import org.apache.http.entity.InputStreamEntity;
 import org.w3c.dom.Document;
 
 /**
@@ -323,19 +330,16 @@ public class HttpAcceptor
         public void handle(final HttpRequest request, final HttpResponse response, final HttpContext context) throws HttpException, IOException
         {
             this.response = response;
-System.out.println("context: "+context);            
+//System.out.println("context: "+context);
+            Control.L.log(Level.INFO, "Incoming connection, context:{0}", context);
             String method = request.getRequestLine().getMethod().toUpperCase(Locale.ENGLISH);
             if(!method.equals("GET") && !method.equals("POST"))
             {
                 throw new MethodNotSupportedException(method + " method not supported");
             }
             target = request.getRequestLine().getUri();
-System.out.println("target: "+target);
-            Header[] hd = request.getAllHeaders();
-            for(Header h : hd)
-            {
-                System.out.println("header:"+h.getName()+" "+h.getValue());
-            }
+//System.out.println("target: "+target);
+            
             Map<String,String> args = Collections.emptyMap();
             if(request instanceof HttpEntityEnclosingRequest)
             {
@@ -348,10 +352,10 @@ System.out.println("target: "+target);
             {
                 args = getArgsFromUrl(target.substring(1));
             }
-            System.out.println("args:"+args.toString());
+//System.out.println("args:"+args.toString());
             if(method.equals("POST"))
             {
-                //handlePOST(args);
+                handlePOST(args);
             }
             else
             {
@@ -443,11 +447,11 @@ System.out.println("target: "+target);
              {
                  ret[ii] = tmp.get(ii);
              }
-             Control.L.log(Level.FINEST, "returning {0} ix:{1}", new Object[]{ret.length, Arrays.toString(ret)});
+             Control.L.log(Level.FINEST, "returning channelindices:{0}", new Object[]{Arrays.toString(ret)});
              return ret;
          }
         
-        private void handleGET(final Map<String, String> hm)
+        private void handleGET(final Map<String, String> hm) throws IOException
         {
             if(hm.isEmpty() || hm.containsKey("generator"))
             {
@@ -456,9 +460,19 @@ System.out.println("target: "+target);
             }
             if(hm.size() == 1 && hm.containsKey("favicon.ico"))
             {
-                httpAnswer(HttpStatus.SC_NOT_FOUND, "File not found", Main.APPNAME);
-                Control.L.log(Level.FINEST, "No favicon support");
-                return;
+                try {
+                    URL myurl = this.getClass().getResource("RSS1_favicon.ico");
+                    File f = new File(myurl.toURI());
+                    response.setStatusCode(HttpStatus.SC_OK);
+                    FileEntity body = new FileEntity(f, ContentType.create("text/html", (Charset) null));
+                    response.setEntity(body);
+                    
+                    //httpAnswer(HttpStatus.SC_NOT_FOUND, "File not found", Main.APPNAME);
+                    //Control.L.log(Level.FINEST, "No favicon support");
+                    return;
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(HttpAcceptor.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             if(hm.containsKey("status"))
             {
@@ -560,7 +574,7 @@ System.out.println("target: "+target);
             {
                 try
                 {
-    //System.out.println("compile pattern:"+hm.get("search_title"));                
+//System.out.println("compile pattern:"+hm.get("search_title"));                
                     pt_title = Pattern.compile(hm.get("search_title"));
                 }
                 catch(PatternSyntaxException e)
@@ -571,26 +585,40 @@ System.out.println("target: "+target);
                 }
             }
             final List<Item> items = control.getSortedItems(cis, cutoff, numitems, pt_title, "xml".equals(type), uniqueTitle);
-    //System.out.println("numitems:"+items.size());
+//System.out.println("numitems:"+items.size());
+            PipedInputStream in = new PipedInputStream();
+            PipedOutputStream pout = new PipedOutputStream(in);
+            final PrintStream out = new PrintStream(pout, true, "UTF-8");
+            InputStreamEntity entity = new InputStreamEntity(
+                    in,
+                    ContentType.create("text/"+type, "UTF-8"));
+            response.setEntity(entity);
             response.setStatusCode(HttpStatus.SC_OK);
-            StringBuilder answer = new StringBuilder(512);
-            
-//            out.print("HTTP/1.0 "+HTTP_OK+" OK"+EOL);
-//            out.print("Content-type: text/"+type+"; charset=utf-8"+EOL);
-//            out.print("Server: "+Main.APPNAME+"/"+Main.APPVERSION+EOL);
-//            final Date dt = new Date();
-//            out.print("Date: "+dt+EOL);
-//            synchronized(HTTP_RESPONSE_FORMATTER)
-//            {
-//                out.print("Last-Modified: "+HTTP_RESPONSE_FORMATTER.format(dt)+EOL+EOL);
-//            }
+//            out.print("hallo3");
+//            out.flush();
+//            out.close();
+System.out.println("type:"+type+" items:"+items.size());
             if("html".equals(type))
             {
-                answer.append((new HtmlFileHandler(control, cis, null, 0, htmlhandlerdatetimeformat)).getContentAsString(items, refresh, additionalHtml));
+                    new Thread(
+                new Runnable(){
+                  public void run()
+                  {
+                          
+                        out.print((new HtmlFileHandler(control, cis, null, 0, htmlhandlerdatetimeformat)).getContentAsString(items, "100", additionalHtml));
+                        System.out.println("we wrote");  
+                        out.close();
+                  }
+                }
+              ).start();
+              //out.close();
+                    //out.print((new HtmlFileHandler(control, cis, null, 0, htmlhandlerdatetimeformat)).getContentAsString(items, refresh, additionalHtml));
+               
+                
             }
             else if("txt".equals(type))
             {
-                answer.append((new TxtFileHandler(control, cis, null, 0, TxtFileHandler.DEFAULT_DATETIME_TXT_PATTERN)).getContentAsString(items));
+                out.print((new TxtFileHandler(control, cis, null, 0, TxtFileHandler.DEFAULT_DATETIME_TXT_PATTERN)).getContentAsString(items));
             }
             else
             {
@@ -601,27 +629,69 @@ System.out.println("target: "+target);
                     {
                         transformer.reset();
                         transformer.setOutputProperty("indent", "yes");
-                        ByteArrayOutputStream os = new ByteArrayOutputStream();
-                        transformer.transform(new DOMSource(doc), new StreamResult(os));
-                        answer.append(new String(os.toByteArray(), "UTF-8"));
+                        transformer.transform(new DOMSource(doc), new StreamResult(out));
                     } 
-                    catch(TransformerException | UnsupportedEncodingException ex)
+                    catch(TransformerException ex)
                     {
                         Logger.getLogger(HttpAcceptor.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
-            StringEntity entity = new StringEntity(
-                        answer.toString(),
-                        ContentType.create("text/"+type, "UTF-8"));
-            response.setEntity(entity);
+            //out.close();
+            
             Control.L.log(Level.INFO, "Served channel:{0} type:{1} number of items:{2}", new Object[]{control.getChannelName(cis), type, items.size()});
-            items.clear();
+            //items.clear();
         }
         
         private void handlePOST(final Map<String, String> hm)
         {
-            
+            int ix = -1;
+            if(hm.containsKey("channel0"))
+            {
+                ix = control.getChannelIndex(hm.get("channel0"));
+            }
+            else
+            {
+                ix = Integer.parseInt(hm.get("ix0"));
+            }
+            if(!control.isValidChannelIndex(ix))
+            {
+                httpAnswer(HttpStatus.SC_INTERNAL_SERVER_ERROR, "Invalid channelindex"+"<BR><BR>"+getHttpUsage(false),"Error");
+                return;
+            }
+            final String title = hm.get("title");
+            if(title == null || title.length() == 0)
+            {
+                httpAnswer(HttpStatus.SC_INTERNAL_SERVER_ERROR, "No title"+"<BR><BR>"+getHttpUsage(false),"Error");
+                return;
+            }
+            long created = -1;
+            final Item item = new Item(created, Control.replaceHtmlCharacter(title), hm.containsKey("description") ? hm.get("description") : "n/a", "ItemAcceptor", ItemCreator.ItemCreatorType.HTTPFEED);
+            if(hm.containsKey("created"))
+            {
+                created = Long.parseLong(hm.get("created"));
+            }
+            else
+            {
+                created = System.currentTimeMillis();
+                item.setFoundrsscreated(false);
+            }
+            if(hm.containsKey("remove") && "1".equals(hm.get("remove")))
+            {
+                final boolean b = control.removeItem(title, created, ix);
+                final String msg = "Removing item with title:"+title+" created:"+created+" in channel:"+control.getChannelName(ix)+" - "+(b?"removed":"not found");
+                Control.L.log(Level.INFO, msg);
+                httpAnswer(HttpStatus.SC_OK, msg, Main.APPNAME);
+                return;
+            }
+            item.setCreated(created);
+            if(hm.containsKey("link"))
+            {
+                item.putElement("link", hm.get("link"));
+            }
+            final Control.CountEvent b = control.addItem(item, ix);
+            Control.L.log(Level.INFO, "Returnvalue:{0} item:{1}", new Object[]{b.toString(), item.toShortString()});
+            httpAnswer(HttpStatus.SC_OK, "Item accepted, returnvalue:"+b.toString()+" {"+item.toShortString()+"}", Main.APPNAME);
         }
         
         private void doStatus()
@@ -735,17 +805,20 @@ System.out.println("target: "+target);
                 {
                     // Set up HTTP connection
                     Socket socket = this.serversocket.accept();
-                    System.out.println("Incoming connection from " + socket.getInetAddress());
+                    Control.L.log(Level.INFO, "Incoming connection from {0}", socket.getInetAddress());
+//System.out.println("Incoming connection from " + socket.getInetAddress());
                     HttpServerConnection conn = this.connFactory.createConnection(socket);
 
                     // Start worker thread
                     Thread t = new WorkerThread(this.httpService, conn);
                     t.setDaemon(true);
                     t.start();
-                } catch (InterruptedIOException ex)
+                } 
+                catch (InterruptedIOException ex)
                 {
                     break;
-                } catch (IOException e)
+                } 
+                catch (IOException e)
                 {
                     System.err.println("I/O error initialising connection thread: "
                             + e.getMessage());
@@ -773,29 +846,39 @@ System.out.println("target: "+target);
         @Override
         public void run()
         {
-            System.out.println("New connection thread");
+//System.out.println("New connection thread");
             HttpContext context = new BasicHttpContext(null);
+            
             try
             {
                 while (!Thread.interrupted() && this.conn.isOpen())
                 {
                     this.httpservice.handleRequest(this.conn, context);
                 }
-            } catch (ConnectionClosedException ex)
+            } 
+            catch (ConnectionClosedException ex)
             {
                 System.err.println("Client closed connection");
-            } catch (IOException ex)
+            } 
+            catch (IOException ex)
             {
                 System.err.println("I/O error: " + ex.getMessage());
-            } catch (HttpException ex)
+            } 
+            catch (HttpException ex)
             {
                 System.err.println("Unrecoverable HTTP protocol violation: " + ex.getMessage());
-            } finally
+            }
+            catch (Exception ex)
+            {
+                System.err.println("Unknown exception: " + ex.getMessage());
+            } 
+            finally
             {
                 try
                 {
                     this.conn.shutdown();
-                } catch (IOException ignore)
+                } 
+                catch (IOException ignore)
                 {
                 }
             }
