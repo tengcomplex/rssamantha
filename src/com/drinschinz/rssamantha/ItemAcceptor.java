@@ -876,11 +876,11 @@ class ClientThread implements Runnable
         }
         if("html".equals(type))
         {
-            out.print((new HtmlFileHandler(itemacceptor.getControl(), cis, null, 0, itemacceptor.getHtmlDatetimeFormat())).getContentAsString(items, refresh, itemacceptor.getAdditionalHtml()));
+            //out.print((new HtmlFileHandler(itemacceptor.getControl(), cis, null, 0, itemacceptor.getHtmlDatetimeFormat())).getContentAsString(items, refresh, itemacceptor.getAdditionalHtml()));
         }
         else if("txt".equals(type))
         {
-            out.print((new TxtFileHandler(itemacceptor.getControl(), cis, null, 0, TxtFileHandler.DEFAULT_DATETIME_TXT_PATTERN)).getContentAsString(items));
+            //out.print((new TxtFileHandler(itemacceptor.getControl(), cis, null, 0, TxtFileHandler.DEFAULT_DATETIME_TXT_PATTERN)).getContentAsString(items));
         }
         else
         {

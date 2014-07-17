@@ -5,14 +5,11 @@
  */
 package com.drinschinz.rssamantha;
 
-import static com.drinschinz.rssamantha.ClientThread.BR;
-import static com.drinschinz.rssamantha.ClientThread.EOL;
-import static com.drinschinz.rssamantha.ClientThread.HTTP_BAD_REQUEST;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InterruptedIOException;
+import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.PrintStream;
@@ -20,7 +17,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.text.ParseException;
@@ -96,6 +92,8 @@ public class HttpAcceptor
     private final static SimpleDateFormat CUTOFF_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//1999-12-22 23:59:59
     public final static String ALL = "ALL";
     public final static String TODAY = "TODAY";
+    public final static String EOL = "\r\n";
+    public final static String BR = "<BR>";
     
     private final static Transformer transformer = newTransformer();
     private static Transformer newTransformer()
@@ -144,7 +142,7 @@ public class HttpAcceptor
         } 
         catch(IOException ex)
         {
-            Logger.getLogger(HttpAcceptor.class.getName()).log(Level.SEVERE, null, ex);
+            Control.L.log(Level.SEVERE, null, ex);
         }
     }
     
@@ -156,85 +154,85 @@ public class HttpAcceptor
     private String initGeneratorHtml(final String[] channels)
     {
         final StringBuilder s = new StringBuilder(4096);        
-        s.append("<HTML>"+ClientThread.EOL);
-        s.append("<HEAD>"+ClientThread.EOL);
-        s.append("<TITLE>").append(Main.APPNAME).append("</TITLE>"+ClientThread.EOL);
-        s.append("</HEAD>"+ClientThread.EOL);
-        s.append("<BODY>"+ClientThread.EOL);
-        s.append(ClientThread.BR+ClientThread.BR+ClientThread.EOL);
+        s.append("<HTML>"+EOL);
+        s.append("<HEAD>"+EOL);
+        s.append("<TITLE>").append(Main.APPNAME).append("</TITLE>"+EOL);
+        s.append("</HEAD>"+EOL);
+        s.append("<BODY>"+EOL);
+        s.append(BR+BR+EOL);
         s.append(checkInput);
-        s.append("<FORM name=\"generate\" action=\"/\" method=\"get\" target=\"_blank\" onsubmit=\"return checkInput()\">"+ClientThread.EOL);
-        s.append("<TABLE>"+ClientThread.EOL);
-        s.append("<TR>"+ClientThread.EOL);
-        s.append("<TD>Channel:</TD>"+ClientThread.EOL);
-        s.append("<TD>"+ClientThread.EOL);
-        s.append("<SELECT name=\"channel\" size=\"5\" multiple>"+ClientThread.EOL);
+        s.append("<FORM name=\"generate\" action=\"/\" method=\"get\" target=\"_blank\" onsubmit=\"return checkInput()\">"+EOL);
+        s.append("<TABLE>"+EOL);
+        s.append("<TR>"+EOL);
+        s.append("<TD>Channel:</TD>"+EOL);
+        s.append("<TD>"+EOL);
+        s.append("<SELECT name=\"channel\" size=\"5\" multiple>"+EOL);
         for(int ii=0; ii<channels.length; ii++)
         {
-            s.append("<OPTION").append(ii == 0 ? " selected>" : ">").append(channels[ii]).append("</OPTION>"+ClientThread.EOL);
+            s.append("<OPTION").append(ii == 0 ? " selected>" : ">").append(channels[ii]).append("</OPTION>"+EOL);
         }
-        s.append("</SELECT>"+ClientThread.EOL);
-        s.append("</TD>"+ClientThread.EOL);
-        s.append("</TR>"+ClientThread.EOL);
-        s.append("<TR>"+ClientThread.EOL);
-        s.append("<TD>Number of Items:</TD>"+ClientThread.EOL);
-        s.append("<TD>"+ClientThread.EOL);
-        s.append("<INPUT name=\"numitems\" type=\"text\" size=\"10\" maxlength=\"12\" value=\"100\">"+ClientThread.BR+ClientThread.EOL);
-        s.append("<FONT size=\"1\">[Integer or ALL]</FONT>"+ClientThread.EOL);
-        s.append("</TD>"+ClientThread.EOL);
-        s.append("</TR>"+ClientThread.EOL);
-        s.append("<TR>"+ClientThread.EOL);
-        s.append("<TD>Cutoff:</TD>"+ClientThread.EOL);
-        s.append("<TD>"+ClientThread.EOL);
-        s.append("<INPUT name=\"cutoff\" type=\"text\" size=\"19\" maxlength=\"19\" value=\"TODAY\">"+ClientThread.BR+ClientThread.EOL);
-        s.append("<FONT size=\"1\">[yyyy-mm-dd hh:mm:ss or milliseconds from epoch or TODAY]</FONT>"+ClientThread.EOL);
-        s.append("</TD>"+ClientThread.EOL);
-        s.append("</TR>"+ClientThread.EOL);
-        s.append("<TR>"+ClientThread.EOL);
-        s.append("<TD>Refresh:</TD>"+ClientThread.EOL);
-        s.append("<TD>"+ClientThread.EOL);
-        s.append("<INPUT name=\"refresh\" type=\"text\" size=\"19\" maxlength=\"19\" value=\"\">"+ClientThread.BR+ClientThread.EOL);
-        s.append("<FONT size=\"1\">[In seconds, works for HTML]</FONT>"+ClientThread.EOL);
-        s.append("</TD>"+ClientThread.EOL);
-        s.append("</TR>"+ClientThread.EOL);
-        s.append("<TR>"+ClientThread.EOL);
-        s.append("<TD>RegExp Title:</TD>"+ClientThread.EOL);
-        s.append("<TD>"+ClientThread.EOL);
-        s.append("<INPUT name=\"search_title\" type=\"text\" size=\"30\" maxlength=\"100\">"+ClientThread.BR+ClientThread.EOL);
-        s.append("<FONT size=\"1\">[Java compliant regexp]</FONT>"+ClientThread.EOL);
-        s.append("</TD>"+ClientThread.EOL);
-        s.append("</TR>"+ClientThread.EOL);
-        s.append("<TR>"+ClientThread.EOL);
-        s.append("<TD>Unique Title:</TD>"+ClientThread.EOL);
-        s.append("<TD>"+ClientThread.EOL);
-        s.append("<INPUT name=\"uniquetitle\" type=\"checkbox\">"+ClientThread.EOL);
-        s.append("</TD>"+ClientThread.EOL);
-        s.append("</TR>"+ClientThread.EOL);
-        s.append("<TR>"+ClientThread.EOL);
-        s.append("<TD>Type:</TD>"+ClientThread.EOL);
-        s.append("<TD>"+ClientThread.EOL);
-        s.append("<INPUT type=\"radio\" name=\"type\" value=\"xml\" checked>XML"+ClientThread.EOL);
-        s.append("<INPUT type=\"radio\" name=\"type\" value=\"html\">HTML"+ClientThread.EOL);
-        s.append("<INPUT type=\"radio\" name=\"type\" value=\"txt\">TXT"+ClientThread.EOL);
-        s.append("</TD>"+ClientThread.EOL);
-        s.append("</TR>"+ClientThread.EOL);
-        s.append("<TR>"+ClientThread.EOL);
-        s.append("<TD>"+ClientThread.EOL);
-        s.append("<INPUT type=\"submit\" value=\"Generate\">"+ClientThread.EOL);
-        s.append("</TD><TD></TD>"+ClientThread.EOL);
-        s.append("<TR>"+ClientThread.EOL);
-        s.append("</TABLE>"+ClientThread.EOL);
-        s.append("</FORM>"+ClientThread.EOL);
-        s.append(ClientThread.BR+ClientThread.BR+ClientThread.EOL+"Channels:<UL>"+ClientThread.EOL);
+        s.append("</SELECT>"+EOL);
+        s.append("</TD>"+EOL);
+        s.append("</TR>"+EOL);
+        s.append("<TR>"+EOL);
+        s.append("<TD>Number of Items:</TD>"+EOL);
+        s.append("<TD>"+EOL);
+        s.append("<INPUT name=\"numitems\" type=\"text\" size=\"10\" maxlength=\"12\" value=\"100\">"+BR+EOL);
+        s.append("<FONT size=\"1\">[Integer or ALL]</FONT>"+EOL);
+        s.append("</TD>"+EOL);
+        s.append("</TR>"+EOL);
+        s.append("<TR>"+EOL);
+        s.append("<TD>Cutoff:</TD>"+EOL);
+        s.append("<TD>"+EOL);
+        s.append("<INPUT name=\"cutoff\" type=\"text\" size=\"19\" maxlength=\"19\" value=\"TODAY\">"+BR+EOL);
+        s.append("<FONT size=\"1\">[yyyy-mm-dd hh:mm:ss or milliseconds from epoch or TODAY]</FONT>"+EOL);
+        s.append("</TD>"+EOL);
+        s.append("</TR>"+EOL);
+        s.append("<TR>"+EOL);
+        s.append("<TD>Refresh:</TD>"+EOL);
+        s.append("<TD>"+EOL);
+        s.append("<INPUT name=\"refresh\" type=\"text\" size=\"19\" maxlength=\"19\" value=\"\">"+BR+EOL);
+        s.append("<FONT size=\"1\">[In seconds, works for HTML]</FONT>"+EOL);
+        s.append("</TD>"+EOL);
+        s.append("</TR>"+EOL);
+        s.append("<TR>"+EOL);
+        s.append("<TD>RegExp Title:</TD>"+EOL);
+        s.append("<TD>"+EOL);
+        s.append("<INPUT name=\"search_title\" type=\"text\" size=\"30\" maxlength=\"100\">"+BR+EOL);
+        s.append("<FONT size=\"1\">[Java compliant regexp]</FONT>"+EOL);
+        s.append("</TD>"+EOL);
+        s.append("</TR>"+EOL);
+        s.append("<TR>"+EOL);
+        s.append("<TD>Unique Title:</TD>"+EOL);
+        s.append("<TD>"+EOL);
+        s.append("<INPUT name=\"uniquetitle\" type=\"checkbox\">"+EOL);
+        s.append("</TD>"+EOL);
+        s.append("</TR>"+EOL);
+        s.append("<TR>"+EOL);
+        s.append("<TD>Type:</TD>"+EOL);
+        s.append("<TD>"+EOL);
+        s.append("<INPUT type=\"radio\" name=\"type\" value=\"xml\" checked>XML"+EOL);
+        s.append("<INPUT type=\"radio\" name=\"type\" value=\"html\">HTML"+EOL);
+        s.append("<INPUT type=\"radio\" name=\"type\" value=\"txt\">TXT"+EOL);
+        s.append("</TD>"+EOL);
+        s.append("</TR>"+EOL);
+        s.append("<TR>"+EOL);
+        s.append("<TD>"+EOL);
+        s.append("<INPUT type=\"submit\" value=\"Generate\">"+EOL);
+        s.append("</TD><TD></TD>"+EOL);
+        s.append("<TR>"+EOL);
+        s.append("</TABLE>"+EOL);
+        s.append("</FORM>"+EOL);
+        s.append(BR+BR+EOL+"Channels:<UL>"+EOL);
         for(String c : channels)
         {
-            s.append("<LI><A HREF=\"/channel=").append(c).append("\">").append(c).append("</A></LI>"+ClientThread.EOL);
+            s.append("<LI><A HREF=\"/channel=").append(c).append("\">").append(c).append("</A></LI>"+EOL);
         }
-        s.append(ClientThread.BR+ClientThread.EOL+"</UL>"+ClientThread.EOL);
-        s.append(ClientThread.EOL+"All Channels as OPML:<UL>"+ClientThread.EOL);
-        s.append("<LI><A HREF=/opml>").append(Main.APPNAME.toLowerCase()).append(".opml</A></LI>"+ClientThread.EOL);
-        s.append(ClientThread.BR+ClientThread.EOL+"</UL>"+ClientThread.EOL);
-        s.append("</BODY>"+ClientThread.EOL);
+        s.append(BR+EOL+"</UL>"+EOL);
+        s.append(EOL+"All Channels as OPML:<UL>"+EOL);
+        s.append("<LI><A HREF=/opml>").append(Main.APPNAME.toLowerCase()).append(".opml</A></LI>"+EOL);
+        s.append(BR+EOL+"</UL>"+EOL);
+        s.append("</BODY>"+EOL);
         s.append("</HTML>");
         return s.toString();
     }
@@ -345,7 +343,7 @@ public class HttpAcceptor
             {
                 HttpEntity entity = ((HttpEntityEnclosingRequest) request).getEntity();
                 byte[] entityContent = EntityUtils.toByteArray(entity);
-                System.out.println("Incoming entity content (bytes): " + entityContent.length);
+//System.out.println("Incoming entity content (bytes): " + entityContent.length);
                 args = getArgsFromUrl(new String(entityContent));
             }
             else
@@ -460,19 +458,13 @@ public class HttpAcceptor
             }
             if(hm.size() == 1 && hm.containsKey("favicon.ico"))
             {
-                try {
-                    URL myurl = this.getClass().getResource("RSS1_favicon.ico");
-                    File f = new File(myurl.toURI());
-                    response.setStatusCode(HttpStatus.SC_OK);
-                    FileEntity body = new FileEntity(f, ContentType.create("text/html", (Charset) null));
-                    response.setEntity(body);
-                    
-                    //httpAnswer(HttpStatus.SC_NOT_FOUND, "File not found", Main.APPNAME);
-                    //Control.L.log(Level.FINEST, "No favicon support");
-                    return;
-                } catch (URISyntaxException ex) {
-                    Logger.getLogger(HttpAcceptor.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                response.setStatusCode(HttpStatus.SC_OK);
+                //response.setEntity(new FileEntity(fileFavicon, ContentType.create("text/html", (Charset) null)));
+                InputStreamEntity entity = new InputStreamEntity(
+                    this.getClass().getResourceAsStream("res/RSS1_favicon.ico"),
+                    ContentType.create("image/x-icon"));
+                response.setEntity(entity);
+                return;
             }
             if(hm.containsKey("status"))
             {
@@ -496,7 +488,7 @@ public class HttpAcceptor
             final int[] cis = getChannels(hm);
             if(cis.length == 0)
             {
-                httpAnswer(HTTP_BAD_REQUEST, "Bad GET Request, invalid channel(s) "+target+BR+BR+getHttpUsage(true), Main.APPNAME);
+                httpAnswer(HttpStatus.SC_BAD_REQUEST, "Bad GET Request, invalid channel(s) "+target+BR+BR+getHttpUsage(true), Main.APPNAME);
                 return;
             }
             int numitems = -1;
@@ -541,25 +533,26 @@ public class HttpAcceptor
             final String type = hm.containsKey("type") ? hm.get("type") : "xml";
             if(!"xml".equals(type) && !"html".equals(type) && !"txt".equals(type))
             {
-                httpAnswer(HTTP_BAD_REQUEST, "Bad GET Request, unknown type:"+hm.toString()+BR+BR+getHttpUsage(true), Main.APPNAME);
+                httpAnswer(HttpStatus.SC_BAD_REQUEST, "Bad GET Request, unknown type:"+hm.toString()+BR+BR+getHttpUsage(true), Main.APPNAME);
                 Control.L.log(Level.WARNING, "Unknown type:{0}", type);
                 return;
             }
-            String refresh = Control.DEFAULT_HTTP_REFRESH;
+            String tmp_refresh = Control.DEFAULT_HTTP_REFRESH;
             if(hm.containsKey("refresh") && hm.get("refresh").length() > 0)
             {
-                refresh = hm.get("refresh");
+                tmp_refresh = hm.get("refresh");
                 try
                 {
-                    Integer.parseInt(refresh);
+                    Integer.parseInt(tmp_refresh);
                 }
                 catch(NumberFormatException e)
                 {
-                    httpAnswer(HTTP_BAD_REQUEST, "Bad GET Request, invalid refresh:"+hm.toString()+BR+BR+getHttpUsage(true), Main.APPNAME);
-                    Control.L.log(Level.WARNING, "Invalid refresh:{0}", refresh);
+                    httpAnswer(HttpStatus.SC_BAD_REQUEST, "Bad GET Request, invalid refresh:"+hm.toString()+BR+BR+getHttpUsage(true), Main.APPNAME);
+                    Control.L.log(Level.WARNING, "Invalid refresh:{0}", tmp_refresh);
                     return;
                 }
             }
+            final String refresh = tmp_refresh;
             boolean uniqueTitle = false;
             if(hm.containsKey("uniquetitle"))
             {
@@ -579,68 +572,79 @@ public class HttpAcceptor
                 }
                 catch(PatternSyntaxException e)
                 {
-                    httpAnswer(HTTP_BAD_REQUEST, "Bad GET Request, invalid search pattern:"+hm.get("search_title")+BR+BR+getHttpUsage(true), Main.APPNAME);
+                    httpAnswer(HttpStatus.SC_BAD_REQUEST, "Bad GET Request, invalid search pattern:"+hm.get("search_title")+BR+BR+getHttpUsage(true), Main.APPNAME);
                     Control.L.log(Level.WARNING, "Invalid pattern:{0}", hm.get("search_title"));
                     return;
                 }
             }
             final List<Item> items = control.getSortedItems(cis, cutoff, numitems, pt_title, "xml".equals(type), uniqueTitle);
 //System.out.println("numitems:"+items.size());
-            PipedInputStream in = new PipedInputStream();
-            PipedOutputStream pout = new PipedOutputStream(in);
-            final PrintStream out = new PrintStream(pout, true, "UTF-8");
-            InputStreamEntity entity = new InputStreamEntity(
-                    in,
-                    ContentType.create("text/"+type, "UTF-8"));
-            response.setEntity(entity);
-            response.setStatusCode(HttpStatus.SC_OK);
-//            out.print("hallo3");
-//            out.flush();
-//            out.close();
-System.out.println("type:"+type+" items:"+items.size());
-            if("html".equals(type))
-            {
-                    new Thread(
-                new Runnable(){
-                  public void run()
-                  {
-                          
-                        out.print((new HtmlFileHandler(control, cis, null, 0, htmlhandlerdatetimeformat)).getContentAsString(items, "100", additionalHtml));
-                        System.out.println("we wrote");  
-                        out.close();
-                  }
-                }
-              ).start();
-              //out.close();
-                    //out.print((new HtmlFileHandler(control, cis, null, 0, htmlhandlerdatetimeformat)).getContentAsString(items, refresh, additionalHtml));
-               
+            
+            
+//System.out.println("type:"+type+" items:"+items.size());
+            new Thread(new Runnable(){
                 
-            }
-            else if("txt".equals(type))
-            {
-                out.print((new TxtFileHandler(control, cis, null, 0, TxtFileHandler.DEFAULT_DATETIME_TXT_PATTERN)).getContentAsString(items));
-            }
-            else
-            {
-                final Document doc = (new RssFileHandler(control, cis, null, 0)).getDocument(items);
-                synchronized(transformer)
+                private PrintStream getPrintStream(PipedInputStream pis)
                 {
+                    final PrintStream out = null;
                     try
                     {
-                        transformer.reset();
-                        transformer.setOutputProperty("indent", "yes");
-                        transformer.transform(new DOMSource(doc), new StreamResult(out));
+                        return new PrintStream(new PipedOutputStream(pis), true, "UTF-8");
                     } 
-                    catch(TransformerException ex)
+                    catch (UnsupportedEncodingException ex)
                     {
-                        Logger.getLogger(HttpAcceptor.class.getName()).log(Level.SEVERE, null, ex);
+                        Control.L.log(Level.SEVERE, null, ex);
                     }
+                    catch (IOException ex)
+                    {
+                        Control.L.log(Level.SEVERE, null, ex);
+                    }
+                    return null;
                 }
-            }
-            //out.close();
-            
-            Control.L.log(Level.INFO, "Served channel:{0} type:{1} number of items:{2}", new Object[]{control.getChannelName(cis), type, items.size()});
-            //items.clear();
+                @Override
+                public void run()
+                {
+                    PipedInputStream in = new PipedInputStream();
+                    BufferedInputStream bin = new BufferedInputStream(in);
+                    final PrintStream out = getPrintStream(in);
+                    InputStreamEntity entity = new InputStreamEntity(
+                            bin,
+                    ContentType.create("text/"+type, "UTF-8"));
+                    synchronized(response)
+                    {
+                        response.setEntity(entity);
+                        response.setStatusCode(HttpStatus.SC_OK);
+                    }
+                    if("html".equals(type))
+                    {    
+                        out.print((new HtmlFileHandler(control, cis, null, 0, htmlhandlerdatetimeformat)).getContentAsString(items, refresh, additionalHtml));
+                    }
+                    else if("txt".equals(type))
+                    {
+                        out.print((new TxtFileHandler(control, cis, null, 0, TxtFileHandler.DEFAULT_DATETIME_TXT_PATTERN)).getContentAsString(items));
+                    }
+                    else
+                    {
+                        final Document doc = (new RssFileHandler(control, cis, null, 0)).getDocument(items);
+                        synchronized(transformer)
+                        {
+                            try
+                            {
+                                transformer.reset();
+                                transformer.setOutputProperty("indent", "yes");
+                                transformer.transform(new DOMSource(doc), new StreamResult(out));
+                            } 
+                            catch(TransformerException ex)
+                            {
+                                Control.L.log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                    out.close();
+                    Control.L.log(Level.INFO, "Served channel:{0} type:{1} number of items:{2}", new Object[]{control.getChannelName(cis), type, items.size()});
+                    items.clear();
+                }
+            }).start();
         }
         
         private void handlePOST(final Map<String, String> hm)
@@ -722,7 +726,7 @@ System.out.println("type:"+type+" items:"+items.size());
                         generatorHtml,
                         ContentType.create("text/html", "UTF-8"));
             response.setEntity(entity);
-            System.out.println("Served generator");
+//System.out.println("Served generator");
         }
         
         private String getHttpUsage(final boolean get)
@@ -798,7 +802,7 @@ System.out.println("type:"+type+" items:"+items.size());
         @Override
         public void run()
         {
-            System.out.println("Listening on port " + this.serversocket.getLocalPort());
+//System.out.println("Listening on port " + this.serversocket.getLocalPort());
             while (!Thread.interrupted())
             {
                 try
@@ -868,10 +872,6 @@ System.out.println("type:"+type+" items:"+items.size());
             {
                 System.err.println("Unrecoverable HTTP protocol violation: " + ex.getMessage());
             }
-            catch (Exception ex)
-            {
-                System.err.println("Unknown exception: " + ex.getMessage());
-            } 
             finally
             {
                 try
