@@ -40,7 +40,7 @@ symboldata = [
 	["^HSI", "HangSeng"]
 ]
 # We want to request things in given order, 
-# that's why we copy over the symbols to from a list to map.
+# that's why we copy over the symbols from a list to map.
 symbolmap = {}
 
 def getSymbolList():
