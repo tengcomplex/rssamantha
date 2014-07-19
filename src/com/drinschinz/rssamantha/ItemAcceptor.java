@@ -61,7 +61,7 @@ public class ItemAcceptor implements Runnable
     /** See #initOpml() and #ClientThread.doOpml(). */
     private final String opml;
     /** JavaScript validation for the generator */
-    private final static String checkInput = new Scanner(ItemAcceptor.class.getResourceAsStream("checkInput.js")).useDelimiter("\\A").next();
+    private final static String checkInput = new Scanner(ItemAcceptor.class.getResourceAsStream("res/checkInput.js")).useDelimiter("\\A").next();
     private static int[] channelixs;
     
     public ItemAcceptor(final Control control, final int port, final int maxworkers, final int[] chix)
@@ -414,7 +414,7 @@ class ClientThread implements Runnable
                 return;
             }
             readRequest();
-            Control.L.log(Level.INFO, "Accepting {0} url:{1} httpversion:{2} from {3}", new Object[]{cmd, url, httpversion, socket.getInetAddress().getHostAddress()});
+            Control.L.log(Level.INFO, "Accepting {0} url:{1} httpversion:{2} content:{3} from {4}", new Object[]{cmd, url, httpversion, content, socket.getInetAddress().getHostAddress()});
 //System.out.println("Accepting "+cmd+" url:"+url+" httpversion:"+httpversion);
             handleResponse();
             Control.L.log(Level.FINEST,"[{0}]: Closed.", id);
@@ -489,30 +489,39 @@ class ClientThread implements Runnable
         StringBuilder sb = new StringBuilder(100);
         int c;
         int contentlength = 0;
-        int contentcount = -1;
+        int contentcount = 0;
+        boolean startcontent = false;
         for(int ii=0; ii<15000; ii++)
         {
-            if(contentcount>=contentlength)
+//if(startcontent) System.out.println("startcontent:"+startcontent+" contencount:"+contentcount+" contentlength:"+contentlength); 
+            if(startcontent && contentcount >= contentlength)
             {
                 request.add(sb);
                 break;
             }
             c = in.read();
 //System.out.print((char)c);
-            if(contentcount != -1)
+            if(c == -1)
+            {
+                request.add(sb);
+                break;
+            }
+            if(startcontent)
             {
                 contentcount++;
             }
-            if (c == '\r')
+            if(c == '\r')
             {
                 //ignore
             }
             else if (c == '\n')
-            { //line terminator
+            {  
                 if (sb.length() <= 0)
                 {
                     //break;
-//System.out.print("\n");
+//System.out.print("HERE\n");
+                    contentcount = 2;
+                    startcontent = true;
                     continue;
                 }
                 else
@@ -520,7 +529,6 @@ class ClientThread implements Runnable
                     if(sb.toString().startsWith("Content-Length:"))
                     {
                         contentlength = Integer.parseInt(sb.toString().substring(16, sb.toString().length()))+2;
-                        contentcount = 0;
                     }
                     request.add(sb);
                     if(request.size() == 1)
