@@ -344,8 +344,6 @@ public class ItemAcceptor implements Runnable
  */
 class ClientThread implements Runnable
 {
-    /** For logging */
-    private final long pre = System.currentTimeMillis();
     private final Socket socket;
     private final int id;
     private PrintStream out;
@@ -460,7 +458,7 @@ class ClientThread implements Runnable
 //System.out.println(" size:"+ItemAcceptor.threads.size());
         if(Control.L.isLoggable(Level.FINE))
         {
-            Control.L.log(Level.FINE, "Done, handling {0} took {1} ms", new Object[]{content, String.valueOf(System.currentTimeMillis()-pre)});
+            Control.L.log(Level.FINE, "Done, handling {0}", new Object[]{content});
         }
     }
 
