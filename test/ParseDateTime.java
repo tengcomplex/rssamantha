@@ -21,22 +21,24 @@ public class ParseDateTime
       //ex.printStackTrace();
       System.out.println("Failed d with default dateformat "+ex.getMessage());
     }
-    
-    formatter = new SimpleDateFormat(args[1], Locale.FRANCE);
-    Calendar cal = Calendar.getInstance();
-    cal.add(Calendar.DATE, -1);
-    System.out.println("Test formatter:"+formatter.format(cal.getTime()));
-    try
+    // test other locales
+    Locale[] otherLocales = {Locale.FRANCE, Locale.GERMAN};
+    for(Locale lo : otherLocales)
     {
-      Date d = formatter.parse(args[0]);
-      System.out.println("Success with fr dateformat Date:"+d);
-    }
-    catch(Exception ex)
-    {
-      //ex.printStackTrace();
-      System.out.println("Failed d with fr dateformat "+ex.getMessage());
-    }
-        
+        formatter = new SimpleDateFormat(args[1], lo);
+        Calendar cal = Calendar.getInstance();
+        System.out.println("Show formatter:"+formatter.format(cal.getTime()));
+        System.out.print("Test locale "+lo.toString()+" ");
+        try
+        {
+          Date d = formatter.parse(args[0]);
+          System.out.println("Success, Date:"+d);
+        }
+        catch(Exception ex)
+        {
+            System.out.println("Fail, "+ex.getMessage());
+        }
+    }   
   }
 
 }
