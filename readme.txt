@@ -263,7 +263,8 @@ Changes
 Version: 0.805
 Release: soon
 ------------------
-- Bugfix: HTTP POST header read content.
+- Bugfix: HTTP POST header read content now working if Content-Length is 
+  not sent as last attribute. 
 
 -------------------
 Version: 0.804
