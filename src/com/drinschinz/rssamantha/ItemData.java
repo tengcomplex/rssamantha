@@ -159,7 +159,8 @@ public class ItemData
             }
             final String title = !uniqueTitle ? null : i.getElements().getElementValue("title");
             /* We made sure at reading time element value title is never null, 
-               therefore title is always not null if we care for */
+               therefore title is always not null if we care for.
+               We also make sure itemTitle is not null if we want unique titles. */
             if(!uniqueTitle || !itemTitles.contains(title))
             {
                 copy.add(i.clone());
