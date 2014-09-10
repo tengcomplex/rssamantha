@@ -36,7 +36,8 @@ import java.util.Locale;
  */
 public class Item implements Comparable<Item>, Serializable
 {
-    private final ElementData elements;
+    //private final ElementData elements;
+    private String title, itemCreatorName, descriptionS, link, category, source, createdS, pubDate;
     private long created;
     private boolean foundrsscreated = true;
     private byte[] description;
@@ -46,7 +47,7 @@ public class Item implements Comparable<Item>, Serializable
 
     public Item(final ItemCreator.ItemCreatorType type, final byte[] desc)
     {
-        elements = new ElementData();
+        //elements = new ElementData();
         this.description = desc;
         this.type = type;
     }
@@ -60,9 +61,72 @@ public class Item implements Comparable<Item>, Serializable
     public Item(final long created, final String title, final String description, final String itemCreatorName, final ItemCreator.ItemCreatorType type)
     {
         this(created, type, null);
-        elements.putElementValue("title", title);
-        elements.putElementValue("description", description);
-        elements.putElementValue("itemcreatorname", itemCreatorName);
+//        elements.putElementValue("title", title);
+//        elements.putElementValue("description", description);
+//        elements.putElementValue("itemcreatorname", itemCreatorName);
+        this.title = title;
+        this.descriptionS = description;
+        this.itemCreatorName = itemCreatorName;
+    }
+    
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+    
+    public String getItemCreatorName()
+    {
+        return itemCreatorName;
+    }
+
+    public void setItemCreatorName(String itemCreatorName)
+    {
+        this.itemCreatorName = itemCreatorName;
+    }
+    
+    public String getDescriptionS()
+    {
+        return descriptionS;
+    }
+
+    public void setDescriptionS(String descriptionS)
+    {
+        this.descriptionS = descriptionS;
+    }
+
+    public String getLink()
+    {
+        return link;
+    }
+
+    public void setLink(String link)
+    {
+        this.link = link;
+    }
+
+    public String getCategory()
+    {
+        return category;
+    }
+
+    public void setCategory(String category)
+    {
+        this.category = category;
+    }
+
+    public String getSource()
+    {
+        return source;
+    }
+
+    public void setSource(String source)
+    {
+        this.source = source;
     }
 
     public ItemCreatorType getType()
@@ -90,15 +154,16 @@ public class Item implements Comparable<Item>, Serializable
         return this.description;
     }
 
-    public void putElement(final String key, final String value)
-    {
-        elements.putElementValue(key, value);
-    }
+//    public void putElement(final String key, final String value)
+//    {
+//System.out.println("KEY:"+key);
+//        elements.putElementValue(key, value);
+//    }
 
-    public ElementData getElements()
-    {
-        return elements;
-    }
+//    public ElementData getElements()
+//    {
+//        return elements;
+//    }
 
     public long getCreated()
     {
@@ -108,10 +173,12 @@ public class Item implements Comparable<Item>, Serializable
     public final void setCreated(final long created)
     {
         this.created = created;
-        elements.putElementValue("created", String.valueOf(created));
+        //elements.putElementValue("created", String.valueOf(created));
+        createdS = String.valueOf(created);
         synchronized(formatter)
         {
-            elements.putElementValue("pubDate", formatter.format(created));
+            //elements.putElementValue("pubDate", formatter.format(created));
+            pubDate = formatter.format(created);
         }
     }
 
