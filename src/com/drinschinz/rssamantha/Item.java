@@ -27,7 +27,6 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Locale;
 
 /**
@@ -36,7 +35,6 @@ import java.util.Locale;
  */
 public class Item implements Comparable<Item>, Serializable
 {
-    //private final ElementData elements;
     private String title, itemCreatorName, descriptionS, link, category, source, createdS, pubDate;
     private long created;
     private boolean foundrsscreated = true;
@@ -47,7 +45,6 @@ public class Item implements Comparable<Item>, Serializable
 
     public Item(final ItemCreator.ItemCreatorType type, final byte[] desc)
     {
-        //elements = new ElementData();
         this.description = desc;
         this.type = type;
     }
@@ -61,9 +58,6 @@ public class Item implements Comparable<Item>, Serializable
     public Item(final long created, final String title, final String description, final String itemCreatorName, final ItemCreator.ItemCreatorType type)
     {
         this(created, type, null);
-//        elements.putElementValue("title", title);
-//        elements.putElementValue("description", description);
-//        elements.putElementValue("itemcreatorname", itemCreatorName);
         this.title = title;
         this.descriptionS = description;
         this.itemCreatorName = itemCreatorName;
@@ -74,7 +68,7 @@ public class Item implements Comparable<Item>, Serializable
         return title;
     }
 
-    public void setTitle(String title)
+    public void setTitle(final String title)
     {
         this.title = title;
     }
@@ -84,7 +78,7 @@ public class Item implements Comparable<Item>, Serializable
         return itemCreatorName;
     }
 
-    public void setItemCreatorName(String itemCreatorName)
+    public void setItemCreatorName(final String itemCreatorName)
     {
         this.itemCreatorName = itemCreatorName;
     }
@@ -94,7 +88,7 @@ public class Item implements Comparable<Item>, Serializable
         return descriptionS;
     }
 
-    public void setDescriptionS(String descriptionS)
+    public void setDescriptionS(final String descriptionS)
     {
         this.descriptionS = descriptionS;
     }
@@ -104,7 +98,7 @@ public class Item implements Comparable<Item>, Serializable
         return link;
     }
 
-    public void setLink(String link)
+    public void setLink(final String link)
     {
         this.link = link;
     }
@@ -114,7 +108,7 @@ public class Item implements Comparable<Item>, Serializable
         return category;
     }
 
-    public void setCategory(String category)
+    public void setCategory(final String category)
     {
         this.category = category;
     }
@@ -124,7 +118,7 @@ public class Item implements Comparable<Item>, Serializable
         return source;
     }
 
-    public void setSource(String source)
+    public void setSource(final String source)
     {
         this.source = source;
     }
@@ -154,17 +148,6 @@ public class Item implements Comparable<Item>, Serializable
         return this.description;
     }
 
-//    public void putElement(final String key, final String value)
-//    {
-//System.out.println("KEY:"+key);
-//        elements.putElementValue(key, value);
-//    }
-
-//    public ElementData getElements()
-//    {
-//        return elements;
-//    }
-
     public long getCreated()
     {
         return created;
@@ -187,11 +170,11 @@ public class Item implements Comparable<Item>, Serializable
     public Item clone()
     {
         final Item ret = new Item(this.created, this.type, this.description);
-        for(Iterator<String> iter = elements.getElementKeys(); iter.hasNext();)
-        {
-            final String n = iter.next();
-            ret.getElements().putElementValue(n, elements.getElementValue(n));
-        }
+        ret.setDescriptionS(this.descriptionS);
+        ret.setTitle(this.title);
+        ret.setCategory(this.category);
+        ret.setSource(this.source);
+        ret.setLink(this.link);
         return ret;
     }
 
@@ -207,7 +190,7 @@ public class Item implements Comparable<Item>, Serializable
     public boolean equals(final Object o)
     {
         final Item cmp = (Item)o;
-        return this.created == cmp.created && this.elements.getElementValue("title").equals(cmp.elements.getElementValue("title"));
+        return this.created == cmp.created && this.title.equals(cmp.getTitle());
     }
 
     /**
@@ -218,15 +201,15 @@ public class Item implements Comparable<Item>, Serializable
     public int hashCode()
     {
         return 679
-                + (this.elements.getElementValue("title") != null ? this.elements.getElementValue("title").hashCode() : 0)
-                + (this.elements.getElementValue("description") != null ? this.elements.getElementValue("description").hashCode() : (description != null ? Arrays.hashCode(description) : 0) )
-                + (this.elements.getElementValue("source") != null ? this.elements.getElementValue("source").hashCode() : 0);
+                + (this.title != null ? this.title.hashCode() : 0)
+                + (this.descriptionS != null ? this.descriptionS.hashCode() : (description != null ? Arrays.hashCode(description) : 0) )
+                + (this.source != null ? this.source.hashCode() : 0);
     }
 
     @Override
     public String toString()
     {
-        return toShortString()+" "+elements.toString();
+        return toShortString()+" category:"+this.category+" link:"+this.link;
     }
 
     /** 
@@ -240,7 +223,7 @@ public class Item implements Comparable<Item>, Serializable
         {
             ret.append(formatter.format(new Date(created)));
         }
-        ret.append("] type:").append(type).append(" foundrsscreated:").append(foundrsscreated).append(" source:").append(elements.getElementValue("source")).append(" title:").append(elements.getElementValue("title"));
+        ret.append("] type:").append(type).append(" foundrsscreated:").append(foundrsscreated).append(" source:").append(this.source).append(" title:").append(this.title);
         return ret.toString();
     }
 
@@ -251,6 +234,6 @@ public class Item implements Comparable<Item>, Serializable
     @Override
     public int compareTo(final Item another)
     {
-        return (this.created < another.created ? 1 : (this.created == another.created ? this.elements.getElementValue("title").compareTo(another.elements.getElementValue("title")) : -1));
+        return (this.created < another.created ? 1 : (this.created == another.created ? this.title.compareTo(another.getTitle()) : -1));
     }
 }
