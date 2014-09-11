@@ -35,7 +35,8 @@ import java.util.Locale;
  */
 public class Item implements Comparable<Item>, Serializable
 {
-    private String title, itemCreatorName, descriptionS, link, category, source, createdS, pubDate;
+    private String title, itemCreatorName, descriptionS, link, category, source, createdS, pubDate, summary;
+   
     private long created;
     private boolean foundrsscreated = true;
     private byte[] description;
@@ -61,6 +62,16 @@ public class Item implements Comparable<Item>, Serializable
         this.title = title;
         this.descriptionS = description;
         this.itemCreatorName = itemCreatorName;
+    }
+    
+    public String getSummary()
+    {
+        return summary;
+    }
+
+    public void setSummary(final String summary)
+    {
+        this.summary = summary;
     }
     
     public String getTitle()
