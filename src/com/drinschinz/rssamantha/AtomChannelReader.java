@@ -56,9 +56,9 @@ public class AtomChannelReader extends ChannelReader
                     final DateInfo di = getCreated(fieldElement, new String[]{"published","updated"});
                     item = new Item(di.getTimestamp(), getValue(fieldElement, "title"), getValue(fieldElement, "content"), itemcreatorname, type);
                     item.setFoundrsscreated(di.isFoundCreated());
-                    item.putElement("summary", getValue(fieldElement, "summary"));
-                    item.putElement("link", getValue(fieldElement, "id"));
-                    item.putElement("source", itemcreatorname);
+                    item.setSummary(getValue(fieldElement, "summary"));
+                    item.setLink(getValue(fieldElement, "id"));
+                    item.setSource(itemcreatorname);
                 }
                 items.add(item);
             }
