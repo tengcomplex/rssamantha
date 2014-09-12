@@ -55,8 +55,8 @@ class Download extends Observable implements Runnable
     
     public Download(final Item i) throws Exception
     {
-        this.url = new URL(i.getElements().getElementValue("contenturl"));
-        this.targetfolder = i.getElements().getElementValue("contentfolder");
+        this.url = new URL(i.getContentUrl());
+        this.targetfolder = i.getContentFolder();
         size = -1;
         downloaded = 0;
         status = DOWNLOADING;

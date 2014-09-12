@@ -101,7 +101,7 @@ public class DownloadControl extends Thread implements Observer
         dl.addObserver(this);
         dlactive.add(dl);
 //System.out.println("started download "+url+" "+targetfolder);
-        Control.L.log(Level.INFO, "Started download {0} {1} dlactivequeuesize:{2} dlqueuesize:{3}", new Object[]{i.getElements().getElementValue("contenturl"), i.getElements().getElementValue("contentfolder"), dlactive.size(), dlqueue.size()});
+        Control.L.log(Level.INFO, "Started download {0} {1} dlactivequeuesize:{2} dlqueuesize:{3}", new Object[]{i.getContentUrl(), i.getContentFolder(), dlactive.size(), dlqueue.size()});
     }
 
     @Override
@@ -180,7 +180,7 @@ public class DownloadControl extends Thread implements Observer
             }
             control.getStatistics().count(Control.CountEvent.FINISHEDDOWNLOAD);
             Control.L.log(Level.INFO, "Finished download {0} size:{1} adding item {2}", new Object[]{dl.getUrl(), dl.getSize(), dl.getItem().toShortString()});
-            this.control.addItem(dl.getItem(), Integer.parseInt(dl.getItem().getElements().getElementValue("itemindex")));
+            this.control.addItem(dl.getItem(), dl.getItem().getIndex());
             Control.writeObject(this.knownDownloads, knownDownloadsFilename);
             Control.L.log(Level.INFO, "Written {0} known downloads.", new Object[]{knownDownloads.size()});
         }

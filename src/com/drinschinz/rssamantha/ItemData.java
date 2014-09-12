@@ -80,7 +80,7 @@ public class ItemData
         titles.remove(s.hashCode());
         for(Item i : items)
         {
-            if(i.getCreated() == c && i.getElements().getElementValue("title").equals(s))
+            if(i.getCreated() == c && i.getTitle().equals(s))
             {
                 return items.remove(i);
             }
@@ -93,7 +93,7 @@ public class ItemData
         items.add(i);
         if(!i.isFoundrsscreated())
         {
-            titles.add(i.getElements().getElementValue("title").hashCode());
+            titles.add(i.getTitle().hashCode());
         }
         if(Control.L.isLoggable(Level.FINE))
         {
@@ -106,7 +106,7 @@ public class ItemData
             {
                 if(!rem.isFoundrsscreated())
                 {
-                    titles.remove(rem.getElements().getElementValue("title").hashCode());
+                    titles.remove(rem.getTitle().hashCode());
                 }
                 if(Control.L.isLoggable(Level.FINE))
                 {
@@ -151,13 +151,13 @@ public class ItemData
             }
             if(matcher != null)
             {
-                matcher.reset(i.getElements().getElementValue("title"));
+                matcher.reset(i.getTitle());
                 if(!matcher.matches())
                 {
                     continue;
                 }
             }
-            final String title = !uniqueTitle ? null : i.getElements().getElementValue("title");
+            final String title = !uniqueTitle ? null : i.getTitle();
             /* We made sure at reading time element value title is never null, 
                therefore title is always not null if we care for.
                We also make sure itemTitle is not null if we want unique titles. */
@@ -187,7 +187,7 @@ public class ItemData
             {
                 known = true;
             }
-            else if(!i.isFoundrsscreated() && titles.contains(i.getElements().getElementValue("title").hashCode()))
+            else if(!i.isFoundrsscreated() && titles.contains(i.getTitle().hashCode()))
             {
                 known = true;
             }
