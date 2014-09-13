@@ -60,16 +60,16 @@ public class RssChannelReader extends ChannelReader
                     final DateInfo di = getCreated(fieldElement, new String[]{"pubDate", "dc:date"});
                     final Item item = new Item(di.getTimestamp(), getValue(fieldElement, "title"), getValue(fieldElement, "description"), itemcreatorname, type);
                     item.setFoundrsscreated(di.isFoundCreated());
-                    item.putElement("link", getValue(fieldElement, "link"));
-                    item.putElement("category", getValue(fieldElement, "category"));
-                    item.putElement("guid", getValue(fieldElement, "guid"));
+                    item.setLink(getValue(fieldElement, "link"));
+                    item.setCategory(getValue(fieldElement, "category"));
+                    //item.putElement("guid", getValue(fieldElement, "guid"));
                     if(!"rssfilereader".equals(itemcreatorname))
                     {
-                        item.putElement("source", itemcreatorname);
+                        item.setSource(itemcreatorname);
                     }
                     else
                     {
-                        item.putElement("source", getValue(fieldElement, "source"));
+                        item.setSource(getValue(fieldElement, "source"));
                     }
                     items.add(item);
                 }
