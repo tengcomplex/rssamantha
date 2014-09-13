@@ -83,8 +83,8 @@ public class PodcastFeedItemCreator extends ItemCreator
             for(Item i : reader.getItems())
             {
 //System.out.println("Podcastitem: "+i);
-                i.putElement("itemindex", String.valueOf(channelindex));
-                i.putElement("title", getNewTitle(i));
+                i.setIndex(channelindex);
+                i.setTitle(getNewTitle(i));
                 final Control.CountEvent b = control.addDownloadItem(i, channelindex);
                 if(Control.L.isLoggable(Level.FINE))
                 {
