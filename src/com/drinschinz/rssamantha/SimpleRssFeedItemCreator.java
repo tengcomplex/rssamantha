@@ -122,7 +122,7 @@ public class SimpleRssFeedItemCreator extends ItemCreator implements DocHandler
         if("item".equals(elem))
         {
             nextitem = new Item(type, null);
-            nextitem.putElement("source", creatorname);
+            nextitem.setSource(creatorname);
         }
         else
         {
@@ -178,7 +178,9 @@ public class SimpleRssFeedItemCreator extends ItemCreator implements DocHandler
         {
             if(nextitem != null && supportedtags.contains(actelement))
             {
-                nextitem.putElement(actelement, text);
+                // TODO FIXME
+                //nextitem.putElement(actelement, text);
+                
             }
         }
     }

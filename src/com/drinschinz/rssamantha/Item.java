@@ -213,6 +213,16 @@ public class Item implements Comparable<Item>, Serializable
     {
         return created;
     }
+    
+    public String getCreatedS()
+    {
+        return createdS;
+    }
+    
+    public String getPubDate()
+    {
+        return pubDate;
+    }
 
     public final void setCreated(final long created)
     {

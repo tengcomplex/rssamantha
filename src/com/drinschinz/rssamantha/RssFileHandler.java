@@ -123,15 +123,45 @@ public class RssFileHandler extends FileHandler
             {
                 final Item item = items.get(ii);
                 el = document.createElement("item");
-                for(Iterator<String> iter = item.getElements().getElementKeys(); iter.hasNext();)
-                {
-                    final String n = iter.next();
-                    final Element itemel = document.createElement(n);
-                    final String value = item.getElements().getElementValue(n);
-                    text = document.createTextNode(value);
-                    itemel.appendChild(text);
-                    el.appendChild(itemel);
-                }
+//                for(Iterator<String> iter = item.getElements().getElementKeys(); iter.hasNext();)
+//                {
+//                    final String n = iter.next();
+//                    final Element itemel = document.createElement(n);
+//                    final String value = item.getElements().getElementValue(n);
+//                    text = document.createTextNode(value);
+//                    itemel.appendChild(text);
+//                    el.appendChild(itemel);
+//                }
+                Element itemel;
+//                itemel = document.createElement("itemcreatorname");
+//                text = document.createTextNode(item.getItemCreatorName());
+//                itemel.appendChild(text);
+//                el.appendChild(itemel);
+                itemel = document.createElement("link");
+                text = document.createTextNode(item.getLink());
+                itemel.appendChild(text);
+                el.appendChild(itemel);
+                itemel = document.createElement("description");
+                text = document.createTextNode(item.getDescriptionS());
+                itemel.appendChild(text);
+                el.appendChild(itemel);
+                itemel = document.createElement("source");
+                text = document.createTextNode(item.getSource());
+                itemel.appendChild(text);
+                el.appendChild(itemel);
+                itemel = document.createElement("title");
+                text = document.createTextNode(item.getTitle());
+                itemel.appendChild(text);
+                el.appendChild(itemel);
+                itemel = document.createElement("category");
+                text = document.createTextNode(item.getCategory());
+                itemel.appendChild(text);
+                el.appendChild(itemel);
+                itemel = document.createElement("pubDate");
+                text = document.createTextNode(item.getPubDate());
+                itemel.appendChild(text);
+                el.appendChild(itemel);
+                
                 channelel.appendChild(el);
             }
             return document;
@@ -140,7 +170,7 @@ public class RssFileHandler extends FileHandler
         catch(ParserConfigurationException | DOMException ex)
         {
             Control.L.log(Level.SEVERE, "Error writing {0} {1}", new Object[]{filename, ex.getMessage()});
-            //ex.printStackTrace(System.err);
+            ex.printStackTrace(System.err);
         }
         return null;
     }
