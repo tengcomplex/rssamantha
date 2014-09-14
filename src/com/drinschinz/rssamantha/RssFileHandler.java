@@ -132,56 +132,13 @@ public class RssFileHandler extends FileHandler
 //                    itemel.appendChild(text);
 //                    el.appendChild(itemel);
 //                }
-                Element itemel;
-                if(item.getItemCreatorName() != null)
-                {
-                    itemel = document.createElement("itemcreatorname");
-                    text = document.createTextNode(item.getItemCreatorName());
-                    itemel.appendChild(text);
-                    el.appendChild(itemel);
-                }
-                if(item.getLink() != null)
-                {
-                    itemel = document.createElement("link");
-                    text = document.createTextNode(item.getLink());
-                    itemel.appendChild(text);
-                    el.appendChild(itemel);
-                }
-                if(item.getDescriptionS() != null)
-                {
-                    itemel = document.createElement("description");
-                    text = document.createTextNode(item.getDescriptionS());
-                    itemel.appendChild(text);
-                    el.appendChild(itemel);
-                }
-                if(item.getSource() != null)
-                {
-                    itemel = document.createElement("source");
-                    text = document.createTextNode(item.getSource());
-                    itemel.appendChild(text);
-                    el.appendChild(itemel);
-                }
-                if(item.getTitle() != null)
-                {
-                    itemel = document.createElement("title");
-                    text = document.createTextNode(item.getTitle());
-                    itemel.appendChild(text);
-                    el.appendChild(itemel);
-                }
-                if(item.getCategory() != null)
-                {
-                    itemel = document.createElement("category");
-                    text = document.createTextNode(item.getCategory());
-                    itemel.appendChild(text);
-                    el.appendChild(itemel);
-                }
-                if(item.getPubDate() != null)
-                {
-                    itemel = document.createElement("pubDate");
-                    text = document.createTextNode(item.getPubDate());
-                    itemel.appendChild(text);
-                    el.appendChild(itemel);
-                }
+                appendChild(document, el, "itemcreatorname", item.getItemCreatorName());
+                appendChild(document, el, "link", item.getLink());
+                appendChild(document, el, "description", item.getDescriptionS());
+                appendChild(document, el, "source", item.getSource());
+                appendChild(document, el, "title", item.getTitle());
+                appendChild(document, el, "category", item.getCategory());
+                appendChild(document, el, "pubDate", item.getPubDate());
                 channelel.appendChild(el);
             }
             return document;
@@ -193,6 +150,17 @@ public class RssFileHandler extends FileHandler
             ex.printStackTrace(System.err);
         }
         return null;
+    }
+    
+    private void appendChild(final Document document, Element el, String elementName, String value)
+    {
+        if(value == null)
+        {
+            return;
+        }
+        final Element itemel = document.createElement(elementName);
+        itemel.appendChild(document.createTextNode(value));
+        el.appendChild(itemel);
     }
 
     @Override
