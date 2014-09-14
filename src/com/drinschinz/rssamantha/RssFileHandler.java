@@ -133,35 +133,55 @@ public class RssFileHandler extends FileHandler
 //                    el.appendChild(itemel);
 //                }
                 Element itemel;
-//                itemel = document.createElement("itemcreatorname");
-//                text = document.createTextNode(item.getItemCreatorName());
-//                itemel.appendChild(text);
-//                el.appendChild(itemel);
-                itemel = document.createElement("link");
-                text = document.createTextNode(item.getLink());
-                itemel.appendChild(text);
-                el.appendChild(itemel);
-                itemel = document.createElement("description");
-                text = document.createTextNode(item.getDescriptionS());
-                itemel.appendChild(text);
-                el.appendChild(itemel);
-                itemel = document.createElement("source");
-                text = document.createTextNode(item.getSource());
-                itemel.appendChild(text);
-                el.appendChild(itemel);
-                itemel = document.createElement("title");
-                text = document.createTextNode(item.getTitle());
-                itemel.appendChild(text);
-                el.appendChild(itemel);
-                itemel = document.createElement("category");
-                text = document.createTextNode(item.getCategory());
-                itemel.appendChild(text);
-                el.appendChild(itemel);
-                itemel = document.createElement("pubDate");
-                text = document.createTextNode(item.getPubDate());
-                itemel.appendChild(text);
-                el.appendChild(itemel);
-                
+                if(item.getItemCreatorName() != null)
+                {
+                    itemel = document.createElement("itemcreatorname");
+                    text = document.createTextNode(item.getItemCreatorName());
+                    itemel.appendChild(text);
+                    el.appendChild(itemel);
+                }
+                if(item.getLink() != null)
+                {
+                    itemel = document.createElement("link");
+                    text = document.createTextNode(item.getLink());
+                    itemel.appendChild(text);
+                    el.appendChild(itemel);
+                }
+                if(item.getDescriptionS() != null)
+                {
+                    itemel = document.createElement("description");
+                    text = document.createTextNode(item.getDescriptionS());
+                    itemel.appendChild(text);
+                    el.appendChild(itemel);
+                }
+                if(item.getSource() != null)
+                {
+                    itemel = document.createElement("source");
+                    text = document.createTextNode(item.getSource());
+                    itemel.appendChild(text);
+                    el.appendChild(itemel);
+                }
+                if(item.getTitle() != null)
+                {
+                    itemel = document.createElement("title");
+                    text = document.createTextNode(item.getTitle());
+                    itemel.appendChild(text);
+                    el.appendChild(itemel);
+                }
+                if(item.getCategory() != null)
+                {
+                    itemel = document.createElement("category");
+                    text = document.createTextNode(item.getCategory());
+                    itemel.appendChild(text);
+                    el.appendChild(itemel);
+                }
+                if(item.getPubDate() != null)
+                {
+                    itemel = document.createElement("pubDate");
+                    text = document.createTextNode(item.getPubDate());
+                    itemel.appendChild(text);
+                    el.appendChild(itemel);
+                }
                 channelel.appendChild(el);
             }
             return document;
