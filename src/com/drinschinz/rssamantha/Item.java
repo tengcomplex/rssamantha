@@ -69,7 +69,7 @@ public class Item implements Comparable<Item>, Serializable
         return contentLength;
     }
 
-    public void setContentLength(String contentLength)
+    public void setContentLength(final String contentLength)
     {
         this.contentLength = contentLength;
     }
@@ -79,7 +79,7 @@ public class Item implements Comparable<Item>, Serializable
         return contentType;
     }
 
-    public void setContentType(String contentType)
+    public void setContentType(final String contentType)
     {
         this.contentType = contentType;
     }
@@ -89,7 +89,7 @@ public class Item implements Comparable<Item>, Serializable
         return index;
     }
 
-    public void setIndex(int index)
+    public void setIndex(final int index)
     {
         this.index = index;
     }
@@ -99,7 +99,7 @@ public class Item implements Comparable<Item>, Serializable
         return contentUrl;
     }
 
-    public void setContentUrl(String contentUrl)
+    public void setContentUrl(final String contentUrl)
     {
         this.contentUrl = contentUrl;
     }
@@ -109,7 +109,7 @@ public class Item implements Comparable<Item>, Serializable
         return contentFolder;
     }
 
-    public void setContentFolder(String contentFolder)
+    public void setContentFolder(final String contentFolder)
     {
         this.contentFolder = contentFolder;
     }
@@ -227,11 +227,9 @@ public class Item implements Comparable<Item>, Serializable
     public final void setCreated(final long created)
     {
         this.created = created;
-        //elements.putElementValue("created", String.valueOf(created));
         createdS = String.valueOf(created);
         synchronized(formatter)
         {
-            //elements.putElementValue("pubDate", formatter.format(created));
             pubDate = formatter.format(created);
         }
     }
