@@ -223,7 +223,7 @@ public abstract class ItemCreator extends Thread
         final String oldTitle = i.getTitle();
         if(i.getType() == ItemCreatorType.RSSFEED || i.getType() == ItemCreatorType.SIMPLERSSFEED || i.getType() == ItemCreatorType.ATOMFEED)
         {
-            if(oldTitle.equals(i.getDescriptionS()))
+            if(i.getDescriptionS() == null || oldTitle.equals(i.getDescriptionS()))
             {
                 i.setDescriptionS("");
             }
