@@ -199,6 +199,10 @@ public abstract class ItemCreator extends Thread
                 {
                     candidate = item.getCategory();
                 }
+                else if("description".equals(attributename))
+                {
+                    candidate = item.getDescriptionS();
+                }
                 matcher.reset(candidate);
                 if(!matcher.matches())
                 {
