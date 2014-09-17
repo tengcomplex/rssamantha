@@ -53,7 +53,6 @@ public class SimpleRssFeedItemCreator extends ItemCreator implements DocHandler
         supportedtags.add("description");
         supportedtags.add("link");
         supportedtags.add("category");
-        supportedtags.add("guid");
     }
 
     public SimpleRssFeedItemCreator(final Control c, final String url, final String name)
@@ -179,8 +178,29 @@ public class SimpleRssFeedItemCreator extends ItemCreator implements DocHandler
             if(nextitem != null && supportedtags.contains(actelement))
             {
                 // TODO FIXME
-                //nextitem.putElement(actelement, text);
-                
+                switch(actelement)
+                {
+                    case "title" :
+                    {
+                        nextitem.setTitle(text);
+                    } break;
+                    case "description" :
+                    {
+                        nextitem.setDescriptionS(text);
+                    } break;
+                    case "category" :
+                    {
+                        nextitem.setCategory(text);
+                    } break;
+                    case "link" :
+                    {
+                        nextitem.setLink(text);
+                    } break;
+                    default:
+                    {
+                        Control.L.log(Level.WARNING, "Unsupported tag {0}", actelement);
+                    }
+                }
             }
         }
     }
