@@ -123,15 +123,6 @@ public class RssFileHandler extends FileHandler
             {
                 final Item item = items.get(ii);
                 el = document.createElement("item");
-//                for(Iterator<String> iter = item.getElements().getElementKeys(); iter.hasNext();)
-//                {
-//                    final String n = iter.next();
-//                    final Element itemel = document.createElement(n);
-//                    final String value = item.getElements().getElementValue(n);
-//                    text = document.createTextNode(value);
-//                    itemel.appendChild(text);
-//                    el.appendChild(itemel);
-//                }
                 appendChild(document, el, "itemcreatorname", item.getItemCreatorName());
                 appendChild(document, el, "link", item.getLink());
                 appendChild(document, el, "description", item.getDescriptionS());
