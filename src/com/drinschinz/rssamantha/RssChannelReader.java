@@ -62,7 +62,6 @@ public class RssChannelReader extends ChannelReader
                     item.setFoundrsscreated(di.isFoundCreated());
                     item.setLink(getValue(fieldElement, "link"));
                     item.setCategory(getValue(fieldElement, "category"));
-                    //item.putElement("guid", getValue(fieldElement, "guid"));
                     if(!"rssfilereader".equals(itemcreatorname))
                     {
                         item.setSource(itemcreatorname);
