@@ -191,7 +191,7 @@ public class ItemAcceptor implements Runnable
         s.append("<TR>"+ClientThread.EOL);
         s.append("<TD>Number of Items:</TD>"+ClientThread.EOL);
         s.append("<TD>"+ClientThread.EOL);
-        s.append("<INPUT name=\"numitems\" type=\"text\" size=\"10\" maxlength=\"12\" value=\"100\">"+ClientThread.BR+ClientThread.EOL);
+        s.append("<INPUT name=\"numitems\" type=\"text\" size=\"19\" maxlength=\"19\" value=\"100\">"+ClientThread.BR+ClientThread.EOL);
         s.append("<FONT size=\"1\">[Integer or ALL]</FONT>"+ClientThread.EOL);
         s.append("</TD>"+ClientThread.EOL);
         s.append("</TR>"+ClientThread.EOL);
@@ -212,7 +212,7 @@ public class ItemAcceptor implements Runnable
         s.append("<TR>"+ClientThread.EOL);
         s.append("<TD>RegExp Title:</TD>"+ClientThread.EOL);
         s.append("<TD>"+ClientThread.EOL);
-        s.append("<INPUT name=\"search_title\" type=\"text\" size=\"30\" maxlength=\"100\">"+ClientThread.BR+ClientThread.EOL);
+        s.append("<INPUT name=\"search_title\" type=\"text\" size=\"50\" maxlength=\"1024\">"+ClientThread.BR+ClientThread.EOL);
         s.append("<FONT size=\"1\">[Java compliant regexp]</FONT>"+ClientThread.EOL);
         s.append("</TD>"+ClientThread.EOL);
         s.append("</TR>"+ClientThread.EOL);
