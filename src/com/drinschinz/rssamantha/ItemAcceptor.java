@@ -424,7 +424,7 @@ class ClientThread implements Runnable
             {
                 httpAnswer(HTTP_BAD_REQUEST, "Bad Request", e.getMessage(), Main.APPNAME);
             }
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         finally
         {
@@ -667,7 +667,7 @@ class ClientThread implements Runnable
         item.setCreated(created);
         if(hm.containsKey("link"))
         {
-            item.putElement("link", hm.get("link"));
+            item.setLink(hm.get("link"));
         }
         final Control.CountEvent b = itemacceptor.getControl().addItem(item, ix);
         Control.L.log(Level.INFO, "Returnvalue:{0} item:{1}", new Object[]{b.toString(), item.toShortString()});

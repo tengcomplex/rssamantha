@@ -193,7 +193,16 @@ public abstract class ItemCreator extends Thread
                 final Matcher matcher = pattern.get(key);
                 final int ix = key.indexOf("_");
                 final String attributename = key.substring(0, ix != -1 ? ix : key.length());
-                final String candidate = item.getElements().getElementValue(attributename);
+                // TODO: this could be better
+                String candidate = item.getTitle();
+                if("category".equals(attributename))
+                {
+                    candidate = item.getCategory();
+                }
+                else if("description".equals(attributename))
+                {
+                    candidate = item.getDescriptionS();
+                }
                 matcher.reset(candidate);
                 if(!matcher.matches())
                 {
@@ -215,14 +224,14 @@ public abstract class ItemCreator extends Thread
     protected String getNewTitle(final Item i)
     {
         String newTitle = "";
-        final String oldTitle = i.getElements().getElementValue("title");
+        final String oldTitle = i.getTitle();
         if(i.getType() == ItemCreatorType.RSSFEED || i.getType() == ItemCreatorType.SIMPLERSSFEED || i.getType() == ItemCreatorType.ATOMFEED)
         {
-            if(oldTitle.equals(i.getElements().getElementValue("description")))
+            if(i.getDescriptionS() == null || oldTitle.equals(i.getDescriptionS()))
             {
-                i.putElement("description", "");
+                i.setDescriptionS("");
             }
-            newTitle = (titleprefix ? "["+i.getElements().getElementValue("source")+"] " : "")+oldTitle;
+            newTitle = (titleprefix ? "["+i.getSource()+"] " : "")+oldTitle;
         }
         else if(i.getType() == ItemCreatorType.RSSIDENTICAFEED)
         {
@@ -230,11 +239,11 @@ public abstract class ItemCreator extends Thread
         }
         else
         {
-            newTitle = (titleprefix ? "["+i.getElements().getElementValue("source")+"] " : "")+oldTitle;
+            newTitle = (titleprefix ? "["+i.getSource()+"] " : "")+oldTitle;
         }
         if(appenddescription)
         {
-            newTitle += " | "+ChannelReader.smartTrim(i.getElements().getElementValue("description"));
+            newTitle += " | "+ChannelReader.smartTrim(i.getDescriptionS());
         }
         /* Some clients not handling html in the title well, so we strip it out */
         return Control.decodeHtml(newTitle).replaceAll("\n", " ").replaceAll("\r", " ");
@@ -257,7 +266,7 @@ public abstract class ItemCreator extends Thread
             {
                 continue;
             }
-            i.putElement("title", getNewTitle(i));
+            i.setTitle(getNewTitle(i));
             this.control.addItem(i, channelindex);
         }
     }

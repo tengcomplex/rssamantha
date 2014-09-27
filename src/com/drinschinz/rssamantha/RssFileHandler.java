@@ -123,15 +123,13 @@ public class RssFileHandler extends FileHandler
             {
                 final Item item = items.get(ii);
                 el = document.createElement("item");
-                for(Iterator<String> iter = item.getElements().getElementKeys(); iter.hasNext();)
-                {
-                    final String n = iter.next();
-                    final Element itemel = document.createElement(n);
-                    final String value = item.getElements().getElementValue(n);
-                    text = document.createTextNode(value);
-                    itemel.appendChild(text);
-                    el.appendChild(itemel);
-                }
+                appendChild(document, el, "itemcreatorname", item.getItemCreatorName());
+                appendChild(document, el, "link", item.getLink());
+                appendChild(document, el, "description", item.getDescriptionS());
+                appendChild(document, el, "source", item.getSource());
+                appendChild(document, el, "title", item.getTitle());
+                appendChild(document, el, "category", item.getCategory());
+                appendChild(document, el, "pubDate", item.getPubDate());
                 channelel.appendChild(el);
             }
             return document;
@@ -140,9 +138,20 @@ public class RssFileHandler extends FileHandler
         catch(ParserConfigurationException | DOMException ex)
         {
             Control.L.log(Level.SEVERE, "Error writing {0} {1}", new Object[]{filename, ex.getMessage()});
-            //ex.printStackTrace(System.err);
+            ex.printStackTrace(System.err);
         }
         return null;
+    }
+    
+    private void appendChild(final Document document, Element el, String elementName, String value)
+    {
+        if(value == null)
+        {
+            return;
+        }
+        final Element itemel = document.createElement(elementName);
+        itemel.appendChild(document.createTextNode(value));
+        el.appendChild(itemel);
     }
 
     @Override

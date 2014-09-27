@@ -84,7 +84,7 @@ public class HtmlFileHandler extends TxtFileHandler
                 table.append(datetimeformat.format(ii.getCreated()));
             }
             table.append("</TD>").append(ClientThread.EOL);
-            table.append("<TD><A HREF=\"").append(ii.getElements().getElementValue("link")).append("\" target=\"_blank\">").append(ii.getElements().getElementValue("title")).append("</A>" +"</TD>"+ClientThread.EOL);
+            table.append("<TD><A HREF=\"").append(ii.getLink()).append("\" target=\"_blank\">").append(ii.getTitle()).append("</A>" +"</TD>"+ClientThread.EOL);
             table.append("</TR>").append(ClientThread.EOL);
         }
         table.append("</TABLE>").append(ClientThread.EOL);

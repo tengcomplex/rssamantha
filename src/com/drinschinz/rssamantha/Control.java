@@ -217,7 +217,7 @@ public class Control
         final RssChannelReader rcr = new RssChannelReader(Main.applicationproperties.getProperty("app.files"), "checkversion");
         if(rcr.read() && rcr.getItems().size() > 0)
         {
-            final String t = rcr.getItems().get(0).getElements().getElementValue("title");
+            final String t = rcr.getItems().get(0).getTitle();
             final int fv = t.indexOf("v");
             int to = t.indexOf("/", fv);
             if(to < 0)
@@ -854,7 +854,7 @@ public class Control
             {
                 if(i.getDescriptionAsBytes() != null)
                 {
-                    i.putElement("description", extractBytes(i.getDescriptionAsBytes()));
+                    i.setDescriptionS(extractBytes(i.getDescriptionAsBytes()));
                     i.setDescriptionAsBytes(null);
                 }
             }
@@ -928,7 +928,7 @@ public class Control
      */
     private CountEvent isAddable(final Item i, final int ix)
     {   
-        if(i.getElements().getElementValue("title") == null || i.getElements().getElementValue("title").length() == 0)
+        if(i.getTitle() == null || i.getTitle().length() == 0)
         {   
             stats.count(CountEvent.INVALID);
             return CountEvent.INVALID;
@@ -966,13 +966,13 @@ public class Control
             stats.count(CountEvent.ALREADYINDOWNLOADPROGRESS);
             return CountEvent.ALREADYINDOWNLOADPROGRESS;
         }
-        if(downloadcontrol.isKnownFile(i.getElements().getElementValue("contenturl")))
+        if(downloadcontrol.isKnownFile(i.getContentUrl()))
         {
-            L.log(Level.FINE, "Already known download {0}", i.getElements().getElementValue("contenturl"));
+            L.log(Level.FINE, "Already known download {0}", i.getContentUrl());
             stats.count(CountEvent.ALREADYKNOWNDOWNLOAD);
             return CountEvent.ALREADYKNOWNDOWNLOAD;
         }
-        i.putElement("contentfolder", channels[ix].configelements.get("downloadfolder"));
+        i.setContentFolder(channels[ix].configelements.get("downloadfolder"));
         downloadcontrol.addItem(i);
         stats.count(CountEvent.ADDEDTODOWNLOADQUEUE);
         return CountEvent.ADDEDTODOWNLOADQUEUE;
@@ -1051,9 +1051,10 @@ public class Control
         {
             return atr;
         }
-        if(this.compression != Deflater.NO_COMPRESSION && i.getDescriptionAsBytes() == null && i.getElements().getElementValue("description").length() > COMPRESSIONLIMIT)
+        if(this.compression != Deflater.NO_COMPRESSION && i.getDescriptionAsBytes() == null && i.getDescriptionS().length() > COMPRESSIONLIMIT)
         {
-            i.setDescriptionAsBytes(compressBytes(i.getElements().removeElementValue("description")));
+            i.setDescriptionAsBytes(compressBytes(i.getDescriptionS()));
+            i.setDescriptionS(null);
         }
         channels[ix].itemdata.addItem(i);
         return atr;

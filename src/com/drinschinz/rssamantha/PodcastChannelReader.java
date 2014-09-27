@@ -64,20 +64,20 @@ public class PodcastChannelReader extends RssChannelReader
                     final DateInfo di = getCreated(fieldElement, new String[]{"pubDate"});
                     item = new Item(di.getTimestamp(), getValue(fieldElement, "title"), getValue(fieldElement, "description"), itemcreatorname, type);
                     item.setFoundrsscreated(di.isFoundCreated());
-                    item.putElement("link", getValue(fieldElement, "link"));
-                    item.putElement("category", getValue(fieldElement, "category"));
-                    item.putElement("guid", getValue(fieldElement, "guid"));
+                    item.setLink(getValue(fieldElement, "link"));
+                    item.setCategory(getValue(fieldElement, "category"));
+                    //item.putElement("guid", getValue(fieldElement, "guid"));
                     final NodeList trs = fieldElement.getElementsByTagName("enclosure");
                     final Element enel = ((Element) trs.item(0));
                     if(enel != null)
                     {
-                        item.putElement("contenttype", enel.getAttribute("type"));
-                        item.putElement("contenturl", enel.getAttribute("url"));
-                        item.putElement("contentlength", enel.getAttribute("length"));
+                        item.setContentType(enel.getAttribute("type"));
+                        item.setContentUrl(enel.getAttribute("url"));
+                        item.setContentLength(enel.getAttribute("length"));
                     }
-                    item.putElement("source", itemcreatorname);
+                    item.setSource(itemcreatorname);
                 }
-                if(item.getElements().containsElement("contenturl"))
+                if(item.getContentUrl() != null) // TODO, this be done different. Check url earlier.
                 {
                     items.add(item);
                 }

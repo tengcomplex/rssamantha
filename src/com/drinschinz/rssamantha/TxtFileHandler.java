@@ -78,7 +78,7 @@ public class TxtFileHandler extends FileHandler
         for(Item ii : items)
         {
             str.append(datetimeformat.format(new Date(ii.getCreated())));
-            str.append(" ").append(ii.getElements().getElementValue("title")).append(Control.LINESEP);
+            str.append(" ").append(ii.getTitle()).append(Control.LINESEP);
         }
         return str.toString();
     }
