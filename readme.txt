@@ -264,7 +264,10 @@ Version: 0.806
 Release: soon
 ------------------
 - Performance Improvement: Replace tag map in Item instances, work with 
-  dedicated fields instead. [#10] 
+  dedicated fields instead. [#10]
+- Frontend: Make search title input field wider, accept expressions of length 
+  1024. [#11]
+- Cleanup frontend javascript code [#12].
 
 -------------------
 Version: 0.805
