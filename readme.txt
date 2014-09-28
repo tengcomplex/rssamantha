@@ -267,7 +267,7 @@ Release: soon
   dedicated fields instead. [#10]
 - Frontend: Make search title input field wider, accept expressions of length 
   1024. [#11]
-- Cleanup frontend javascript code [#12].
+- Cleanup frontend javascript code [#13].
 
 -------------------
 Version: 0.805
