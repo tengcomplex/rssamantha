@@ -28,8 +28,9 @@ Installation
 A java SE runtime environment >=1.7 is required.
 
 Unzip rssamantha.zip, edit configuration file as needed.
-There are example wrapper scripts rssamantha.bsh/rssamantha.bat and an example
-configuration file rssamantha_demo.opml you can take as a start.
+There are example wrapper scripts rssamantha.bsh (for unixoid), rssamantha.bat 
+(for windows) and an example configuration file rssamantha_demo.opml you can 
+take as a start.
 
 -------------------
 General Usage
@@ -112,7 +113,7 @@ Remove item:
 wget --post-data='title=testtitle&description=testdescription&ix=0&created=$CREATED&remove=1' http://host:port/ -O /dev/null
 wget --post-data='title=testtitle&description=testdescription&channel=tengtest&created=$CREATED&remove=1' http://host:port/ -O /dev/null
 
-When special characters are to be passed, encode in url-encoding.
+When special characters are to be passed, content must be url-encoded.
 
 GET examples:
 http://$HOST:$PORT (-> generator)
