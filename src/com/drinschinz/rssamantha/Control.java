@@ -567,7 +567,7 @@ public class Control
     
     public String getChannelDataToShortString(final int[] channelindices)
     {
-        final StringBuilder s = new StringBuilder("");
+        final StringBuilder s = new StringBuilder(128 * channelindices.length);
         for(int i : channelindices)
         {
             s.append(getChannelDataToShortString(i)).append(" ");
