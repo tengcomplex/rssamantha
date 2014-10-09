@@ -579,9 +579,9 @@ public class Control
     public synchronized int getNumberOfAllItems()
     {
         int ret = 0;
-        for(int ii=0; ii<channels.length; ii++)
+        for(ChannelData channel : channels)
         {
-            ret += channels[ii].itemdata.getNumberOfItems();
+            ret += channel.itemdata.getNumberOfItems();
         }
         return ret;
     }
