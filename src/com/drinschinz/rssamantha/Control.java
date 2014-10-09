@@ -1038,10 +1038,6 @@ public class Control
 
     protected synchronized CountEvent addItem(final Item i, final int ix)
     {
-//if(i.getElements().getElementValue("title").startsWith("[SZSE]"))
-//{
-//    System.out.println("DEBUG");
-//}
         final CountEvent atr = isAddable(i, ix);
         if(L.isLoggable(Level.FINE))
         {
