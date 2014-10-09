@@ -924,7 +924,7 @@ public class Control
     }
 
     /**
-     *
+     * Validates Item on given index, and counts up stats.
      */
     private CountEvent isAddable(final Item i, final int ix)
     {   
