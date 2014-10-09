@@ -217,7 +217,10 @@ public abstract class ChannelReader extends DocumentReader
         try
         {
             final Date d = sdf.parse(s);
-            Control.L.log(Level.FINEST, "parsed {0} with format:{1} return {2}", new Object[]{s, sdf.toPattern(), d.toString()});
+            if(Control.L.isLoggable(Level.FINEST))
+            {
+                Control.L.log(Level.FINEST, "parsed {0} with format:{1} return {2}", new Object[]{s, sdf.toPattern(), d.toString()});
+            }
             return d;
         }
         catch(ParseException ex)
