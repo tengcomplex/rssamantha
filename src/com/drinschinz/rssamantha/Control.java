@@ -748,7 +748,10 @@ public class Control
         new ItemCreatorsStarter().start();
         for(ChannelData cd : channels)
         {
-            L.log(Level.FINEST, "channel:{0}", cd.toString());
+            if(L.isLoggable(Level.FINEST))
+            {
+                L.log(Level.FINEST, "channel:{0}", cd.toString());
+            }
             if(cd.rsswriter != null)
             {
                 cd.rsswriter.start();
