@@ -71,7 +71,10 @@ public class DownloadControl extends Thread implements Observer
         }
         knownDownloads = (HashMap<String, Long>)Control.readObject(knownDownloadsFilename);
         Control.L.log(Level.INFO, "Initialized {0} known downloads.", new Object[]{knownDownloads.size()});
-        Control.L.log(Level.FINEST, "Known downloads:{0}", Arrays.toString(knownDownloads.keySet().toArray()));
+        if(Control.L.isLoggable(Level.FINEST))
+        {
+            Control.L.log(Level.FINEST, "Known downloads:{0}", Arrays.toString(knownDownloads.keySet().toArray()));
+        }
     }
 
     public Map<String, Long> getKnownDownloads()
@@ -89,7 +92,10 @@ public class DownloadControl extends Thread implements Observer
         if(knownDownloads.containsKey(filename))
         {
             knownDownloads.put(filename, System.currentTimeMillis());
-            Control.L.log(Level.FINEST, "Reset last accessed known filename {0}", new Object[]{filename});            
+            if(Control.L.isLoggable(Level.FINEST))
+            {
+                Control.L.log(Level.FINEST, "Reset last accessed known filename {0}", new Object[]{filename});            
+            }
             return true;
         }
         return false;
@@ -175,7 +181,10 @@ public class DownloadControl extends Thread implements Observer
             synchronized(knownDownloads)
             {
                 knownDownloads.put(dl.getUrl(), System.currentTimeMillis());
-                Control.L.log(Level.FINEST, "Put to known downloads {0}", new Object[]{dl.getUrl()});
+                if(Control.L.isLoggable(Level.FINEST))
+                {
+                    Control.L.log(Level.FINEST, "Put to known downloads {0}", new Object[]{dl.getUrl()});
+                }
                 removeOldKnownDownloads();
             }
             control.getStatistics().count(Control.CountEvent.FINISHEDDOWNLOAD);
