@@ -401,7 +401,10 @@ class ClientThread implements Runnable
     {
         try
         {
-            Control.L.log(Level.FINEST,"[{0}]: Incoming call...", String.valueOf(id));
+            if(Control.L.isLoggable(Level.FINEST))
+            {
+                Control.L.log(Level.FINEST,"[{0}]: Incoming call...", String.valueOf(id));
+            }
             socket.setSoTimeout(ItemAcceptor.timeout);
             socket.setTcpNoDelay(true);
             in = new BufferedInputStream(socket.getInputStream());
@@ -415,7 +418,10 @@ class ClientThread implements Runnable
             Control.L.log(Level.INFO, "Accepting {0} url:{1} httpversion:{2} content:{3} from {4}", new Object[]{cmd, url, httpversion, content, socket.getInetAddress().getHostAddress()});
 //System.out.println("Accepting "+cmd+" url:"+url+" httpversion:"+httpversion);
             handleResponse();
-            Control.L.log(Level.FINEST,"[{0}]: Closed.", id);
+            if(Control.L.isLoggable(Level.FINEST))
+            {
+                Control.L.log(Level.FINEST,"[{0}]: Closed.", id);
+            }
         }
         catch(Exception e)
         {
@@ -424,7 +430,7 @@ class ClientThread implements Runnable
             {
                 httpAnswer(HTTP_BAD_REQUEST, "Bad Request", e.getMessage(), Main.APPNAME);
             }
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
         finally
         {
@@ -438,7 +444,10 @@ class ClientThread implements Runnable
                 {
                     socket.close();
                 }
-                Control.L.log(Level.FINEST,"[{0}]: Finally Closed.", id);
+                if(Control.L.isLoggable(Level.FINEST))
+                {
+                    Control.L.log(Level.FINEST,"[{0}]: Finally Closed.", id);
+                }
             }
             catch(IOException e)
             {
@@ -708,7 +717,10 @@ class ClientThread implements Runnable
     {   
         if(hm.containsKey("allchannels"))
         {
-            Control.L.log(Level.FINEST, "returning all {0} channels", new Object[]{itemacceptor.getAllChannelIndicies().length});
+            if(Control.L.isLoggable(Level.FINEST))
+            {
+                Control.L.log(Level.FINEST, "returning all {0} channels", new Object[]{itemacceptor.getAllChannelIndicies().length});
+            }
             return itemacceptor.getAllChannelIndicies();
         }
         final List<Integer> tmp = new ArrayList<>(itemacceptor.getControl().getChannelCount());
@@ -742,7 +754,10 @@ class ClientThread implements Runnable
         {
             ret[ii] = tmp.get(ii);
         }
-        Control.L.log(Level.FINEST, "returning {0} ix:{1}", new Object[]{ret.length, Arrays.toString(ret)});
+        if(Control.L.isLoggable(Level.FINEST))
+        {
+            Control.L.log(Level.FINEST, "returning {0} ix:{1}", new Object[]{ret.length, Arrays.toString(ret)});
+        }
         return ret;
     }
 
@@ -756,7 +771,10 @@ class ClientThread implements Runnable
         if(hm.size() == 1 && hm.containsKey("favicon.ico"))
         {
             httpAnswer(HTTP_NOT_FOUND, "File not found", "File not found", Main.APPNAME);
-            Control.L.log(Level.FINEST, "No favicon support");
+            if(Control.L.isLoggable(Level.FINEST))
+            {
+                Control.L.log(Level.FINEST, "No favicon support");
+            }
             return;
         }
         if(hm.containsKey("status"))
