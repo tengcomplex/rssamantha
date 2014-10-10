@@ -653,6 +653,8 @@ Release: 20100116
 
 TODO
 ===============================================================================
+- 2014-10-09T10:49:05.588 com.drinschinz.rssamantha.ChannelReader getCreated SEVERE: Error reading http://feeds.feedburner.com/eclipse/fnews Could not parse Sept 29, 2014 8:31:00 am EST
+  Not awesome, we would have to preprocess Sept->Sep.
 - Introduce ignorecreated per reading channel.
 - Make IP access list for GET/POST independent.
 - It may be possible to smart trim every description at read() time.
