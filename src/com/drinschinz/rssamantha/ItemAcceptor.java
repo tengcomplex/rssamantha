@@ -506,21 +506,6 @@ class ClientThread implements Runnable
         return false;
     }
 
-//    private boolean isAccept() throws Exception
-//    {
-//        final InetAddress ia = socket.getInetAddress();
-////System.out.println("ia:"+ia.getHostAddress());
-//        for(String s : itemacceptor.getAcceptorList())
-//        {
-//            if(ia.getHostAddress().startsWith(s))
-//            {
-//                return true;
-//            }
-//        }
-//        Control.L.log(Level.WARNING, "Not accepting incoming request from {0}", ia.getHostAddress());
-//        return false;
-//    }
-
     /**
      * TODO: This is ugly.
      */
