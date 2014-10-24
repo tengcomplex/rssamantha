@@ -51,7 +51,8 @@ public class ItemAcceptor implements Runnable
     private final String host = System.getProperty(Control.PNAME+".itemacceptorhost", "localhost");
     private final SimpleDateFormat htmlhandlerdatetimeformat = new SimpleDateFormat(System.getProperty(Control.PNAME+".htmlfiledatetimeformat", HtmlFileHandler.DEFAULTDATETIMEHTMLPATTERN));
     private final AdditionalHtml additionalHtml;
-    private final List<String>acceptorlist;
+    //private final List<String>acceptorlist;
+    private final List<String>acceptorlist_general, acceptorlist_post;
     static int timeout = 0;
     private final List<ClientThread> threads;
     /* max # worker threads */
@@ -68,16 +69,16 @@ public class ItemAcceptor implements Runnable
     {
         this.control = control;
         this.port = port;
-        this.acceptorlist = new ArrayList<>();
         channelixs = chix;
+        this.acceptorlist_general = new ArrayList<>();
+        this.acceptorlist_post = new ArrayList<>();
+        /* Migrate old propertyname */
         if(System.getProperties().containsKey(Control.PNAME+".acceptorlist"))
         {
-            Collections.addAll(acceptorlist, System.getProperty(Control.PNAME+".acceptorlist").split(","));
+           System.setProperty(Control.PNAME+".acceptorlist_general", System.getProperty(Control.PNAME+".acceptorlist"));
         }
-        else
-        {
-            acceptorlist.add("0:0:0:0:0:0:0:1");
-        }
+        initAcceptorList(Control.PNAME+".acceptorlist_general", acceptorlist_general);
+        initAcceptorList(Control.PNAME+".acceptorlist_post", acceptorlist_post);
         timeout = 5000;
         this.maxworkers = maxworkers;
         threads = Collections.synchronizedList(new ArrayList());
@@ -85,6 +86,20 @@ public class ItemAcceptor implements Runnable
         final String[] channels = this.control.getAllChannelNames();
         generatorHtml = initGeneratorHtml(channels);
         opml = initOpml(channels);
+    }
+    
+    private void initAcceptorList(String propertyName, List<String> list)
+    {
+        if(System.getProperties().containsKey(propertyName))
+        {
+            Collections.addAll(list, System.getProperty(propertyName).split(","));
+        }
+        else
+        {
+            list.add("0:0:0:0:0:0:0:1");
+            list.add("127.0.0.1");
+        }
+        Control.L.log(Level.FINE, "Initialized {0}:{1}", new Object[]{propertyName, Arrays.toString(list.toArray())});
     }
     
     public static class AdditionalHtml
@@ -281,9 +296,14 @@ public class ItemAcceptor implements Runnable
         return this.control;
     }
 
-    protected List<String> getAcceptorList()
+    protected List<String> getAcceptorList_general()
     {
-        return this.acceptorlist;
+        return this.acceptorlist_general;
+    }
+    
+    protected List<String> getAcceptorList_post()
+    {
+        return this.acceptorlist_post;
     }
 
     protected void removeClient(final ClientThread c)
@@ -409,7 +429,7 @@ class ClientThread implements Runnable
             socket.setTcpNoDelay(true);
             in = new BufferedInputStream(socket.getInputStream());
             out = new PrintStream(socket.getOutputStream());
-            if(!isAccept())
+            if(!isAccept(itemacceptor.getAcceptorList_general()))
             {
                 itemacceptor.getControl().getStatistics().count(Control.CountEvent.HTTP_NOACCEPT);
                 return;
@@ -420,7 +440,7 @@ class ClientThread implements Runnable
             handleResponse();
             if(Control.L.isLoggable(Level.FINEST))
             {
-                Control.L.log(Level.FINEST,"[{0}]: Closed.", id);
+                Control.L.log(Level.FINEST,"[{0}]: Closing.", id);
             }
         }
         catch(Exception e)
@@ -470,12 +490,12 @@ class ClientThread implements Runnable
             Control.L.log(Level.FINE, "Done, handling {0}", new Object[]{content});
         }
     }
-
-    private boolean isAccept() throws Exception
+    
+    private boolean isAccept(final List<String> list) throws Exception
     {
         final InetAddress ia = socket.getInetAddress();
 //System.out.println("ia:"+ia.getHostAddress());
-        for(String s : itemacceptor.getAcceptorList())
+        for(String s : list)
         {
             if(ia.getHostAddress().startsWith(s))
             {
@@ -485,6 +505,21 @@ class ClientThread implements Runnable
         Control.L.log(Level.WARNING, "Not accepting incoming request from {0}", ia.getHostAddress());
         return false;
     }
+
+//    private boolean isAccept() throws Exception
+//    {
+//        final InetAddress ia = socket.getInetAddress();
+////System.out.println("ia:"+ia.getHostAddress());
+//        for(String s : itemacceptor.getAcceptorList())
+//        {
+//            if(ia.getHostAddress().startsWith(s))
+//            {
+//                return true;
+//            }
+//        }
+//        Control.L.log(Level.WARNING, "Not accepting incoming request from {0}", ia.getHostAddress());
+//        return false;
+//    }
 
     /**
      * TODO: This is ugly.
@@ -632,8 +667,13 @@ class ClientThread implements Runnable
         return hm;
     }
 
-    private void handlePOST(final Map<String, String> hm)
+    private void handlePOST(final Map<String, String> hm) throws Exception
     {
+        if(!isAccept(itemacceptor.getAcceptorList_post()))
+        {
+            itemacceptor.getControl().getStatistics().count(Control.CountEvent.HTTP_NOACCEPT);
+            return;
+        }
         int ix = -1;
         if(hm.containsKey("channel0"))
         {
