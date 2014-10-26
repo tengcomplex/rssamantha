@@ -89,10 +89,9 @@ Add/Remove external items and requesting data via HTTP.
 -------------------
 If an itemacceptor thread is configured, it is possible to add/remove items to a
 channel from external sources via HTTP post.
-By default this is allowd from localhost, there is a property acceptorlist_post
-for configuring other host. IF a remote host needs post access, it also must be
-added to acceptorlist_get since it is checked before we even read the full HTTP 
-request. 
+By default this is allowed from localhost, there is a property acceptorlist_post
+for configuring other host. If a remote host needs post access, it automatically
+can do GET requests.
 
 The related properties are:
 * com.drinschinz.rssamantha.itemacceptor
