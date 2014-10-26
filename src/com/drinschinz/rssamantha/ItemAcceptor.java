@@ -79,6 +79,13 @@ public class ItemAcceptor implements Runnable
         }
         initAcceptorList(Control.PNAME+".acceptorlist_general", acceptorlist_general);
         initAcceptorList(Control.PNAME+".acceptorlist_post", acceptorlist_post);
+        for(String ipacl : acceptorlist_post)
+        {
+            if(!acceptorlist_general.contains(ipacl))
+            {
+                acceptorlist_general.add(ipacl);
+            }
+        }
         timeout = 5000;
         this.maxworkers = maxworkers;
         threads = Collections.synchronizedList(new ArrayList());
