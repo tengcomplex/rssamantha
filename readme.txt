@@ -88,7 +88,10 @@ java -Dcom.drinschinz.rssamantha.loglevel=INFO \
 Add/Remove external items and requesting data via HTTP.
 -------------------
 If an itemacceptor thread is configured, it is possible to add/remove items to a
-channel from external sources via HTTP post. 
+channel from external sources via HTTP post.
+By default this is allowed from localhost, there is a property acceptorlist_post
+for configuring other host. If a remote host needs post access, it automatically
+can do GET requests.
 
 The related properties are:
 * com.drinschinz.rssamantha.itemacceptor
@@ -268,7 +271,8 @@ Release: soon
   dedicated fields instead. [#10]
 - Frontend: Make search title input field wider, accept expressions of length 
   1024. [#11]
-- Cleanup frontend javascript code [#13].
+- Cleanup frontend javascript code. [#13]
+- Add dedicated IP acceptorlist_post. [#14]
 
 -------------------
 Version: 0.805
@@ -653,8 +657,9 @@ Release: 20100116
 
 TODO
 ===============================================================================
+- 2014-10-09T10:49:05.588 com.drinschinz.rssamantha.ChannelReader getCreated SEVERE: Error reading http://feeds.feedburner.com/eclipse/fnews Could not parse Sept 29, 2014 8:31:00 am EST
+  Not awesome, we would have to preprocess Sept->Sep.
 - Introduce ignorecreated per reading channel.
-- Make IP access list for GET/POST independent.
 - It may be possible to smart trim every description at read() time.
 - Jun 27, 2011 6:35:19 AM com.drinschinz.rssfeedcreator.ChannelReader getCreated SEVERE: Error reading http://feeds.feedburner.com/francetv-sports?format=xml Couldn't parse dim 26 juin 2011 22:13:51 +0100
     Seems wrong, french guys using weird days are not supported as it seems.
