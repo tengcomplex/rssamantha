@@ -27,7 +27,7 @@ $JVM \
 -D$PKG.bodyfile=additionalhtml.html \
 -D$PKG.onloadfile=additionalhtml.onload \
 -D$PKG.itemacceptorport=8082 \
--D$PKG.acceptorlist_get=127.0.0.1,0:0:0:0:0:0:0:1 \
+-D$PKG.acceptorlist_general=127.0.0.1,0:0:0:0:0:0:0:1 \
 -D$PKG.acceptorlist_post=127.0.0.1,0:0:0:0:0:0:0:1 \
 -D$PKG.httpreferrer=http://www.myreferrer.com \
 -D$PKG.preprocessconfig=true \
