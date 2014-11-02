@@ -46,7 +46,7 @@ Usage:
  [-Dcom.drinschinz.rssamantha.itemacceptorport=number] (8383)
  [-Dcom.drinschinz.rssamantha.itemacceptorhost=string] (localhost)
  [-Dcom.drinschinz.rssamantha.itemacceptorthreads=number] (20)
- [-Dcom.drinschinz.rssamantha.acceptorlist_general=IP1,IP,I*,...IPN] (0:0:0:0:0:0:0:1)
+ [-Dcom.drinschinz.rssamantha.acceptorlist_get=IP1,IP,I*,...IPN] (0:0:0:0:0:0:0:1)
  [-Dcom.drinschinz.rssamantha.acceptorlist_post=IP1,IP,I*,...IPN] (0:0:0:0:0:0:0:1)
  [-Dcom.drinschinz.rssamantha.cssfile=filename] (null)
  [-Dcom.drinschinz.rssamantha.scriptfile=filename] (null)

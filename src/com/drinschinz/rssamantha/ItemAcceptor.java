@@ -75,9 +75,9 @@ public class ItemAcceptor implements Runnable
         /* Migrate old propertyname */
         if(System.getProperties().containsKey(Control.PNAME+".acceptorlist"))
         {
-           System.setProperty(Control.PNAME+".acceptorlist_general", System.getProperty(Control.PNAME+".acceptorlist"));
+           System.setProperty(Control.PNAME+".acceptorlist_get", System.getProperty(Control.PNAME+".acceptorlist"));
         }
-        initAcceptorList(Control.PNAME+".acceptorlist_general", acceptorlist_general);
+        initAcceptorList(Control.PNAME+".acceptorlist_get", acceptorlist_general);
         initAcceptorList(Control.PNAME+".acceptorlist_post", acceptorlist_post);
         copyOverIfNotContain(acceptorlist_post, acceptorlist_general);
         timeout = 5000;
@@ -112,7 +112,9 @@ public class ItemAcceptor implements Runnable
             list.add("127.0.0.1");
             Control.L.log(Level.FINE, "No data for list {0} adding localhost", new Object[]{propertyName});
         }
-        Control.L.log(Level.FINE, "Initialized {0}:{1}", new Object[]{propertyName, Arrays.toString(list.toArray())});
+        final String l = Arrays.toString(list.toArray());
+        Control.L.log(Level.INFO, "Initialized {0}:{1}", new Object[]{propertyName, l});
+        System.out.println("Accepting HTTP "+(propertyName.substring(propertyName.indexOf("_")+1).toUpperCase())+" requests from "+l);
     }
     
     public static class AdditionalHtml
