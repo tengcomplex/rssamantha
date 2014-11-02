@@ -110,6 +110,7 @@ public class ItemAcceptor implements Runnable
         {
             list.add("0:0:0:0:0:0:0:1");
             list.add("127.0.0.1");
+            Control.L.log(Level.FINE, "No data for list {0} adding localhost", new Object[]{propertyName});
         }
         Control.L.log(Level.FINE, "Initialized {0}:{1}", new Object[]{propertyName, Arrays.toString(list.toArray())});
     }
