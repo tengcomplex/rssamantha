@@ -79,13 +79,7 @@ public class ItemAcceptor implements Runnable
         }
         initAcceptorList(Control.PNAME+".acceptorlist_general", acceptorlist_general);
         initAcceptorList(Control.PNAME+".acceptorlist_post", acceptorlist_post);
-        for(String ipacl : acceptorlist_post)
-        {
-            if(!acceptorlist_general.contains(ipacl))
-            {
-                acceptorlist_general.add(ipacl);
-            }
-        }
+        copyOverIfNotContain(acceptorlist_post, acceptorlist_general);
         timeout = 5000;
         this.maxworkers = maxworkers;
         threads = Collections.synchronizedList(new ArrayList());
@@ -95,11 +89,22 @@ public class ItemAcceptor implements Runnable
         opml = initOpml(channels);
     }
     
+    private void copyOverIfNotContain(List<String> source, List<String> target)
+    {
+        for(String s : source)
+        {
+            if(!target.contains(s))
+            {
+                target.add(s);
+            }
+        }
+    }
+    
     private void initAcceptorList(String propertyName, List<String> list)
     {
         if(System.getProperties().containsKey(propertyName))
         {
-            Collections.addAll(list, System.getProperty(propertyName).split(","));
+            copyOverIfNotContain(Arrays.asList(System.getProperty(propertyName).split(",")), list);
         }
         else
         {
