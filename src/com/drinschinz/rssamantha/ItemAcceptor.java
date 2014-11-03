@@ -133,11 +133,11 @@ public class ItemAcceptor implements Runnable
         {
             if(System.getProperties().containsKey(Control.PNAME+"."+what))
             {   
-                final StringBuilder s = new StringBuilder();
-                for(String ln : Control.readFile(System.getProperties().getProperty(Control.PNAME+"."+what).toString()))
+                final List<String> lines = Control.readFile(System.getProperties().getProperty(Control.PNAME+"."+what).toString());
+                final StringBuilder s = new StringBuilder(Math.max(Math.min(lines.size()*64, 2056), 2));
+                for(String ln : lines)
                 {
-                    s.append(ln);
-                    s.append(Control.LINESEP);
+                    s.append(ln).append(Control.LINESEP);
                 }
                 if(s.length() == 0)
                 {
