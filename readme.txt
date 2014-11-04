@@ -65,7 +65,7 @@ Usage:
  [-Dcom.drinschinz.rssamantha.preprocessconfig.value=valuereplacedby]
  ["-Dcom.drinschinz.rssamantha.preprocessconfig.repl_<replacename>=Homer+OR+Fry"]
  -jar rssamantha.jar
- configfile
+ mychannels.opml
 
 The compression argument supports values as defined in the java standard
 java.util.zip.Deflater.
