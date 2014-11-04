@@ -79,7 +79,7 @@ public class Main
             {
                 Runtime.getRuntime().addShutdownHook(new ShutdownThread(control));
             }
-            catch (Throwable t)
+            catch(Throwable t)
             {
                 // we get here when the program is run with java
                 // version 1.2.2 or older
