@@ -49,11 +49,6 @@ public class Main
     /** Global access. Properties @see Main.applicationproperties is loaded at this point. */
     public final static String APPNAME = applicationproperties.getProperty("app.name");
     public final static String APPVERSION = applicationproperties.getProperty("app.version");
-    
-    private static String getUsage()
-    {
-        return applicationproperties.getProperty("app.usage");
-    }
 
     /**
      * @param args the command line arguments
@@ -63,7 +58,7 @@ public class Main
         if(args.length != 1 || ((args.length == 1 && ("-?".equals(args[0]) || "-h".equals(args[0]) || "--help".equals(args[0])))))
         {
             System.out.println(APPNAME+" "+APPVERSION);
-            System.out.println(getUsage());
+            System.out.println(applicationproperties.getProperty("app.usage"));
             System.exit(0);
         }
         else if((args.length == 1 && ("-version".equals(args[0]) || "--version".equals(args[0]))))
