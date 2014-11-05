@@ -116,6 +116,20 @@ public class ItemAcceptor implements Runnable
         System.out.println("Accepting HTTP "+(propertyName.substring(propertyName.indexOf("_")+1).toUpperCase())+" requests from "+l);
     }
     
+    protected boolean isAccept(final String hostAddress, final List<String> list) throws Exception
+    {
+//System.out.println("ia:"+ia.getHostAddress());
+        for(String s : list)
+        {
+            if(hostAddress.startsWith(s))
+            {
+                return true;
+            }
+        }
+        Control.L.log(Level.WARNING, "Not accepting incoming request from {0}", hostAddress);
+        return false;
+    }
+    
     public static class AdditionalHtml
     {
         private final String css, script, onload, body;
@@ -443,7 +457,7 @@ class ClientThread implements Runnable
             socket.setTcpNoDelay(true);
             in = new BufferedInputStream(socket.getInputStream());
             out = new PrintStream(socket.getOutputStream());
-            if(!isAccept(itemacceptor.getAcceptorList_general()))
+            if(!itemacceptor.isAccept(socket.getInetAddress().getHostAddress(), itemacceptor.getAcceptorList_general()))
             {
                 itemacceptor.getControl().getStatistics().count(Control.CountEvent.HTTP_NOACCEPT);
                 return;
@@ -503,21 +517,6 @@ class ClientThread implements Runnable
         {
             Control.L.log(Level.FINE, "Done, handling {0}", new Object[]{content});
         }
-    }
-    
-    private boolean isAccept(final List<String> list) throws Exception
-    {
-        final InetAddress ia = socket.getInetAddress();
-//System.out.println("ia:"+ia.getHostAddress());
-        for(String s : list)
-        {
-            if(ia.getHostAddress().startsWith(s))
-            {
-                return true;
-            }
-        }
-        Control.L.log(Level.WARNING, "Not accepting incoming request from {0}", ia.getHostAddress());
-        return false;
     }
 
     /**
@@ -668,7 +667,7 @@ class ClientThread implements Runnable
 
     private void handlePOST(final Map<String, String> hm) throws Exception
     {
-        if(!isAccept(itemacceptor.getAcceptorList_post()))
+        if(!itemacceptor.isAccept(socket.getInetAddress().getHostAddress(), itemacceptor.getAcceptorList_post()))
         {
             itemacceptor.getControl().getStatistics().count(Control.CountEvent.HTTP_NOACCEPT);
             return;
