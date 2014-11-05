@@ -51,7 +51,6 @@ public class ItemAcceptor implements Runnable
     private final String host = System.getProperty(Control.PNAME+".itemacceptorhost", "localhost");
     private final SimpleDateFormat htmlhandlerdatetimeformat = new SimpleDateFormat(System.getProperty(Control.PNAME+".htmlfiledatetimeformat", HtmlFileHandler.DEFAULTDATETIMEHTMLPATTERN));
     private final AdditionalHtml additionalHtml;
-    //private final List<String>acceptorlist;
     private final List<String>acceptorlist_general, acceptorlist_post;
     static int timeout = 0;
     private final List<ClientThread> threads;
