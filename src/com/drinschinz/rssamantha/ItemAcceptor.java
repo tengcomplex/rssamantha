@@ -478,7 +478,7 @@ class ClientThread implements Runnable
             {
                 httpAnswer(HTTP_BAD_REQUEST, "Bad Request", e.getMessage(), Main.APPNAME);
             }
-            e.printStackTrace(System.err);
+//e.printStackTrace(System.err);
         }
         finally
         {
