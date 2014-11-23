@@ -266,7 +266,7 @@ Changes
 ================================================================================
 -------------------
 Version: 0.806
-Release: soon
+Release: 20141123
 ------------------
 - Performance Improvement: Replace tag map in Item instances, work with 
   dedicated fields instead. [#10]
