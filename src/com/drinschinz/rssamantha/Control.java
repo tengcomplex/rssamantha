@@ -1239,9 +1239,11 @@ public class Control
         ret.append("*** Java Home:           ").append(System.getProperty("java.home")).append(LINESEP);
         ret.append("*** Max Memory:          ").append(Runtime.getRuntime().maxMemory()).append(LINESEP);
         ret.append("*** Free Memory:         ").append(Runtime.getRuntime().freeMemory()).append(LINESEP);
+        ret.append("*** File Encoding:       ").append(System.getProperty("file.encoding")).append(LINESEP);
         ret.append("*** User Home:           ").append(System.getProperty("user.home")).append(LINESEP);
         ret.append("*** User Name:           ").append(System.getProperty("user.name")).append(LINESEP);
         ret.append("*** User Country:        ").append(System.getProperty("user.country")).append(LINESEP);
+        ret.append("*** User Timezone:       ").append(System.getProperty("user.timezone")).append(LINESEP);
         ret.append("*** User IP:             ");
         try
         {
