@@ -658,6 +658,18 @@ Release: 20100116
 
 TODO
 ===============================================================================
+- Example: ^(?!(\[(lkml.org|ycombinator|Library of Congress: News)\])).*
+
+- Improvement, Item.toShortString, source might be useless there.
+
+- Bug in ItemAcceptor.getArgsFromUrl(), if value contains a "=" it fails.
+  We have to concat a astring from all indicies greater 0 instead of passing 
+  tok[1].
+  hm.put(tok[0], tok.length > 1 ? tok[1] : "");
+
+- Check very long description when sending POST, seems we fail with 400 instead
+  of just cutting it, or return a graceful warning.
+
 - 2014-10-09T10:49:05.588 com.drinschinz.rssamantha.ChannelReader getCreated SEVERE: Error reading http://feeds.feedburner.com/eclipse/fnews Could not parse Sept 29, 2014 8:31:00 am EST
   Not awesome, we would have to preprocess Sept->Sep.
 - Introduce ignorecreated per reading channel.
