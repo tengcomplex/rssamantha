@@ -265,6 +265,13 @@ RSSamantha.
 Changes
 ================================================================================
 -------------------
+Version: 0.807
+Release: soon
+------------------
+- Improve Item logging. [#16]
+- Print file.encoding and user.timezome at startup.
+
+-------------------
 Version: 0.806
 Release: 20141123
 ------------------
