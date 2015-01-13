@@ -278,7 +278,7 @@ public class Item implements Comparable<Item>, Serializable
     @Override
     public String toString()
     {
-        return toShortString()+" category:"+this.category+" link:"+this.link;
+        return toShortString()+" category:"+this.category;
     }
 
     /** 
@@ -287,12 +287,21 @@ public class Item implements Comparable<Item>, Serializable
      */
     public String toShortString()
     {
-        final StringBuilder ret = new StringBuilder("created:"+created+"[");
+        final StringBuilder ret = new StringBuilder(256);
+        ret.append("created:").append(created).append("[");
         synchronized(formatter)
         {
             ret.append(formatter.format(new Date(created)));
         }
-        ret.append("] type:").append(type).append(" foundrsscreated:").append(foundrsscreated).append(" source:").append(this.source).append(" title:").append(this.title);
+        ret.append("] type:").append(type).append(" foundrsscreated:").append(foundrsscreated).append(" title:").append(this.title);
+        if(this.source != null)
+        {
+            ret.append(" source:").append(this.source);
+        }
+        if(this.link != null)
+        {
+            ret.append(" link:").append(this.link);
+        }
         return ret.toString();
     }
 
