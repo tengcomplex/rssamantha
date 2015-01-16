@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Take care of those.
+
+&      &amp;
+'      &apos;
+<      &lt;
+>      &gt;
+"      &quot;
+
+Ä      &#196;
+Ö      &#214;
+Ü      &#220;
+ä      &#228
+ö      &#246;
+ü      &#252;
+ß      &#223;
+-->
+
+<opml version="1.0">
+	<head>
+		<title>RSSamantha source configuration for broken feeds</title>
+	</head>
+	<body>
+		<outline config.name="general">
+			<source title="ccc" feedtype="rss" feedUrl="http://www.ccc.de/de/rss/updates.xml" delay="5200045"/>
+		</outline>
+
+		<outline config.name="technews">	
+			<source title="mobile business" feedtype="rss" feedUrl="http://www.mobilebusiness.de/rss2/rss-feeds/category/241.html" delay="58754747"/>
+			<source title="techdirt" feedtype="rss" feedUrl="http://feeds.techdirt.com/techdirt/feed" delay="58754747"/>
+		</outline>
+		
+		<outline config.name="software">	
+			<source title="GeeXboX" feedtype="rss" feedUrl="http://www.geexbox.org/feed/" delay="86400000"/>
+		</outline>
+	</body>
+</opml>
+
+
+
