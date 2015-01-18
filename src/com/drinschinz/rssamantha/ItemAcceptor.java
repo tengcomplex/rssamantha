@@ -681,7 +681,7 @@ class ClientThread implements Runnable
         final String title = hm.get("title");
         if(title == null || title.length() == 0)
         {
-            httpAnswer(HTTP_INTERNAL_ERROR,"No title","No title"+"<BR><BR>"+getHttpUsage(false),"Error");
+            httpAnswer(HTTP_INTERNAL_ERROR,"No title", "No title"+"<BR><BR>"+getHttpUsage(false),"Error");
             return;
         }
         long created = -1;
