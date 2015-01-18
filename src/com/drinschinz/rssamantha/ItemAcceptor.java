@@ -717,8 +717,9 @@ class ClientThread implements Runnable
             item.setLink(hm.get("link"));
         }
         final Control.CountEvent b = itemacceptor.getControl().addItem(item, ix);
-        Control.L.log(Level.INFO, "Returnvalue:{0} item:{1}", new Object[]{b.toString(), item.toShortString()});
-        httpAnswer(HTTP_OK, "OK", "Item accepted, returnvalue:"+b.toString()+" {"+item.toShortString()+"}", Main.APPNAME);
+        final String shortItem = item.toShortString();
+        Control.L.log(Level.INFO, "Returnvalue:{0} item:{1}", new Object[]{b.toString(), shortItem});
+        httpAnswer(HTTP_OK, "OK", "Item accepted, returnvalue:"+b.toString()+" {"+shortItem+"}", Main.APPNAME);
     }
     
     private void doStatus() throws Exception
