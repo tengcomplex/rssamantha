@@ -675,13 +675,13 @@ class ClientThread implements Runnable
         final int ix = hm.containsKey("channel0") ? itemacceptor.getControl().getChannelIndex(hm.get("channel0")) : Integer.parseInt(hm.get("ix0"));
         if(!itemacceptor.getControl().isValidChannelIndex(ix))
         {
-            httpAnswer(HTTP_INTERNAL_ERROR, "Invalid channelindex", "Invalid channelindex"+"<BR><BR>"+getHttpUsage(false),"Error");
+            httpAnswer(HTTP_INTERNAL_ERROR, "Invalid channelindex", "Invalid channelindex"+"<BR><BR>"+getHttpUsage(false), "Error");
             return;
         }
         final String title = hm.get("title");
         if(title == null || title.length() == 0)
         {
-            httpAnswer(HTTP_INTERNAL_ERROR,"No title", "No title"+"<BR><BR>"+getHttpUsage(false),"Error");
+            httpAnswer(HTTP_INTERNAL_ERROR,"No title", "No title"+"<BR><BR>"+getHttpUsage(false), "Error");
             return;
         }
         long created = -1;
