@@ -631,22 +631,25 @@ class ClientThread implements Runnable
     
     
     /**
-     * TODO: It seems this can be slightly optimized.
-     * @param s
-     * @return
+     * We support multiple channel (or ix for chanelindices), consider following example:<br>
+     * channel=myfirstchannel&channel=mysecondchannel<br>
+     * In this case we suffix the channel keys with indices, channel0->myfirstchannel and channel1->mysecondchannel.
+     * @param s Raw HTTP parameter.
+     * @return A parsed key->value map. 
      * @throws Exception 
      */
     private Map<String,String> getArgsFromUrl(final String s) throws Exception
     {
         final String [] el = (s.startsWith("?") ? s.substring(1) : s).split("&");
         final HashMap<String, String> hm = new HashMap<>();
-        final int[] channelix = new int[2];
+        final int[] channelix = new int[]{0, 0};
         for(int ii=0; ii<el.length; ii++)
         {
             final String t = URLDecoder.decode(el[ii], "UTF-8");
-            if(t.indexOf("=") != -1)
+            final int ix = t.indexOf("=");
+            if(ix != -1)
             {
-                final String[] tok = t.split("=");
+                final String[] tok = new String[]{t.substring(0, ix), t.substring(ix+1)};
                 if("channel".equals(tok[0]))
                 {
                     tok[0]+=(channelix[0]++);
@@ -655,7 +658,7 @@ class ClientThread implements Runnable
                 {
                     tok[0]+=(channelix[1]++);
                 }
-                hm.put(tok[0], tok.length > 1 ? tok[1] : "");
+                hm.put(tok[0], tok[1]);
             }
             else if(t.length() > 0)
             {
