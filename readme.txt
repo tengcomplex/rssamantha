@@ -269,6 +269,7 @@ Version: 0.807
 Release: soon
 ------------------
 - Improve Item logging. [#16]
+- Bugfix: HTTP parameter no longer fails reading "=" character in values. [#17]
 - Print file.encoding and user.timezome at startup.
 
 -------------------
