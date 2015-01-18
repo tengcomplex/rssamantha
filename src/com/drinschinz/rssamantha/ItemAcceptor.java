@@ -672,15 +672,7 @@ class ClientThread implements Runnable
             itemacceptor.getControl().getStatistics().count(Control.CountEvent.HTTP_NOACCEPT);
             return;
         }
-        int ix = -1;
-        if(hm.containsKey("channel0"))
-        {
-            ix = itemacceptor.getControl().getChannelIndex(hm.get("channel0"));
-        }
-        else
-        {
-            ix = Integer.parseInt(hm.get("ix0"));
-        }
+        final int ix = hm.containsKey("channel0") ? itemacceptor.getControl().getChannelIndex(hm.get("channel0")) : Integer.parseInt(hm.get("ix0"));
         if(!itemacceptor.getControl().isValidChannelIndex(ix))
         {
             httpAnswer(HTTP_INTERNAL_ERROR, "Invalid channelindex", "Invalid channelindex"+"<BR><BR>"+getHttpUsage(false),"Error");
