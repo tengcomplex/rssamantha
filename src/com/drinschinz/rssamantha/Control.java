@@ -1258,7 +1258,6 @@ public class Control
     }
 
     public final static String LINESEP = System.getProperty("line.separator");
-    public final static String LOGLINEDIVIDER = "----------------------------------------------------------------"+LINESEP;
     
     public static String getPropertiesAsString(final Properties p)
     {
@@ -1266,14 +1265,15 @@ public class Control
         {
             return (p == null ? "NULL" : "No")+ " properties";
         }
-        final StringBuilder ret = new StringBuilder(LOGLINEDIVIDER);
+        final StringBuilder ret = new StringBuilder(1024);
+        ret.append("----------------------------------------------------------------").append(LINESEP);
         ret.append(p.size()).append(" propertie").append(p.size() > 1 ? "s" : "").append(LINESEP);
         for(final Iterator<Object> iter = p.keySet().iterator(); iter.hasNext();)
         {
             final String key = iter.next().toString();
             ret.append(key).append("\t").append(p.getProperty(key)).append(iter.hasNext() ? LINESEP : "");
         }
-        ret.append(LINESEP).append(LOGLINEDIVIDER);
+        ret.append(LINESEP).append("----------------------------------------------------------------").append(LINESEP);
         return ret.toString();
     }
     
