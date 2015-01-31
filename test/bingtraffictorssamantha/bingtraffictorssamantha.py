@@ -1,6 +1,6 @@
 #
 #  Bing to RSSamantha.
-#  Copyright (C) 2011-2014  David Schröer <tengcomplexATgmail.com>
+#  Copyright (C) 2011-2015  David Schröer <tengcomplexATgmail.com>
 #
 #
 #  This file is part of RSSamantha.
