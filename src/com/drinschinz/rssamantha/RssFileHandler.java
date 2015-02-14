@@ -119,9 +119,8 @@ public class RssFileHandler extends FileHandler
                 el.appendChild(text);
                 channelel.appendChild(el);
             }
-            for(int ii=0; ii<items.size(); ii++)
+            for(Item item : items) 
             {
-                final Item item = items.get(ii);
                 el = document.createElement("item");
                 appendChild(document, el, "itemcreatorname", item.getItemCreatorName());
                 appendChild(document, el, "link", item.getLink());
