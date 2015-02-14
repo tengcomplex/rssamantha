@@ -1005,7 +1005,10 @@ public class Control
             baos.close();
             final byte[] output = baos.toByteArray();
 //System.out.println("Original: "+input.length+" Compressed: "+output.length);
-            L.log(Level.FINE, "Original: {0} Compressed: {1}", new Object[]{input.length, output.length});
+            if(L.isLoggable(Level.FINE))
+            {
+                L.log(Level.FINE, "Original: {0} Compressed: {1}", new Object[]{input.length, output.length});
+            }
             return output;
         }
         catch(IOException ex)
