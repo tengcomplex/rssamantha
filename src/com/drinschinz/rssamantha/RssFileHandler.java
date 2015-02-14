@@ -142,7 +142,7 @@ public class RssFileHandler extends FileHandler
         return null;
     }
     
-    private void appendChild(final Document document, Element el, String elementName, String value)
+    private void appendChild(final Document document, final Element el, final String elementName, final String value)
     {
         if(value == null)
         {
