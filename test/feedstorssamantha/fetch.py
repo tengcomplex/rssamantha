@@ -37,12 +37,15 @@ def handleFeed(rssamanthaUrl, feedName, url, channel):
 			feedTitle = d['feed']['title']
 	else:
 			feedTitle = "n/a" 
-	print "Parsed url:"+url+" feedtitle:"+feedTitle.encode('ascii', 'ignore')+"\n"
+	print "Parsed url:"+url+" feedtitle:"+feedTitle.encode('ascii', 'ignore')+" namespaces:"+str(d.namespaces)+"\n"
 	for item in d.entries:
 		if hasattr(item, 'published_parsed') and not (item.published_parsed is None):
 			dt = str(int(time.mktime(item.published_parsed)*1000))
 		else:
-			dt = ""
+			if hasattr(item, 'updated_parsed') and not (item.updated_parsed is None):
+				dt = str(int(time.mktime(item.updated_parsed)*1000))
+			else:
+				dt = ""
 		if hasattr(item, 'published'):
 			p = item.published
 		else:
