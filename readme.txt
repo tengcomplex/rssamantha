@@ -266,7 +266,7 @@ Changes
 ================================================================================
 -------------------
 Version: 0.807
-Release: soon
+Release: 20150222
 ------------------
 - Improve Item logging. [#16]
 - Bugfix: HTTP parameter no longer fails reading "=" character in values. [#17]
