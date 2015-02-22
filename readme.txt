@@ -10,7 +10,7 @@ for rather unhandy searchterms, requesting channels via HTTP GET and add/remove
 items from external processes via http POST.
 
 License:
-GPL v3 Copyright (C) 2011-2014  David Schröer <tengcomplexATgmail.com>
+GPL v3 Copyright (C) 2011-2015  David Schröer <tengcomplexATgmail.com>
 
 Features
 ================================================================================
