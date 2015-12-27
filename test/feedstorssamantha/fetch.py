@@ -33,11 +33,17 @@ import feedparser
 def handleFeed(rssamanthaUrl, feedName, url, channel):
 	print "Parsing url:"+url+" ..."
 	d = feedparser.parse(url)
+	if d['bozo'] == 1:
+		print "feed is not well formed, "+str(d['bozo_exception'])
 	if hasattr(d['feed'], 'title') and not (d['feed']['title'] is None):
 			feedTitle = d['feed']['title']
 	else:
-			feedTitle = "n/a" 
-	print "Parsed url:"+url+" feedtitle:"+feedTitle.encode('ascii', 'ignore')+" namespaces:"+str(d.namespaces)+"\n"
+			feedTitle = "n/a"
+	if hasattr(d, 'namespaces') and not (d.namespaces is None):
+			namespaces = str(d.namespaces)
+	else:
+			namespaces = "n/a"
+	print "Parsed url:"+url+" feedtitle:"+feedTitle.encode('ascii', 'ignore')+" namespaces:"+namespaces+"\n"
 	for item in d.entries:
 		if hasattr(item, 'published_parsed') and not (item.published_parsed is None):
 			dt = str(int(time.mktime(item.published_parsed)*1000))
