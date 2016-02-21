@@ -21,17 +21,21 @@
 #
 #
 #
-# Usage: >python fetch.py rssamanthaurl feedname "url" channelname
+# Usage: >python fetch.py rssamanthaurl feedname "url" channelname [titlepattern]
 #
 
 import sys
+import re
 import time
 import urllib
 import urllib2
 import feedparser
 
-def handleFeed(rssamanthaUrl, feedName, url, channel):
+def handleFeed(rssamanthaUrl, feedName, url, channel, pattern):
 	print "Parsing url:"+url+" ..."
+	if pattern is not None:
+		print "pattern:"+pattern
+		matchPattern = re.compile(pattern)
 	d = feedparser.parse(url)
 	if d['bozo'] == 1:
 		print "feed is not well formed, "+str(d['bozo_exception'])
@@ -61,6 +65,11 @@ def handleFeed(rssamanthaUrl, feedName, url, channel):
 		else:
 			desc = "n/a"
 		print "title:"+item.title.encode('ascii', 'ignore')+" published:["+dt+" "+p+"] link:"+item.link.encode('ascii', 'ignore')+" description:"+desc.encode('ascii', 'ignore')
+		if pattern is not None:
+			match = matchPattern.match(item.title)
+			if not match:
+				print "Item title not matching pattern, not sending"
+				continue;		
 		ret = sendItem(rssamanthaUrl, ("["+feedName.decode('utf-8')+"] "+item.title), dt, desc, item.link, channel)
 		print ret
 	print "--------------------\n"
@@ -87,5 +96,7 @@ def sendItem(rssamanthaUrl, title, d, description, link, channel):
 # Do work if called standalone, with arguments
 #
 if len(sys.argv) == 5:
-	handleFeed(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+	handleFeed(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], None)
+elif len(sys.argv) == 6:
+	handleFeed(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
 

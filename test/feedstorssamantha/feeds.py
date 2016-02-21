@@ -50,7 +50,11 @@ for channel in channels:
 	for feed in feeds:
 		title = str(feed.getAttribute("title").encode('utf-8'))
 		url = str(feed.getAttribute("feedUrl"))
-		print "Title: "+title+" Url: "+url
+		pattern = str(feed.getAttribute("matchpattern_title"))
+		print "Title: "+title+" Url: "+url+" pattern:"+pattern
 		sleep(random.randint(3,11))
-		handleFeed(RSSAMANTHA_URL, title, url, channelName)
+		if pattern is None:
+			handleFeed(RSSAMANTHA_URL, title, url, channelName)
+		else:
+			handleFeed(RSSAMANTHA_URL, title, url, channelName, pattern)
 
