@@ -75,14 +75,14 @@ public class Statistics
     protected String getUptime()
     {
         long diff = System.currentTimeMillis() - started;
-        int days,hours,minutes,seconds;
-        days = (int)(diff / DAY);
-        diff -= (days * DAY);
-        hours = (int)(diff / HOUR);
-        diff -= (hours * HOUR);
-        minutes = (int)(diff / MINUTE);
-        diff -= (minutes * MINUTE);
-        seconds = (int)(diff / SECOND);
+        long days, hours, minutes, seconds;
+        days = (long)(diff / DAY);
+        diff -= days * DAY;
+        hours = (long)(diff / HOUR);
+        diff -= hours * HOUR;
+        minutes = (long)(diff / MINUTE);
+        diff -= minutes * MINUTE;
+        seconds = (long)(diff / SECOND);
         return ""+days+"d "+hours+"h "+minutes+"m "+seconds+"s";
     }
 }
