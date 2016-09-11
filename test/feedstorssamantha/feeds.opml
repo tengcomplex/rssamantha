@@ -25,6 +25,7 @@ Take care of those.
 	<body>
 		<outline config.name="general">
 			<source title="ccc" feedtype="rss" feedUrl="http://www.ccc.de/de/rss/updates.xml" delay="5200045"/>
+			<source title="Yelp Dortmund" feedUrl="http://www.yelp.de/syndicate/area/rss.xml?loc=Dortmund" matchpattern_title=".*\- Dortmund \(\d/\d\) on Yelp$" delay="45300088"/>
 		</outline>
 
 		<outline config.name="technews">	
